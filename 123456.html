@@ -1,1 +1,1034 @@
-<h1>12345E4C22MT3HG8734ERMRBAJ42E7W63NP0274E55YMXPA5T34A9ZMTPX7539SB40ARP15DKG422C1H<h1/>
+	<!DOCTYPE html>
+	<html lang="zh-CN">
+	<head>
+	    <meta charset="UTF-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	    <title>助梦网络达人 - 官方主页</title>
+	    <script src="https://cdn.tailwindcss.com"></script>
+	    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+	    <style>
+	        :root {
+	            --bg: #050508;
+	            --bg-secondary: #0d0d12;
+	            --fg: #f0f0f5;
+	            --muted: #6b6b80;
+	            --accent: #ff6b35;
+	            --accent-glow: rgba(255, 107, 53, 0.5);
+	            --cyan: #00d4ff;
+	            --cyan-glow: rgba(0, 212, 255, 0.4);
+	            --card: rgba(20, 20, 30, 0.7);
+	            --border: rgba(255, 255, 255, 0.08);
+	        }
+	        * {
+	            margin: 0;
+	            padding: 0;
+	            box-sizing: border-box;
+	        }
+	        html {
+	            scroll-behavior: smooth;
+	        }
+	        body {
+	            font-family: 'Noto Sans SC', sans-serif;
+	            background: var(--bg);
+	            color: var(--fg);
+	            overflow-x: hidden;
+	            line-height: 1.6;
+	        }
+	        .font-display {
+	            font-family: 'Orbitron', sans-serif;
+	        }
+	        /* 动态背景 */
+	        .hero-bg {
+	            position: fixed;
+	            top: 0;
+	            left: 0;
+	            width: 100%;
+	            height: 100%;
+	            z-index: -1;
+	            background: 
+	                radial-gradient(ellipse 80% 50% at 50% 0%, rgba(255, 107, 53, 0.15) 0%, transparent 50%),
+	                radial-gradient(ellipse 60% 40% at 80% 100%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+	                linear-gradient(180deg, var(--bg) 0%, var(--bg-secondary) 100%);
+	        }
+	        /* 粒子画布 */
+	        #particles-canvas {
+	            position: fixed;
+	            top: 0;
+	            left: 0;
+	            width: 100%;
+	            height: 100%;
+	            z-index: -1;
+	            pointer-events: none;
+	        }
+	        /* 光晕动画 */
+	        .glow-orb {
+	            position: absolute;
+	            border-radius: 50%;
+	            filter: blur(80px);
+	            animation: float 8s ease-in-out infinite;
+	            pointer-events: none;
+	        }
+	        .orb-1 {
+	            width: 400px;
+	            height: 400px;
+	            background: var(--accent-glow);
+	            top: -100px;
+	            right: -100px;
+	            animation-delay: 0s;
+	        }
+	        .orb-2 {
+	            width: 300px;
+	            height: 300px;
+	            background: var(--cyan-glow);
+	            bottom: 20%;
+	            left: -100px;
+	            animation-delay: -4s;
+	        }
+	        @keyframes float {
+	            0%, 100% { transform: translate(0, 0) scale(1); }
+	            50% { transform: translate(30px, -30px) scale(1.1); }
+	        }
+	        /* 标题动画 */
+	        .title-glow {
+	            background: linear-gradient(135deg, var(--fg) 0%, var(--accent) 50%, var(--cyan) 100%);
+	            background-size: 200% 200%;
+	            -webkit-background-clip: text;
+	            -webkit-text-fill-color: transparent;
+	            background-clip: text;
+	            animation: gradient-shift 4s ease infinite;
+	        }
+	        @keyframes gradient-shift {
+	            0%, 100% { background-position: 0% 50%; }
+	            50% { background-position: 100% 50%; }
+	        }
+	        /* 卡片样式 */
+	        .platform-card {
+	            background: var(--card);
+	            backdrop-filter: blur(20px);
+	            border: 1px solid var(--border);
+	            border-radius: 24px;
+	            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+	            position: relative;
+	            overflow: hidden;
+	        }
+	        .platform-card::before {
+	            content: '';
+	            position: absolute;
+	            top: 0;
+	            left: 0;
+	            right: 0;
+	            height: 1px;
+	            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+	            opacity: 0;
+	            transition: opacity 0.4s;
+	        }
+	        .platform-card:hover::before {
+	            opacity: 1;
+	        }
+	        .platform-card:hover {
+	            transform: translateY(-8px);
+	            border-color: rgba(255, 107, 53, 0.3);
+	            box-shadow: 0 20px 60px rgba(255, 107, 53, 0.15);
+	        }
+	        /* 抖音品牌色 */
+	        .douyin-card:hover {
+	            border-color: rgba(254, 44, 85, 0.4);
+	            box-shadow: 0 20px 60px rgba(254, 44, 85, 0.2);
+	        }
+	        .douyin-card:hover::before {
+	            background: linear-gradient(90deg, transparent, #fe2c55, transparent);
+	        }
+	        /* 快手品牌色 */
+	        .kuaishou-card:hover {
+	            border-color: rgba(255, 102, 0, 0.4);
+	            box-shadow: 0 20px 60px rgba(255, 102, 0, 0.2);
+	        }
+	        .kuaishou-card:hover::before {
+	            background: linear-gradient(90deg, transparent, #ff6600, transparent);
+	        }
+	        /* 按钮样式 */
+	        .btn-primary {
+	            background: linear-gradient(135deg, var(--accent) 0%, #ff8f5a 100%);
+	            color: white;
+	            font-weight: 600;
+	            padding: 16px 40px;
+	            border-radius: 50px;
+	            border: none;
+	            cursor: pointer;
+	            transition: all 0.3s ease;
+	            position: relative;
+	            overflow: hidden;
+	            display: inline-flex;
+	            align-items: center;
+	            gap: 8px;
+	        }
+	        .btn-primary::after {
+	            content: '';
+	            position: absolute;
+	            top: 50%;
+	            left: 50%;
+	            width: 0;
+	            height: 0;
+	            background: rgba(255, 255, 255, 0.3);
+	            border-radius: 50%;
+	            transform: translate(-50%, -50%);
+	            transition: width 0.6s, height 0.6s;
+	        }
+	        .btn-primary:hover::after {
+	            width: 300px;
+	            height: 300px;
+	        }
+	        .btn-primary:hover {
+	            transform: scale(1.05);
+	            box-shadow: 0 10px 40px var(--accent-glow);
+	        }
+	        /* 统计数字动画 */
+	        .stat-number {
+	            font-family: 'Orbitron', sans-serif;
+	            font-weight: 900;
+	            font-size: clamp(2rem, 5vw, 3.5rem);
+	            background: linear-gradient(180deg, var(--fg) 0%, var(--muted) 100%);
+	            -webkit-background-clip: text;
+	            -webkit-text-fill-color: transparent;
+	            background-clip: text;
+	        }
+	        /* 标签样式 */
+	        .tag {
+	            background: rgba(255, 107, 53, 0.15);
+	            color: var(--accent);
+	            padding: 6px 16px;
+	            border-radius: 20px;
+	            font-size: 0.85rem;
+	            font-weight: 500;
+	            border: 1px solid rgba(255, 107, 53, 0.3);
+	            transition: all 0.3s;
+	        }
+	        .tag:hover {
+	            background: rgba(255, 107, 53, 0.25);
+	            transform: scale(1.05);
+	        }
+	        /* 头像容器 */
+	        .avatar-container {
+	            position: relative;
+	            width: 200px;
+	            height: 200px;
+	            margin: 0 auto;
+	        }
+	        .avatar-ring {
+	            position: absolute;
+	            inset: -10px;
+	            border-radius: 50%;
+	            border: 3px solid transparent;
+	            border-top-color: var(--accent);
+	            border-right-color: var(--cyan);
+	            animation: spin 3s linear infinite;
+	        }
+	        .avatar-ring-inner {
+	            position: absolute;
+	            inset: -5px;
+	            border-radius: 50%;
+	            border: 2px solid transparent;
+	            border-bottom-color: var(--cyan);
+	            border-left-color: var(--accent);
+	            animation: spin 2s linear infinite reverse;
+	        }
+	        @keyframes spin {
+	            to { transform: rotate(360deg); }
+	        }
+	        .avatar {
+	            width: 100%;
+	            height: 100%;
+	            border-radius: 50%;
+	            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+	            display: flex;
+	            align-items: center;
+	            justify-content: center;
+	            font-size: 4rem;
+	            position: relative;
+	            overflow: hidden;
+	        }
+	        .avatar::before {
+	            content: '';
+	            position: absolute;
+	            inset: 0;
+	            background: linear-gradient(45deg, transparent 40%, rgba(255, 255, 255, 0.1) 50%, transparent 60%);
+	            animation: shine 3s infinite;
+	        }
+	        @keyframes shine {
+	            0% { transform: translateX(-100%); }
+	            100% { transform: translateX(100%); }
+	        }
+	        /* 滚动动画 */
+	        .reveal {
+	            opacity: 0;
+	            transform: translateY(40px);
+	            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+	        }
+	        .reveal.active {
+	            opacity: 1;
+	            transform: translateY(0);
+	        }
+	        /* 分隔线 */
+	        .divider {
+	            height: 1px;
+	            background: linear-gradient(90deg, transparent, var(--border), transparent);
+	            margin: 80px 0;
+	        }
+	        /* 特色网格 */
+	        .feature-grid {
+	            display: grid;
+	            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+	            gap: 24px;
+	        }
+	        .feature-item {
+	            background: var(--card);
+	            border: 1px solid var(--border);
+	            border-radius: 16px;
+	            padding: 32px;
+	            transition: all 0.4s;
+	            position: relative;
+	        }
+	        .feature-item:hover {
+	            background: rgba(30, 30, 45, 0.8);
+	            border-color: rgba(255, 107, 53, 0.2);
+	            transform: translateY(-4px);
+	        }
+	        .feature-icon {
+	            width: 56px;
+	            height: 56px;
+	            border-radius: 14px;
+	            background: linear-gradient(135deg, rgba(255, 107, 53, 0.2) 0%, rgba(0, 212, 255, 0.1) 100%);
+	            display: flex;
+	            align-items: center;
+	            justify-content: center;
+	            margin-bottom: 20px;
+	        }
+	        /* 视频展示区 */
+	        .video-showcase {
+	            position: relative;
+	            border-radius: 20px;
+	            overflow: hidden;
+	            aspect-ratio: 16/9;
+	            background: var(--card);
+	            border: 1px solid var(--border);
+	        }
+	        .video-overlay {
+	            position: absolute;
+	            inset: 0;
+	            background: linear-gradient(180deg, transparent 50%, rgba(0, 0, 0, 0.8) 100%);
+	            display: flex;
+	            flex-direction: column;
+	            justify-content: flex-end;
+	            padding: 32px;
+	            opacity: 0;
+	            transition: opacity 0.4s;
+	        }
+	        .video-showcase:hover .video-overlay {
+	            opacity: 1;
+	        }
+	        .play-btn {
+	            position: absolute;
+	            top: 50%;
+	            left: 50%;
+	            transform: translate(-50%, -50%);
+	            width: 80px;
+	            height: 80px;
+	            border-radius: 50%;
+	            background: rgba(255, 255, 255, 0.2);
+	            backdrop-filter: blur(10px);
+	            display: flex;
+	            align-items: center;
+	            justify-content: center;
+	            cursor: pointer;
+	            transition: all 0.3s;
+	            border: 2px solid rgba(255, 255, 255, 0.3);
+	        }
+	        .play-btn:hover {
+	            transform: translate(-50%, -50%) scale(1.1);
+	            background: rgba(255, 107, 53, 0.4);
+	        }
+	        /* 导航 */
+	        .nav {
+	            position: fixed;
+	            top: 0;
+	            left: 0;
+	            right: 0;
+	            z-index: 100;
+	            padding: 20px 0;
+	            transition: all 0.3s;
+	        }
+	        .nav.scrolled {
+	            background: rgba(5, 5, 8, 0.9);
+	            backdrop-filter: blur(20px);
+	            border-bottom: 1px solid var(--border);
+	        }
+	        .nav-link {
+	            color: var(--muted);
+	            transition: color 0.3s;
+	            position: relative;
+	        }
+	        .nav-link::after {
+	            content: '';
+	            position: absolute;
+	            bottom: -4px;
+	            left: 0;
+	            width: 0;
+	            height: 2px;
+	            background: var(--accent);
+	            transition: width 0.3s;
+	        }
+	        .nav-link:hover {
+	            color: var(--fg);
+	        }
+	        .nav-link:hover::after {
+	            width: 100%;
+	        }
+	        /* 平台徽标 */
+	        .platform-badge {
+	            display: inline-flex;
+	            align-items: center;
+	            gap: 8px;
+	            padding: 8px 16px;
+	            border-radius: 30px;
+	            font-size: 0.9rem;
+	            font-weight: 600;
+	        }
+	        .douyin-badge {
+	            background: rgba(254, 44, 85, 0.15);
+	            color: #fe2c55;
+	            border: 1px solid rgba(254, 44, 85, 0.3);
+	        }
+	        .kuaishou-badge {
+	            background: rgba(255, 102, 0, 0.15);
+	            color: #ff6600;
+	            border: 1px solid rgba(255, 102, 0, 0.3);
+	        }
+	        /* 滚动条 */
+	        ::-webkit-scrollbar {
+	            width: 8px;
+	        }
+	        ::-webkit-scrollbar-track {
+	            background: var(--bg);
+	        }
+	        ::-webkit-scrollbar-thumb {
+	            background: var(--border);
+	            border-radius: 4px;
+	        }
+	        ::-webkit-scrollbar-thumb:hover {
+	            background: rgba(255, 255, 255, 0.15);
+	        }
+	        /* 响应式 */
+	        @media (max-width: 768px) {
+	            .hero-title {
+	                font-size: 2.5rem !important;
+	            }
+	            .avatar-container {
+	                width: 150px;
+	                height: 150px;
+	            }
+	            .glow-orb {
+	                opacity: 0.5;
+	            }
+	        }
+	        /* 减少动画 */
+	        @media (prefers-reduced-motion: reduce) {
+	            *, *::before, *::after {
+	                animation-duration: 0.01ms !important;
+	                animation-iteration-count: 1 !important;
+	                transition-duration: 0.01ms !important;
+	            }
+	        }
+	        /* 打字机效果 */
+	        .typewriter {
+	            overflow: hidden;
+	            border-right: 3px solid var(--accent);
+	            white-space: nowrap;
+	            animation: typing 3s steps(20) forwards, blink 0.8s step-end infinite;
+	        }
+	        @keyframes typing {
+	            from { width: 0; }
+	            to { width: 100%; }
+	        }
+	        @keyframes blink {
+	            50% { border-color: transparent; }
+	        }
+	        /* 心跳动画 */
+	        .heartbeat {
+	            animation: heartbeat 1.5s ease infinite;
+	        }
+	        @keyframes heartbeat {
+	            0%, 100% { transform: scale(1); }
+	            25% { transform: scale(1.1); }
+	            50% { transform: scale(1); }
+	            75% { transform: scale(1.1); }
+	        }
+	        /* 浮动动画 */
+	        .float {
+	            animation: floatElement 6s ease-in-out infinite;
+	        }
+	        @keyframes floatElement {
+	            0%, 100% { transform: translateY(0); }
+	            50% { transform: translateY(-20px); }
+	        }
+	    </style>
+	</head>
+	<body>
+	    <!-- 背景 -->
+	    <div class="hero-bg"></div>
+	    <canvas id="particles-canvas"></canvas>
+	    <div class="glow-orb orb-1"></div>
+	    <div class="glow-orb orb-2"></div>
+	    <!-- 导航 -->
+	    <nav class="nav" id="nav">
+	        <div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
+	            <a href="#" class="font-display text-xl font-bold text-white">ZM MEDIA</a>
+	            <div class="hidden md:flex items-center gap-8">
+	                <a href="#about" class="nav-link">关于我</a>
+	                <a href="#platforms" class="nav-link">平台</a>
+	                <a href="#content" class="nav-link">内容</a>
+	                <a href="#contact" class="nav-link">联系</a>
+	            </div>
+	            <button class="btn-primary text-sm py-3 px-6" onclick="scrollToSection('contact')">
+	                商务合作
+	            </button>
+	        </div>
+	    </nav>
+	    <!-- 主视觉区 -->
+	    <section class="min-h-screen flex items-center justify-center pt-20 px-6">
+	        <div class="max-w-4xl mx-auto text-center">
+	            <!-- 平台徽标 -->
+	            <div class="flex justify-center gap-4 mb-8 reveal">
+	                <span class="platform-badge douyin-badge">
+	                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+	                        <path d="M12.53.02C13.84 0 15.14.01 16.44 0c.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/>
+	                    </svg>
+	                    抖音
+	                </span>
+	                <span class="platform-badge kuaishou-badge">
+	                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+	                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+	                    </svg>
+	                    快手
+	                </span>
+	            </div>
+	            <!-- 头像 -->
+	            <div class="avatar-container mb-8 reveal float" style="animation-delay: 0.2s;">
+	                <div class="avatar-ring"></div>
+	                <div class="avatar-ring-inner"></div>
+	                <div class="avatar">
+	                    <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+	                        <path d="M12 2a3 3 0 0 0-3 3v4a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+	                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+	                        <line x1="12" y1="19" x2="12" y2="22"/>
+	                    </svg>
+	                </div>
+	            </div>
+	            <!-- 主标题 -->
+	            <h1 class="hero-title font-display text-5xl md:text-7xl font-black mb-6 reveal title-glow" style="animation-delay: 0.3s;">
+	                助梦网络达人
+	            </h1>
+	            <!-- 副标题 -->
+	            <p class="text-xl md:text-2xl text-gray-400 mb-4 reveal" style="animation-delay: 0.4s;">
+	                抖音 / 快手 双平台头部主播
+	            </p>
+	            <!-- 简介 -->
+	            <p class="text-lg text-gray-500 max-w-2xl mx-auto mb-10 reveal" style="animation-delay: 0.5s;">
+	                专注电商直播领域，深耕短视频内容创作<br>
+	                用专业与真诚，为粉丝创造价值，为品牌赋能增长
+	            </p>
+	            <!-- CTA按钮 -->
+	            <div class="flex flex-col sm:flex-row justify-center gap-4 reveal" style="animation-delay: 0.6s;">
+	                <button class="btn-primary" onclick="scrollToSection('platforms')">
+	                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+	                        <polygon points="5 3 19 12 5 21 5 3"/>
+	                    </svg>
+	                    查看主页
+	                </button>
+	                <button class="btn-primary" style="background: transparent; border: 2px solid var(--accent);" onclick="scrollToSection('contact')">
+	                    商务合作咨询
+	                </button>
+	            </div>
+	            <!-- 滚动指示 -->
+	            <div class="mt-20 reveal" style="animation-delay: 0.8s;">
+	                <div class="w-6 h-10 border-2 border-gray-600 rounded-full mx-auto flex justify-center">
+	                    <div class="w-1 h-3 bg-gray-400 rounded-full mt-2" style="animation: scroll-indicator 2s infinite;"></div>
+	                </div>
+	            </div>
+	        </div>
+	    </section>
+	    <style>
+	        @keyframes scroll-indicator {
+	            0%, 100% { opacity: 1; transform: translateY(0); }
+	            50% { opacity: 0.5; transform: translateY(8px); }
+	        }
+	    </style>
+	    <!-- 统计数据 -->
+	    <section class="py-20 px-6">
+	        <div class="max-w-6xl mx-auto">
+	            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+	                <div class="text-center reveal">
+	                    <div class="stat-number" data-target="500">0</div>
+	                    <div class="text-gray-500 mt-2">万+粉丝总数</div>
+	                </div>
+	                <div class="text-center reveal" style="transition-delay: 0.1s;">
+	                    <div class="stat-number" data-target="2000">0</div>
+	                    <div class="text-gray-500 mt-2">+优质作品</div>
+	                </div>
+	                <div class="text-center reveal" style="transition-delay: 0.2s;">
+	                    <div class="stat-number" data-target="100">0</div>
+	                    <div class="text-gray-500 mt-2">+合作品牌</div>
+	                </div>
+	                <div class="text-center reveal" style="transition-delay: 0.3s;">
+	                    <div class="stat-number" data-target="5">0</div>
+	                    <div class="text-gray-500 mt-2">年行业经验</div>
+	                </div>
+	            </div>
+	        </div>
+	    </section>
+	    <div class="divider max-w-6xl mx-auto"></div>
+	    <!-- 关于我 -->
+	    <section id="about" class="py-20 px-6">
+	        <div class="max-w-6xl mx-auto">
+	            <div class="text-center mb-16">
+	                <h2 class="font-display text-3xl md:text-5xl font-bold mb-4 reveal">关于我</h2>
+	                <p class="text-gray-500 max-w-xl mx-auto reveal">用热爱与专业，打造有温度的直播间</p>
+	            </div>
+	            <div class="grid md:grid-cols-2 gap-12 items-center">
+	                <!-- 左侧内容 -->
+	                <div class="reveal">
+	                    <h3 class="text-2xl font-bold mb-6 text-white">
+	                        从普通人到头部主播的蜕变之路
+	                    </h3>
+	                    <p class="text-gray-400 mb-6 leading-relaxed">
+	                        自2020年电商直播风起云涌以来，我深入钻研直播带货与短视频创作。从最初的摸索尝试，到如今在抖音、快手双平台都建立了稳定的粉丝群体，这段旅程让我深刻理解了"真诚"与"专业"是直播行业的立身之本。
+	                    </p>
+	                    <p class="text-gray-400 mb-8 leading-relaxed">
+	                        作为助梦网络达人，我始终坚持：为粉丝推荐真正优质的产品，为品牌传递真实的价值。每一场直播，都是一次与观众的深度对话；每一条视频，都承载着我对内容的敬畏与热爱。
+	                    </p>
+	                    <div class="flex flex-wrap gap-3">
+	                        <span class="tag">电商直播</span>
+	                        <span class="tag">知识分享</span>
+	                        <span class="tag">品牌合作</span>
+	                        <span class="tag">内容创作</span>
+	                        <span class="tag">主播培训</span>
+	                    </div>
+	                </div>
+	                <!-- 右侧特色卡片 -->
+	                <div class="space-y-4">
+	                    <div class="feature-item reveal" style="transition-delay: 0.1s;">
+	                        <div class="feature-icon">
+	                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2">
+	                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+	                            </svg>
+	                        </div>
+	                        <h4 class="font-bold text-lg mb-2">专业直播运营</h4>
+	                        <p class="text-gray-500 text-sm">完整的直播策划流程，从脚本撰写到现场执行，确保每场直播的高质量输出</p>
+	                    </div>
+	                    <div class="feature-item reveal" style="transition-delay: 0.2s;">
+	                        <div class="feature-icon">
+	                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2">
+	                                <circle cx="12" cy="12" r="10"/>
+	                                <path d="M12 6v6l4 2"/>
+	                            </svg>
+	                        </div>
+	                        <h4 class="font-bold text-lg mb-2">精准流量投放</h4>
+	                        <p class="text-gray-500 text-sm">深度理解平台算法，精准把控性别、年龄、地域、兴趣标签，实现高效推广</p>
+	                    </div>
+	                    <div class="feature-item reveal" style="transition-delay: 0.3s;">
+	                        <div class="feature-icon">
+	                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2">
+	                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+	                                <circle cx="9" cy="7" r="4"/>
+	                                <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+	                            </svg>
+	                        </div>
+	                        <h4 class="font-bold text-lg mb-2">粉丝深度运营</h4>
+	                        <p class="text-gray-500 text-sm">建立完善的粉丝互动机制，提升粉丝粘性与活跃度，打造高价值私域流量</p>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </section>
+	    <div class="divider max-w-6xl mx-auto"></div>
+	    <!-- 平台展示 -->
+	    <section id="platforms" class="py-20 px-6">
+	        <div class="max-w-6xl mx-auto">
+	            <div class="text-center mb-16">
+	                <h2 class="font-display text-3xl md:text-5xl font-bold mb-4 reveal">双平台同步运营</h2>
+	                <p class="text-gray-500 max-w-xl mx-auto reveal">同一份热爱，双倍的精彩</p>
+	            </div>
+	            <div class="grid md:grid-cols-2 gap-8">
+	                <!-- 抖音卡片 -->
+	                <div class="platform-card douyin-card p-8 reveal">
+	                    <div class="flex items-center gap-4 mb-6">
+	                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-pink-500 to-red-500 flex items-center justify-center">
+	                            <svg width="32" height="32" viewBox="0 0 24 24" fill="white">
+	                                <path d="M12.53.02C13.84 0 15.14.01 16.44 0c.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/>
+	                            </svg>
+	                        </div>
+	                        <div>
+	                            <h3 class="text-2xl font-bold">抖音</h3>
+	                            <p class="text-gray-500">@助梦网络达人</p>
+	                        </div>
+	                    </div>
+	                    <div class="grid grid-cols-3 gap-4 mb-6">
+	                        <div class="text-center p-4 bg-black/20 rounded-xl">
+	                            <div class="text-2xl font-bold text-pink-400">300万+</div>
+	                            <div class="text-xs text-gray-500 mt-1">粉丝</div>
+	                        </div>
+	                        <div class="text-center p-4 bg-black/20 rounded-xl">
+	                            <div class="text-2xl font-bold text-pink-400">1200+</div>
+	                            <div class="text-xs text-gray-500 mt-1">作品</div>
+	                        </div>
+	                        <div class="text-center p-4 bg-black/20 rounded-xl">
+	                            <div class="text-2xl font-bold text-pink-400">5000万+</div>
+	                            <div class="text-xs text-gray-500 mt-1">获赞</div>
+	                        </div>
+	                    </div>
+	                    <p class="text-gray-400 text-sm mb-6">
+	                        专注电商直播与知识分享，每天准时开播，为你带来优质好物推荐与实用干货分享。直播间互动活跃，粉丝粘性极高。
+	                    </p>
+	                    <button class="w-full py-3 rounded-xl bg-gradient-to-r from-pink-500 to-red-500 text-white font-semibold hover:opacity-90 transition-opacity">
+	                        关注抖音账号
+	                    </button>
+	                </div>
+	                <!-- 快手卡片 -->
+	                <div class="platform-card kuaishou-card p-8 reveal" style="transition-delay: 0.15s;">
+	                    <div class="flex items-center gap-4 mb-6">
+	                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-500 to-yellow-500 flex items-center justify-center">
+	                            <svg width="32" height="32" viewBox="0 0 24 24" fill="white">
+	                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+	                            </svg>
+	                        </div>
+	                        <div>
+	                            <h3 class="text-2xl font-bold">快手</h3>
+	                            <p class="text-gray-500">@助梦网络达人</p>
+	                        </div>
+	                    </div>
+	                    <div class="grid grid-cols-3 gap-4 mb-6">
+	                        <div class="text-center p-4 bg-black/20 rounded-xl">
+	                            <div class="text-2xl font-bold text-orange-400">200万+</div>
+	                            <div class="text-xs text-gray-500 mt-1">粉丝</div>
+	                        </div>
+	                        <div class="text-center p-4 bg-black/20 rounded-xl">
+	                            <div class="text-2xl font-bold text-orange-400">800+</div>
+	                            <div class="text-xs text-gray-500 mt-1">作品</div>
+	                        </div>
+	                        <div class="text-center p-4 bg-black/20 rounded-xl">
+	                            <div class="text-2xl font-bold text-orange-400">3000万+</div>
+	                            <div class="text-xs text-gray-500 mt-1">播放</div>
+	                        </div>
+	                    </div>
+	                    <p class="text-gray-400 text-sm mb-6">
+	                        深耕快手平台，以接地气的内容风格和真诚的带货态度，赢得了老铁们的信任与支持。直播间氛围热烈，转化率行业领先。
+	                    </p>
+	                    <button class="w-full py-3 rounded-xl bg-gradient-to-r from-orange-500 to-yellow-500 text-white font-semibold hover:opacity-90 transition-opacity">
+	                        关注快手账号
+	                    </button>
+	                </div>
+	            </div>
+	        </div>
+	    </section>
+	    <div class="divider max-w-6xl mx-auto"></div>
+	    <!-- 内容展示 -->
+	    <section id="content" class="py-20 px-6">
+	        <div class="max-w-6xl mx-auto">
+	            <div class="text-center mb-16">
+	                <h2 class="font-display text-3xl md:text-5xl font-bold mb-4 reveal">精彩内容</h2>
+	                <p class="text-gray-500 max-w-xl mx-auto reveal">每一条视频，都是用心打磨的作品</p>
+	            </div>
+	            <!-- 内容分类 -->
+	            <div class="flex justify-center gap-4 mb-12 flex-wrap reveal">
+	                <button class="content-tab active px-6 py-2 rounded-full bg-white/10 text-white transition-all hover:bg-white/20" data-tab="all">全部</button>
+	                <button class="content-tab px-6 py-2 rounded-full bg-transparent text-gray-500 transition-all hover:text-white" data-tab="live">直播回放</button>
+	                <button class="content-tab px-6 py-2 rounded-full bg-transparent text-gray-500 transition-all hover:text-white" data-tab="shorts">短视频</button>
+	                <button class="content-tab px-6 py-2 rounded-full bg-transparent text-gray-500 transition-all hover:text-white" data-tab="knowledge">知识分享</button>
+	            </div>
+	            <!-- 内容网格 -->
+	            <div class="grid md:grid-cols-3 gap-6">
+	                <div class="video-showcase reveal content-item" data-category="live">
+	                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='225'%3E%3Crect fill='%231a1a2e' width='400' height='225'/%3E%3Ctext x='50%25' y='50%25' fill='%23666' text-anchor='middle' dy='.3em'%3E直播精彩回放%3C/text%3E%3C/svg%3E" alt="直播回放" class="w-full h-full object-cover">
+	                    <div class="video-overlay">
+	                        <span class="text-xs text-orange-400 mb-2">直播回放</span>
+	                        <h4 class="font-bold">3小时带货直播精华剪辑</h4>
+	                    </div>
+	                    <div class="play-btn">
+	                        <svg width="32" height="32" viewBox="0 0 24 24" fill="white">
+	                            <polygon points="5 3 19 12 5 21 5 3"/>
+	                        </svg>
+	                    </div>
+	                </div>
+	                <div class="video-showcase reveal content-item" data-category="shorts" style="transition-delay: 0.1s;">
+	                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='225'%3E%3Crect fill='%2316213e' width='400' height='225'/%3E%3Ctext x='50%25' y='50%25' fill='%23666' text-anchor='middle' dy='.3em'%3E爆款短视频%3C/text%3E%3C/svg%3E" alt="短视频" class="w-full h-full object-cover">
+	                    <div class="video-overlay">
+	                        <span class="text-xs text-cyan-400 mb-2">短视频</span>
+	                        <h4 class="font-bold">一条视频涨粉10万的秘密</h4>
+	                    </div>
+	                    <div class="play-btn">
+	                        <svg width="32" height="32" viewBox="0 0 24 24" fill="white">
+	                            <polygon points="5 3 19 12 5 21 5 3"/>
+	                        </svg>
+	                    </div>
+	                </div>
+	                <div class="video-showcase reveal content-item" data-category="knowledge" style="transition-delay: 0.2s;">
+	                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='225'%3E%3Crect fill='%230f3460' width='400' height='225'/%3E%3Ctext x='50%25' y='50%25' fill='%23666' text-anchor='middle' dy='.3em'%3E知识干货%3C/text%3E%3C/svg%3E" alt="知识分享" class="w-full h-full object-cover">
+	                    <div class="video-overlay">
+	                        <span class="text-xs text-green-400 mb-2">知识分享</span>
+	                        <h4 class="font-bold">新人主播从0到1完整攻略</h4>
+	                    </div>
+	                    <div class="play-btn">
+	                        <svg width="32" height="32" viewBox="0 0 24 24" fill="white">
+	                            <polygon points="5 3 19 12 5 21 5 3"/>
+	                        </svg>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </section>
+	    <div class="divider max-w-6xl mx-auto"></div>
+	    <!-- 商务合作 -->
+	    <section id="contact" class="py-20 px-6">
+	        <div class="max-w-4xl mx-auto">
+	            <div class="platform-card p-12 text-center reveal">
+	                <div class="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-orange-500 to-pink-500 flex items-center justify-center heartbeat">
+	                    <svg width="40" height="40" viewBox="0 0 24 24" fill="white">
+	                        <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+	                    </svg>
+	                </div>
+	                <h2 class="font-display text-3xl md:text-4xl font-bold mb-4">商务合作</h2>
+	                <p class="text-gray-400 mb-8 max-w-lg mx-auto">
+	                    诚邀品牌方、供应链伙伴洽谈合作。无论是直播带货、短视频植入还是品牌代言，我们都将以专业态度为您创造最大价值。
+	                </p>
+	                <div class="grid md:grid-cols-2 gap-6 mb-8">
+	                    <div class="bg-black/20 rounded-xl p-6 text-left">
+	                        <h4 class="font-bold mb-3 flex items-center gap-2">
+	                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2">
+	                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+	                            </svg>
+	                            联系电话
+	                        </h4>
+	                        <p class="text-gray-400">400-888-XXXX</p>
+	                    </div>
+	                    <div class="bg-black/20 rounded-xl p-6 text-left">
+	                        <h4 class="font-bold mb-3 flex items-center gap-2">
+	                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2">
+	                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+	                                <polyline points="22,6 12,13 2,6"/>
+	                            </svg>
+	                            商务邮箱
+	                        </h4>
+	                        <p class="text-gray-400">business@zhumeng.com</p>
+	                    </div>
+	                </div>
+	                <div class="flex flex-col sm:flex-row justify-center gap-4">
+	                    <button class="btn-primary">
+	                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+	                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+	                        </svg>
+	                        在线咨询
+	                    </button>
+	                    <button class="btn-primary" style="background: transparent; border: 2px solid var(--accent);">
+	                        下载合作方案
+	                    </button>
+	                </div>
+	            </div>
+	        </div>
+	    </section>
+	    <!-- 页脚 -->
+	    <footer class="py-12 px-6 border-t border-white/5">
+	        <div class="max-w-6xl mx-auto">
+	            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+	                <div class="text-center md:text-left">
+	                    <div class="font-display text-xl font-bold mb-2">助梦网络达人</div>
+	                    <p class="text-gray-600 text-sm">用热爱成就梦想，用专业创造价值</p>
+	                </div>
+	                <div class="flex gap-6">
+	                    <a href="#" class="text-gray-500 hover:text-white transition-colors">抖音主页</a>
+	                    <a href="#" class="text-gray-500 hover:text-white transition-colors">快手主页</a>
+	                    <a href="#" class="text-gray-500 hover:text-white transition-colors">商务合作</a>
+	                </div>
+	            </div>
+	            <div class="mt-8 pt-8 border-t border-white/5 text-center text-gray-600 text-sm">
+	                2020-2026 助梦网络达人 版权所有
+	            </div>
+	        </div>
+	    </footer>
+	    <script>
+	        // 粒子系统
+	        const canvas = document.getElementById('particles-canvas');
+	        const ctx = canvas.getContext('2d');
+	        let particles = [];
+	        let mouseX = 0;
+	        let mouseY = 0;
+	        function resizeCanvas() {
+	            canvas.width = window.innerWidth;
+	            canvas.height = window.innerHeight;
+	        }
+	        function createParticles() {
+	            particles = [];
+	            const particleCount = Math.floor((canvas.width * canvas.height) / 15000);
+	            for (let i = 0; i < particleCount; i++) {
+	                particles.push({
+	                    x: Math.random() * canvas.width,
+	                    y: Math.random() * canvas.height,
+	                    radius: Math.max(0.5, Math.random() * 2),
+	                    vx: (Math.random() - 0.5) * 0.5,
+	                    vy: (Math.random() - 0.5) * 0.5,
+	                    alpha: Math.random() * 0.5 + 0.2,
+	                    color: Math.random() > 0.5 ? 'rgba(255, 107, 53,' : 'rgba(0, 212, 255,'
+	                });
+	            }
+	        }
+	        function drawParticles() {
+	            ctx.clearRect(0, 0, canvas.width, canvas.height);
+	            particles.forEach((p, i) => {
+	                // 移动粒子
+	                p.x += p.vx;
+	                p.y += p.vy;
+	                // 边界检测
+	                if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+	                if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+	                // 鼠标交互
+	                const dx = mouseX - p.x;
+	                const dy = mouseY - p.y;
+	                const dist = Math.sqrt(dx * dx + dy * dy);
+	                if (dist < 150) {
+	                    const force = (150 - dist) / 150;
+	                    p.x -= dx * force * 0.02;
+	                    p.y -= dy * force * 0.02;
+	                }
+	                // 绘制粒子
+	                ctx.beginPath();
+	                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+	                ctx.fillStyle = p.color + p.alpha + ')';
+	                ctx.fill();
+	                // 连接线
+	                particles.slice(i + 1).forEach(p2 => {
+	                    const dx2 = p.x - p2.x;
+	                    const dy2 = p.y - p2.y;
+	                    const dist2 = Math.sqrt(dx2 * dx2 + dy2 * dy2);
+	                    if (dist2 < 100) {
+	                        ctx.beginPath();
+	                        ctx.moveTo(p.x, p.y);
+	                        ctx.lineTo(p2.x, p2.y);
+	                        ctx.strokeStyle = 'rgba(255, 255, 255,' + (0.1 * (1 - dist2 / 100)) + ')';
+	                        ctx.stroke();
+	                    }
+	                });
+	            });
+	            requestAnimationFrame(drawParticles);
+	        }
+	        // 初始化粒子系统
+	        resizeCanvas();
+	        createParticles();
+	        drawParticles();
+	        window.addEventListener('resize', () => {
+	            resizeCanvas();
+	            createParticles();
+	        });
+	        document.addEventListener('mousemove', (e) => {
+	            mouseX = e.clientX;
+	            mouseY = e.clientY;
+	        });
+	        // 滚动动画
+	        const observerOptions = {
+	            threshold: 0.1,
+	            rootMargin: '0px 0px -50px 0px'
+	        };
+	        const observer = new IntersectionObserver((entries) => {
+	            entries.forEach(entry => {
+	                if (entry.isIntersecting) {
+	                    entry.target.classList.add('active');
+	                }
+	            });
+	        }, observerOptions);
+	        document.querySelectorAll('.reveal').forEach(el => {
+	            observer.observe(el);
+	        });
+	        // 导航滚动效果
+	        const nav = document.getElementById('nav');
+	        window.addEventListener('scroll', () => {
+	            if (window.scrollY > 50) {
+	                nav.classList.add('scrolled');
+	            } else {
+	                nav.classList.remove('scrolled');
+	            }
+	        });
+	        // 数字滚动动画
+	        function animateNumbers() {
+	            const numbers = document.querySelectorAll('.stat-number');
+	            numbers.forEach(num => {
+	                const target = parseInt(num.dataset.target);
+	                const duration = 2000;
+	                const start = performance.now();
+	                function update(currentTime) {
+	                    const elapsed = currentTime - start;
+	                    const progress = Math.min(elapsed / duration, 1);
+	                    // 缓动函数
+	                    const easeOut = 1 - Math.pow(1 - progress, 3);
+	                    const current = Math.floor(target * easeOut);
+	                    num.textContent = current;
+	                    if (progress < 1) {
+	                        requestAnimationFrame(update);
+	                    } else {
+	                        num.textContent = target;
+	                    }
+	                }
+	                requestAnimationFrame(update);
+	            });
+	        }
+	        // 当统计区域可见时触发数字动画
+	        const statsObserver = new IntersectionObserver((entries) => {
+	            entries.forEach(entry => {
+	                if (entry.isIntersecting) {
+	                    animateNumbers();
+	                    statsObserver.disconnect();
+	                }
+	            });
+	        }, { threshold: 0.5 });
+	        const statsSection = document.querySelector('.stat-number');
+	        if (statsSection) {
+	            statsObserver.observe(statsSection.parentElement.parentElement);
+	        }
+	        // 平滑滚动
+	        function scrollToSection(id) {
+	            const element = document.getElementById(id);
+	            if (element) {
+	                element.scrollIntoView({ behavior: 'smooth' });
+	            }
+	        }
+	        // 内容分类切换
+	        const contentTabs = document.querySelectorAll('.content-tab');
+	        const contentItems = document.querySelectorAll('.content-item');
+	        contentTabs.forEach(tab => {
+	            tab.addEventListener('click', () => {
+	                // 更新按钮状态
+	                contentTabs.forEach(t => {
+	                    t.classList.remove('active', 'bg-white/10', 'text-white');
+	                    t.classList.add('bg-transparent', 'text-gray-500');
+	                });
+	                tab.classList.add('active', 'bg-white/10', 'text-white');
+	                tab.classList.remove('bg-transparent', 'text-gray-500');
+	                // 过滤内容
+	                const filter = tab.dataset.tab;
+	                contentItems.forEach(item => {
+	                    if (filter === 'all' || item.dataset.category === filter) {
+	                        item.style.display = 'block';
+	                        item.style.opacity = '1';
+	                    } else {
+	                        item.style.opacity = '0';
+	                        setTimeout(() => {
+	                            item.style.display = 'none';
+	                        }, 300);
+	                    }
+	                });
+	            });
+	        });
+	        // 初始化第一个标签页状态
+	        const firstTab = contentTabs[0];
+	        if (firstTab) {
+	            firstTab.classList.add('bg-white/10', 'text-white');
+	        }
+	    </script>
+	</body>
+	</html>
