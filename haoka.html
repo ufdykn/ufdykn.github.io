@@ -1,0 +1,1176 @@
+	<!DOCTYPE html>
+	<html lang="zh-CN">
+	<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>快手主播助梦网络达人 靓号办理代理</title>
+	<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+	<style>
+	  :root {
+	    --bg: #0a0a0c;
+	    --bg-deep: #050507;
+	    --fg: #f0ece4;
+	    --fg-muted: #8a8578;
+	    --accent: #c9a84c;
+	    --accent-light: #e8d48b;
+	    --accent-dark: #8b6914;
+	    --card: rgba(18, 17, 20, 0.85);
+	    --card-hover: rgba(28, 26, 32, 0.95);
+	    --border: rgba(201, 168, 76, 0.15);
+	    --border-active: rgba(201, 168, 76, 0.4);
+	    --glow: rgba(201, 168, 76, 0.08);
+	  }
+	  * { margin: 0; padding: 0; box-sizing: border-box; }
+	  html {
+	    scroll-behavior: smooth;
+	    scrollbar-width: thin;
+	    scrollbar-color: var(--accent-dark) var(--bg);
+	  }
+	  body {
+	    font-family: 'Noto Sans SC', sans-serif;
+	    background: var(--bg);
+	    color: var(--fg);
+	    overflow-x: hidden;
+	    line-height: 1.8;
+	  }
+	  /* ===== 全局粒子画布 ===== */
+	  #particle-canvas {
+	    position: fixed;
+	    top: 0; left: 0;
+	    width: 100%; height: 100%;
+	    z-index: 0;
+	    pointer-events: none;
+	  }
+	  /* ===== 导航 ===== */
+	  nav {
+	    position: fixed;
+	    top: 0; left: 0; right: 0;
+	    z-index: 100;
+	    padding: 1rem 2rem;
+	    display: flex;
+	    justify-content: space-between;
+	    align-items: center;
+	    backdrop-filter: blur(20px);
+	    background: rgba(10, 10, 12, 0.6);
+	    border-bottom: 1px solid var(--border);
+	    transition: all 0.4s ease;
+	  }
+	  nav.scrolled {
+	    padding: 0.6rem 2rem;
+	    background: rgba(10, 10, 12, 0.92);
+	  }
+	  .nav-brand {
+	    font-family: 'Noto Serif SC', serif;
+	    font-size: 1.3rem;
+	    font-weight: 900;
+	    color: var(--accent);
+	    letter-spacing: 0.1em;
+	    text-decoration: none;
+	  }
+	  .nav-brand span {
+	    color: var(--fg);
+	    font-weight: 400;
+	  }
+	  .nav-links {
+	    display: flex;
+	    gap: 2rem;
+	    list-style: none;
+	  }
+	  .nav-links a {
+	    color: var(--fg-muted);
+	    text-decoration: none;
+	    font-size: 0.85rem;
+	    font-weight: 500;
+	    letter-spacing: 0.08em;
+	    transition: color 0.3s;
+	    position: relative;
+	  }
+	  .nav-links a::after {
+	    content: '';
+	    position: absolute;
+	    bottom: -4px;
+	    left: 0; right: 0;
+	    height: 1px;
+	    background: var(--accent);
+	    transform: scaleX(0);
+	    transition: transform 0.3s ease;
+	  }
+	  .nav-links a:hover { color: var(--accent); }
+	  .nav-links a:hover::after { transform: scaleX(1); }
+	  /* ===== 英雄区 ===== */
+	  .hero {
+	    position: relative;
+	    min-height: 100vh;
+	    display: flex;
+	    flex-direction: column;
+	    justify-content: center;
+	    align-items: center;
+	    text-align: center;
+	    padding: 6rem 2rem 4rem;
+	    z-index: 1;
+	  }
+	  .hero::before {
+	    content: '';
+	    position: absolute;
+	    top: 0; left: 0; right: 0; bottom: 0;
+	    background:
+	      radial-gradient(ellipse 60% 50% at 50% 40%, rgba(201, 168, 76, 0.06) 0%, transparent 70%),
+	      radial-gradient(ellipse 80% 60% at 30% 80%, rgba(139, 105, 20, 0.04) 0%, transparent 60%),
+	      radial-gradient(ellipse 40% 30% at 70% 20%, rgba(232, 212, 139, 0.03) 0%, transparent 50%);
+	    z-index: -1;
+	  }
+	  .hero-badge {
+	    display: inline-flex;
+	    align-items: center;
+	    gap: 0.5rem;
+	    padding: 0.4rem 1.2rem;
+	    border: 1px solid var(--border-active);
+	    border-radius: 100px;
+	    font-size: 0.75rem;
+	    color: var(--accent);
+	    letter-spacing: 0.15em;
+	    text-transform: uppercase;
+	    margin-bottom: 2rem;
+	    animation: fadeInUp 1s ease 0.2s both;
+	    background: rgba(201, 168, 76, 0.04);
+	  }
+	  .hero-badge i { font-size: 0.65rem; }
+	  .hero-title {
+	    font-family: 'Noto Serif SC', serif;
+	    font-size: clamp(2.8rem, 7vw, 5.5rem);
+	    font-weight: 900;
+	    line-height: 1.15;
+	    margin-bottom: 1.5rem;
+	    animation: fadeInUp 1s ease 0.4s both;
+	  }
+	  .hero-title .line1 { display: block; color: var(--fg); }
+	  .hero-title .line2 {
+	    display: block;
+	    background: linear-gradient(135deg, var(--accent-light), var(--accent), var(--accent-dark));
+	    -webkit-background-clip: text;
+	    -webkit-text-fill-color: transparent;
+	    background-clip: text;
+	  }
+	  .hero-subtitle {
+	    font-size: clamp(0.95rem, 2vw, 1.15rem);
+	    color: var(--fg-muted);
+	    max-width: 600px;
+	    margin: 0 auto 2.5rem;
+	    font-weight: 300;
+	    line-height: 2;
+	    animation: fadeInUp 1s ease 0.6s both;
+	  }
+	  .hero-subtitle em {
+	    font-style: normal;
+	    color: var(--accent);
+	    font-weight: 500;
+	  }
+	  .hero-cta-group {
+	    display: flex;
+	    gap: 1rem;
+	    flex-wrap: wrap;
+	    justify-content: center;
+	    animation: fadeInUp 1s ease 0.8s both;
+	  }
+	  .btn-primary {
+	    display: inline-flex;
+	    align-items: center;
+	    gap: 0.6rem;
+	    padding: 0.9rem 2.2rem;
+	    background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+	    color: var(--bg);
+	    font-weight: 700;
+	    font-size: 0.9rem;
+	    letter-spacing: 0.06em;
+	    border: none;
+	    border-radius: 4px;
+	    cursor: pointer;
+	    transition: all 0.3s ease;
+	    text-decoration: none;
+	    position: relative;
+	    overflow: hidden;
+	  }
+	  .btn-primary::before {
+	    content: '';
+	    position: absolute;
+	    top: 0; left: -100%;
+	    width: 100%; height: 100%;
+	    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+	    transition: left 0.5s ease;
+	  }
+	  .btn-primary:hover::before { left: 100%; }
+	  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(201, 168, 76, 0.3); }
+	  .btn-ghost {
+	    display: inline-flex;
+	    align-items: center;
+	    gap: 0.6rem;
+	    padding: 0.9rem 2.2rem;
+	    background: transparent;
+	    color: var(--fg);
+	    font-weight: 500;
+	    font-size: 0.9rem;
+	    letter-spacing: 0.06em;
+	    border: 1px solid var(--border-active);
+	    border-radius: 4px;
+	    cursor: pointer;
+	    transition: all 0.3s ease;
+	    text-decoration: none;
+	  }
+	  .btn-ghost:hover {
+	    border-color: var(--accent);
+	    background: rgba(201, 168, 76, 0.06);
+	    transform: translateY(-2px);
+	  }
+	  /* 滚动提示 */
+	  .scroll-hint {
+	    position: absolute;
+	    bottom: 2rem;
+	    left: 50%;
+	    transform: translateX(-50%);
+	    display: flex;
+	    flex-direction: column;
+	    align-items: center;
+	    gap: 0.5rem;
+	    animation: fadeInUp 1s ease 1.2s both;
+	  }
+	  .scroll-hint span {
+	    font-size: 0.65rem;
+	    color: var(--fg-muted);
+	    letter-spacing: 0.2em;
+	  }
+	  .scroll-line {
+	    width: 1px;
+	    height: 40px;
+	    background: linear-gradient(to bottom, var(--accent), transparent);
+	    animation: scrollPulse 2s ease infinite;
+	  }
+	  @keyframes scrollPulse {
+	    0%, 100% { opacity: 0.3; transform: scaleY(0.6); }
+	    50% { opacity: 1; transform: scaleY(1); }
+	  }
+	  /* ===== 数据条 ===== */
+	  .stats-bar {
+	    position: relative;
+	    z-index: 1;
+	    display: grid;
+	    grid-template-columns: repeat(4, 1fr);
+	    max-width: 1000px;
+	    margin: -3rem auto 0;
+	    padding: 0 2rem;
+	    gap: 1px;
+	    background: var(--border);
+	    border-radius: 4px;
+	    overflow: hidden;
+	  }
+	  .stat-item {
+	    background: var(--card);
+	    padding: 2rem 1rem;
+	    text-align: center;
+	    transition: background 0.3s;
+	  }
+	  .stat-item:hover { background: var(--card-hover); }
+	  .stat-number {
+	    font-family: 'Noto Serif SC', serif;
+	    font-size: clamp(1.8rem, 4vw, 2.5rem);
+	    font-weight: 900;
+	    color: var(--accent);
+	    line-height: 1;
+	    margin-bottom: 0.4rem;
+	  }
+	  .stat-label {
+	    font-size: 0.75rem;
+	    color: var(--fg-muted);
+	    letter-spacing: 0.1em;
+	  }
+	  /* ===== 业务板块 ===== */
+	  .section {
+	    position: relative;
+	    z-index: 1;
+	    max-width: 1100px;
+	    margin: 0 auto;
+	    padding: 6rem 2rem;
+	  }
+	  .section-header {
+	    text-align: center;
+	    margin-bottom: 4rem;
+	  }
+	  .section-tag {
+	    display: inline-block;
+	    font-size: 0.7rem;
+	    color: var(--accent);
+	    letter-spacing: 0.25em;
+	    text-transform: uppercase;
+	    margin-bottom: 1rem;
+	    position: relative;
+	  }
+	  .section-tag::before, .section-tag::after {
+	    content: '';
+	    position: absolute;
+	    top: 50%;
+	    width: 30px;
+	    height: 1px;
+	    background: var(--border-active);
+	  }
+	  .section-tag::before { right: calc(100% + 12px); }
+	  .section-tag::after { left: calc(100% + 12px); }
+	  .section-title {
+	    font-family: 'Noto Serif SC', serif;
+	    font-size: clamp(2rem, 4vw, 2.8rem);
+	    font-weight: 900;
+	    margin-bottom: 1rem;
+	  }
+	  .section-desc {
+	    font-size: 0.95rem;
+	    color: var(--fg-muted);
+	    max-width: 550px;
+	    margin: 0 auto;
+	    font-weight: 300;
+	  }
+	  /* 双栏卡片 */
+	  .biz-grid {
+	    display: grid;
+	    grid-template-columns: 1fr 1fr;
+	    gap: 1.5rem;
+	  }
+	  .biz-card {
+	    position: relative;
+	    background: var(--card);
+	    border: 1px solid var(--border);
+	    border-radius: 6px;
+	    padding: 2.5rem 2rem;
+	    transition: all 0.4s ease;
+	    overflow: hidden;
+	  }
+	  .biz-card::before {
+	    content: '';
+	    position: absolute;
+	    top: 0; left: 0;
+	    width: 100%; height: 3px;
+	    background: linear-gradient(90deg, var(--accent), transparent);
+	    opacity: 0;
+	    transition: opacity 0.4s;
+	  }
+	  .biz-card:hover {
+	    border-color: var(--border-active);
+	    background: var(--card-hover);
+	    transform: translateY(-4px);
+	    box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 40px var(--glow);
+	  }
+	  .biz-card:hover::before { opacity: 1; }
+	  .biz-card-icon {
+	    width: 50px;
+	    height: 50px;
+	    border-radius: 4px;
+	    background: rgba(201, 168, 76, 0.08);
+	    border: 1px solid var(--border);
+	    display: flex;
+	    align-items: center;
+	    justify-content: center;
+	    margin-bottom: 1.5rem;
+	    font-size: 1.2rem;
+	    color: var(--accent);
+	    transition: all 0.3s;
+	  }
+	  .biz-card:hover .biz-card-icon {
+	    background: rgba(201, 168, 76, 0.15);
+	    border-color: var(--accent);
+	  }
+	  .biz-card-title {
+	    font-family: 'Noto Serif SC', serif;
+	    font-size: 1.4rem;
+	    font-weight: 700;
+	    margin-bottom: 0.8rem;
+	  }
+	  .biz-card-desc {
+	    font-size: 0.88rem;
+	    color: var(--fg-muted);
+	    line-height: 1.9;
+	    margin-bottom: 1.5rem;
+	  }
+	  .biz-card-highlight {
+	    display: inline-flex;
+	    align-items: center;
+	    gap: 0.4rem;
+	    padding: 0.35rem 0.9rem;
+	    background: rgba(201, 168, 76, 0.08);
+	    border: 1px solid var(--border);
+	    border-radius: 3px;
+	    font-size: 0.8rem;
+	    color: var(--accent-light);
+	    font-weight: 500;
+	  }
+	  /* ===== 利润计算器 ===== */
+	  .profit-section {
+	    position: relative;
+	    z-index: 1;
+	    background: var(--bg-deep);
+	    padding: 5rem 2rem;
+	    overflow: hidden;
+	  }
+	  .profit-section::before {
+	    content: '';
+	    position: absolute;
+	    top: -50%; left: -50%;
+	    width: 200%; height: 200%;
+	    background: radial-gradient(ellipse at 30% 50%, rgba(201, 168, 76, 0.03) 0%, transparent 50%);
+	  }
+	  .profit-inner {
+	    max-width: 1100px;
+	    margin: 0 auto;
+	    position: relative;
+	  }
+	  .profit-grid {
+	    display: grid;
+	    grid-template-columns: 1fr 1fr;
+	    gap: 3rem;
+	    align-items: center;
+	  }
+	  .profit-left .profit-tagline {
+	    font-family: 'Noto Serif SC', serif;
+	    font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+	    font-weight: 900;
+	    line-height: 1.4;
+	    margin-bottom: 1.5rem;
+	  }
+	  .profit-left .profit-tagline span { color: var(--accent); }
+	  .profit-left p {
+	    color: var(--fg-muted);
+	    font-size: 0.9rem;
+	    margin-bottom: 1.5rem;
+	    font-weight: 300;
+	  }
+	  .profit-features {
+	    list-style: none;
+	    display: flex;
+	    flex-direction: column;
+	    gap: 0.8rem;
+	  }
+	  .profit-features li {
+	    display: flex;
+	    align-items: center;
+	    gap: 0.8rem;
+	    font-size: 0.88rem;
+	    color: var(--fg);
+	  }
+	  .profit-features li i {
+	    color: var(--accent);
+	    font-size: 0.7rem;
+	    width: 20px;
+	    height: 20px;
+	    border-radius: 50%;
+	    border: 1px solid var(--border-active);
+	    display: flex;
+	    align-items: center;
+	    justify-content: center;
+	    flex-shrink: 0;
+	  }
+	  .profit-calc {
+	    background: var(--card);
+	    border: 1px solid var(--border);
+	    border-radius: 6px;
+	    padding: 2.5rem;
+	  }
+	  .profit-calc h4 {
+	    font-family: 'Noto Serif SC', serif;
+	    font-size: 1.1rem;
+	    margin-bottom: 1.5rem;
+	    display: flex;
+	    align-items: center;
+	    gap: 0.5rem;
+	  }
+	  .profit-calc h4 i { color: var(--accent); }
+	  .calc-row {
+	    margin-bottom: 1.2rem;
+	  }
+	  .calc-row label {
+	    display: block;
+	    font-size: 0.78rem;
+	    color: var(--fg-muted);
+	    margin-bottom: 0.4rem;
+	    letter-spacing: 0.05em;
+	  }
+	  .calc-slider-wrap {
+	    display: flex;
+	    align-items: center;
+	    gap: 1rem;
+	  }
+	  .calc-slider-wrap input[type="range"] {
+	    flex: 1;
+	    -webkit-appearance: none;
+	    appearance: none;
+	    height: 4px;
+	    background: var(--border);
+	    border-radius: 2px;
+	    outline: none;
+	  }
+	  .calc-slider-wrap input[type="range"]::-webkit-slider-thumb {
+	    -webkit-appearance: none;
+	    width: 16px;
+	    height: 16px;
+	    border-radius: 50%;
+	    background: var(--accent);
+	    cursor: pointer;
+	    box-shadow: 0 0 10px rgba(201, 168, 76, 0.4);
+	  }
+	  .calc-val {
+	    font-family: 'Noto Serif SC', serif;
+	    font-size: 1.2rem;
+	    font-weight: 700;
+	    color: var(--accent);
+	    min-width: 50px;
+	    text-align: right;
+	  }
+	  .calc-result {
+	    margin-top: 1.5rem;
+	    padding: 1.5rem;
+	    background: rgba(201, 168, 76, 0.05);
+	    border: 1px solid var(--border);
+	    border-radius: 4px;
+	    text-align: center;
+	  }
+	  .calc-result-label {
+	    font-size: 0.75rem;
+	    color: var(--fg-muted);
+	    letter-spacing: 0.1em;
+	    margin-bottom: 0.3rem;
+	  }
+	  .calc-result-num {
+	    font-family: 'Noto Serif SC', serif;
+	    font-size: 2.4rem;
+	    font-weight: 900;
+	    color: var(--accent);
+	  }
+	  .calc-result-unit {
+	    font-size: 0.9rem;
+	    color: var(--fg-muted);
+	    font-weight: 300;
+	  }
+	  /* ===== 励志区 ===== */
+	  .motivation-section {
+	    position: relative;
+	    z-index: 1;
+	    padding: 6rem 2rem;
+	    text-align: center;
+	    overflow: hidden;
+	  }
+	  .motivation-section::before {
+	    content: '';
+	    position: absolute;
+	    top: 0; left: 0; right: 0; bottom: 0;
+	    background:
+	      radial-gradient(ellipse 50% 60% at 50% 50%, rgba(201, 168, 76, 0.04) 0%, transparent 70%);
+	  }
+	  .motivation-quote {
+	    position: relative;
+	    max-width: 750px;
+	    margin: 0 auto;
+	  }
+	  .motivation-quote .quote-mark {
+	    font-family: 'Noto Serif SC', serif;
+	    font-size: 6rem;
+	    color: var(--accent);
+	    opacity: 0.15;
+	    line-height: 1;
+	    user-select: none;
+	  }
+	  .motivation-text {
+	    font-family: 'Noto Serif SC', serif;
+	    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+	    font-weight: 700;
+	    line-height: 2.2;
+	    margin: -2rem 0 2rem;
+	    position: relative;
+	  }
+	  .motivation-text .highlight {
+	    color: var(--accent);
+	    position: relative;
+	  }
+	  .motivation-text .highlight::after {
+	    content: '';
+	    position: absolute;
+	    bottom: 2px;
+	    left: 0; right: 0;
+	    height: 2px;
+	    background: var(--accent);
+	    opacity: 0.3;
+	  }
+	  .motivation-author {
+	    font-size: 0.85rem;
+	    color: var(--fg-muted);
+	    font-weight: 300;
+	    letter-spacing: 0.15em;
+	  }
+	  /* ===== 步骤流程 ===== */
+	  .steps-grid {
+	    display: grid;
+	    grid-template-columns: repeat(4, 1fr);
+	    gap: 1.5rem;
+	    position: relative;
+	  }
+	  .steps-grid::before {
+	    content: '';
+	    position: absolute;
+	    top: 40px;
+	    left: 12%;
+	    right: 12%;
+	    height: 1px;
+	    background: linear-gradient(90deg, transparent, var(--border-active), transparent);
+	  }
+	  .step-item {
+	    text-align: center;
+	    position: relative;
+	  }
+	  .step-num {
+	    width: 50px;
+	    height: 50px;
+	    border-radius: 50%;
+	    border: 2px solid var(--accent);
+	    display: flex;
+	    align-items: center;
+	    justify-content: center;
+	    margin: 0 auto 1.2rem;
+	    font-family: 'Noto Serif SC', serif;
+	    font-size: 1.1rem;
+	    font-weight: 900;
+	    color: var(--accent);
+	    background: var(--bg);
+	    position: relative;
+	    z-index: 2;
+	    transition: all 0.3s;
+	  }
+	  .step-item:hover .step-num {
+	    background: var(--accent);
+	    color: var(--bg);
+	    box-shadow: 0 0 25px rgba(201, 168, 76, 0.3);
+	  }
+	  .step-title {
+	    font-weight: 700;
+	    font-size: 1rem;
+	    margin-bottom: 0.5rem;
+	  }
+	  .step-desc {
+	    font-size: 0.8rem;
+	    color: var(--fg-muted);
+	    font-weight: 300;
+	    line-height: 1.7;
+	  }
+	  /* ===== CTA区 ===== */
+	  .cta-section {
+	    position: relative;
+	    z-index: 1;
+	    padding: 5rem 2rem;
+	    text-align: center;
+	  }
+	  .cta-box {
+	    max-width: 700px;
+	    margin: 0 auto;
+	    background: var(--card);
+	    border: 1px solid var(--border-active);
+	    border-radius: 8px;
+	    padding: 4rem 3rem;
+	    position: relative;
+	    overflow: hidden;
+	  }
+	  .cta-box::before {
+	    content: '';
+	    position: absolute;
+	    top: -1px; left: -1px; right: -1px;
+	    height: 3px;
+	    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+	  }
+	  .cta-box::after {
+	    content: '';
+	    position: absolute;
+	    bottom: -1px; left: -1px; right: -1px;
+	    height: 3px;
+	    background: linear-gradient(90deg, transparent, var(--accent-dark), transparent);
+	  }
+	  .cta-price {
+	    margin-bottom: 1.5rem;
+	  }
+	  .cta-price-label {
+	    font-size: 0.75rem;
+	    color: var(--fg-muted);
+	    letter-spacing: 0.15em;
+	    margin-bottom: 0.3rem;
+	  }
+	  .cta-price-num {
+	    font-family: 'Noto Serif SC', serif;
+	    font-size: 3.5rem;
+	    font-weight: 900;
+	    color: var(--accent);
+	    line-height: 1;
+	  }
+	  .cta-price-num span {
+	    font-size: 1.5rem;
+	    font-weight: 400;
+	  }
+	  .cta-title {
+	    font-family: 'Noto Serif SC', serif;
+	    font-size: 1.5rem;
+	    font-weight: 700;
+	    margin-bottom: 0.8rem;
+	  }
+	  .cta-desc {
+	    font-size: 0.9rem;
+	    color: var(--fg-muted);
+	    font-weight: 300;
+	    margin-bottom: 2rem;
+	  }
+	  .cta-wechat {
+	    display: inline-flex;
+	    align-items: center;
+	    gap: 0.6rem;
+	    padding: 0.7rem 1.8rem;
+	    background: rgba(201, 168, 76, 0.08);
+	    border: 1px solid var(--border-active);
+	    border-radius: 4px;
+	    font-size: 1rem;
+	    color: var(--accent-light);
+	    font-weight: 700;
+	    letter-spacing: 0.15em;
+	  }
+	  .cta-wechat i { font-size: 1.2rem; color: #07c160; }
+	  /* ===== 页脚 ===== */
+	  footer {
+	    position: relative;
+	    z-index: 1;
+	    border-top: 1px solid var(--border);
+	    padding: 2rem;
+	    text-align: center;
+	  }
+	  footer p {
+	    font-size: 0.75rem;
+	    color: var(--fg-muted);
+	    font-weight: 300;
+	    letter-spacing: 0.05em;
+	  }
+	  footer p span { color: var(--accent); }
+	  /* ===== 滚动显现 ===== */
+	  .reveal {
+	    opacity: 0;
+	    transform: translateY(30px);
+	    transition: opacity 0.8s ease, transform 0.8s ease;
+	  }
+	  .reveal.visible {
+	    opacity: 1;
+	    transform: translateY(0);
+	  }
+	  /* ===== 动画 ===== */
+	  @keyframes fadeInUp {
+	    from { opacity: 0; transform: translateY(25px); }
+	    to { opacity: 1; transform: translateY(0); }
+	  }
+	  @keyframes float {
+	    0%, 100% { transform: translateY(0); }
+	    50% { transform: translateY(-8px); }
+	  }
+	  /* ===== 响应式 ===== */
+	  @media (max-width: 900px) {
+	    .biz-grid { grid-template-columns: 1fr; }
+	    .profit-grid { grid-template-columns: 1fr; }
+	    .steps-grid { grid-template-columns: repeat(2, 1fr); }
+	    .steps-grid::before { display: none; }
+	    .stats-bar { grid-template-columns: repeat(2, 1fr); }
+	    .nav-links { display: none; }
+	  }
+	  @media (max-width: 600px) {
+	    .steps-grid { grid-template-columns: 1fr; }
+	    .stats-bar { grid-template-columns: 1fr; }
+	    .cta-box { padding: 3rem 1.5rem; }
+	  }
+	  /* ===== Toast ===== */
+	  .toast {
+	    position: fixed;
+	    bottom: 2rem;
+	    left: 50%;
+	    transform: translateX(-50%) translateY(100px);
+	    background: var(--card-hover);
+	    border: 1px solid var(--border-active);
+	    border-radius: 6px;
+	    padding: 0.8rem 1.6rem;
+	    font-size: 0.85rem;
+	    color: var(--accent-light);
+	    z-index: 999;
+	    opacity: 0;
+	    transition: all 0.4s ease;
+	    backdrop-filter: blur(10px);
+	  }
+	  .toast.show {
+	    transform: translateX(-50%) translateY(0);
+	    opacity: 1;
+	  }
+	  /* ===== 光标跟随 ===== */
+	  .cursor-glow {
+	    position: fixed;
+	    width: 300px;
+	    height: 300px;
+	    border-radius: 50%;
+	    background: radial-gradient(circle, rgba(201, 168, 76, 0.04) 0%, transparent 70%);
+	    pointer-events: none;
+	    z-index: 0;
+	    transform: translate(-50%, -50%);
+	    transition: left 0.3s ease, top 0.3s ease;
+	  }
+	  @media (prefers-reduced-motion: reduce) {
+	    .reveal { opacity: 1; transform: none; transition: none; }
+	    .scroll-line { animation: none; }
+	    #particle-canvas { display: none; }
+	    .cursor-glow { display: none; }
+	  }
+	</style>
+	</head>
+	<body>
+	<!-- 粒子画布 -->
+	<canvas id="particle-canvas"></canvas>
+	<!-- 光标跟随 -->
+	<div class="cursor-glow" id="cursorGlow"></div>
+	<!-- 导航 -->
+	<nav id="mainNav">
+	  <a href="#" class="nav-brand">助梦<span>网络达人</span></a>
+	  <ul class="nav-links">
+	    <li><a href="#business">核心业务</a></li>
+	    <li><a href="#profit">利润模型</a></li>
+	    <li><a href="#steps">加入流程</a></li>
+	    <li><a href="#join">立即加入</a></li>
+	  </ul>
+	</nav>
+	<!-- 英雄区 -->
+	<section class="hero">
+	  <div class="hero-badge"><i class="fas fa-gem"></i> 手机靓号 · 流量卡 · 代理招募</div>
+	  <h1 class="hero-title">
+	    <span class="line1">乾坤未定</span>
+	    <span class="line2">你我皆是黑马</span>
+	  </h1>
+	  <p class="hero-subtitle">
+	    别总羡慕别人的高光，谁不是从暗处<em>死磕</em>熬过来的？<br>
+	    现在的你，可能只是一粒微小的种子，但只要<em>拼命扎根</em>，哪怕生于平凡街巷，也终能破土而出。
+	  </p>
+	  <div class="hero-cta-group">
+	    <a href="#join" class="btn-primary"><i class="fas fa-bolt"></i> 特价99成为代理</a>
+	    <a href="#business" class="btn-ghost"><i class="fas fa-eye"></i> 了解详情</a>
+	  </div>
+	  <div class="scroll-hint">
+	    <span>向下探索</span>
+	    <div class="scroll-line"></div>
+	  </div>
+	</section>
+	<!-- 数据条 -->
+	<div class="stats-bar reveal">
+	  <div class="stat-item">
+	    <div class="stat-number" data-target="150">0</div>
+	    <div class="stat-label">每单最低利润（元）</div>
+	  </div>
+	  <div class="stat-item">
+	    <div class="stat-number" data-target="4500">0</div>
+	    <div class="stat-label">月均预期收入（元）</div>
+	  </div>
+	  <div class="stat-item">
+	    <div class="stat-number" data-target="99">0</div>
+	    <div class="stat-label">代理入门价（元）</div>
+	  </div>
+	  <div class="stat-item">
+	    <div class="stat-number" data-target="72">0</div>
+	    <div class="stat-label">小时内快速回本</div>
+	  </div>
+	</div>
+	<!-- 核心业务 -->
+	<section class="section" id="business">
+	  <div class="section-header reveal">
+	    <div class="section-tag">核心业务</div>
+	    <h2 class="section-title">两大赛道，双倍收益</h2>
+	    <p class="section-desc">靓号搭配流量卡，嘎嘎好卖——朋友圈就是你的商铺，每单利润不低于150元，上不封顶</p>
+	  </div>
+	  <div class="biz-grid">
+	    <div class="biz-card reveal">
+	      <div class="biz-card-icon"><i class="fas fa-crown"></i></div>
+	      <h3 class="biz-card-title">极品手机靓号</h3>
+	      <p class="biz-card-desc">
+	        超低价拿货，高溢价出单。豹子号、顺子号、情侣号……稀缺资源，每单利润不低于150元，上不封顶。无需囤货，后台实时更新号码资源，所见即所得。
+	      </p>
+	      <div class="biz-card-highlight"><i class="fas fa-arrow-trend-up"></i> 利润上不封顶</div>
+	    </div>
+	    <div class="biz-card reveal">
+	      <div class="biz-card-icon"><i class="fas fa-sim-card"></i></div>
+	      <h3 class="biz-card-title">大流量套餐卡</h3>
+	      <p class="biz-card-desc">
+	        19元235G、29元130G等爆款套餐，市场刚需，人人需要。一单佣金高达150+，靓号搭配流量卡组合销售，转化率翻倍。官方直签，正规可查。
+	      </p>
+	      <div class="biz-card-highlight"><i class="fas fa-fire"></i> 单笔佣金150+</div>
+	    </div>
+	  </div>
+	</section>
+	<!-- 利润模型 -->
+	<section class="profit-section" id="profit">
+	  <div class="profit-inner">
+	    <div class="profit-grid">
+	      <div class="profit-left reveal">
+	        <div class="profit-tagline">
+	          出1-2单<br>即可<span>回本</span>
+	        </div>
+	        <p>一天卖一单，一个月就是4500+。佣金自动结算，后台实时更新，自助提现即可。你咽下的每一口苦，都在为逆袭蓄力。</p>
+	        <ul class="profit-features">
+	          <li><i class="fas fa-check"></i> 佣金自动结算，无需催款</li>
+	          <li><i class="fas fa-check"></i> 专属后台，实时更新数据</li>
+	          <li><i class="fas fa-check"></i> 自助提现，资金秒到账</li>
+	          <li><i class="fas fa-check"></i> 无需囤货，零库存压力</li>
+	          <li><i class="fas fa-check"></i> 朋友圈即可运营，无需门店</li>
+	        </ul>
+	      </div>
+	      <div class="profit-calc reveal">
+	        <h4><i class="fas fa-calculator"></i> 收益测算</h4>
+	        <div class="calc-row">
+	          <label>日均出单量</label>
+	          <div class="calc-slider-wrap">
+	            <input type="range" id="dailyOrders" min="1" max="10" value="3" step="1">
+	            <div class="calc-val" id="dailyVal">3</div>
+	          </div>
+	        </div>
+	        <div class="calc-row">
+	          <label>单均利润（元）</label>
+	          <div class="calc-slider-wrap">
+	            <input type="range" id="perProfit" min="200" max="500" value="200" step="50">
+	            <div class="calc-val" id="profitVal">200</div>
+	          </div>
+	        </div>
+	        <div class="calc-result">
+	          <div class="calc-result-label">预计月收入</div>
+	          <div class="calc-result-num" id="monthIncome">10000</div>
+	          <div class="calc-result-unit">元 / 月</div>
+	        </div>
+	      </div>
+	    </div>
+	  </div>
+	</section>
+	<!-- 励志区 -->
+	<section class="motivation-section">
+	  <div class="motivation-quote reveal">
+	    <div class="quote-mark">"</div>
+	    <p class="motivation-text">
+	      别怕低谷，你咽下的每一口苦，<br>都在为<span class="highlight">逆袭</span>蓄力。<br>
+	      哪怕生于平凡街巷，<br>也终能<span class="highlight">破土而出</span>。
+	    </p>
+	    <div class="motivation-author">—— 致每一位不甘平凡的你</div>
+	  </div>
+	</section>
+	<!-- 加入流程 -->
+	<section class="section" id="steps">
+	  <div class="section-header reveal">
+	    <div class="section-tag">加入流程</div>
+	    <h2 class="section-title">四步启航，简单直接</h2>
+	    <p class="section-desc">从代理到盈利，全程指导，小白也能快速上手</p>
+	  </div>
+	  <div class="steps-grid reveal">
+	    <div class="step-item">
+	      <div class="step-num">1</div>
+	      <h4 class="step-title">添加微信</h4>
+	      <p class="step-desc">添加助梦网络达人官方微信 bjzmdrkj，获取代理资格与专属后台</p>
+	    </div>
+	    <div class="step-item">
+	      <div class="step-num">2</div>
+	      <h4 class="step-title">支付99</h4>
+	      <p class="step-desc">特价99元开通代理权限，出1单即可全额回本</p>
+	    </div>
+	    <div class="step-item">
+	      <div class="step-num">3</div>
+	      <h4 class="step-title">选品上架</h4>
+	      <p class="step-desc">后台自选靓号与流量卡，一键转发朋友圈开始销售</p>
+	    </div>
+	    <div class="step-item">
+	      <div class="step-num">4</div>
+	      <h4 class="step-title">坐收佣金</h4>
+	      <p class="step-desc">佣金自动结算，后台实时更新，自助提现即可到账</p>
+	    </div>
+	  </div>
+	</section>
+	<!-- CTA -->
+	<section class="cta-section" id="join">
+	  <div class="cta-box reveal">
+	    <div class="cta-price">
+	      <div class="cta-price-label">代理特价</div>
+	      <div class="cta-price-num"><span>¥</span>99</div>
+	    </div>
+	    <h3 class="cta-title">别怕低谷，此刻就是起点</h3>
+	    <p class="cta-desc">每单利润150+，佣金自动结算，自助提现。只需99元，开启你的逆袭之路。</p>
+	    <div class="cta-wechat" id="wechatCopy">
+	      <i class="fab fa-weixin"></i> MMMNFN
+	    </div>
+	  </div>
+	</section>
+	<!-- 页脚 -->
+	<footer>
+	  <p>© 2026 <span>助梦网络达人</span> · 乾坤未定，你我皆是黑马</p>
+	</footer>
+	<!-- Toast -->
+	<div class="toast" id="toast"></div>
+	<script>
+	  // ===== 粒子系统 =====
+	  const canvas = document.getElementById('particle-canvas');
+	  const ctx = canvas.getContext('2d');
+	  let particles = [];
+	  let mouseX = 0, mouseY = 0;
+	  function resizeCanvas() {
+	    canvas.width = window.innerWidth;
+	    canvas.height = window.innerHeight;
+	  }
+	  resizeCanvas();
+	  window.addEventListener('resize', resizeCanvas);
+	  class Particle {
+	    constructor() {
+	      this.reset();
+	    }
+	    reset() {
+	      this.x = Math.random() * canvas.width;
+	      this.y = Math.random() * canvas.height;
+	      this.size = Math.random() * 2 + 0.5;
+	      this.speedX = (Math.random() - 0.5) * 0.3;
+	      this.speedY = (Math.random() - 0.5) * 0.3;
+	      this.opacity = Math.random() * 0.5 + 0.1;
+	      this.pulse = Math.random() * Math.PI * 2;
+	      this.pulseSpeed = Math.random() * 0.02 + 0.005;
+	    }
+	    update() {
+	      this.x += this.speedX;
+	      this.y += this.speedY;
+	      this.pulse += this.pulseSpeed;
+	      // 鼠标影响
+	      const dx = this.x - mouseX;
+	      const dy = this.y - mouseY;
+	      const dist = Math.sqrt(dx * dx + dy * dy);
+	      if (dist < 150) {
+	        const force = (150 - dist) / 150 * 0.5;
+	        this.x += dx / dist * force;
+	        this.y += dy / dist * force;
+	      }
+	      if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+	        this.reset();
+	      }
+	    }
+	    draw() {
+	      const currentOpacity = this.opacity * (0.6 + 0.4 * Math.sin(this.pulse));
+	      ctx.beginPath();
+	      ctx.arc(this.x, this.y, Math.max(0.1, this.size), 0, Math.PI * 2);
+	      ctx.fillStyle = `rgba(201, 168, 76, ${currentOpacity})`;
+	      ctx.fill();
+	    }
+	  }
+	  // 初始化粒子
+	  const particleCount = Math.min(80, Math.floor(window.innerWidth / 15));
+	  for (let i = 0; i < particleCount; i++) {
+	    particles.push(new Particle());
+	  }
+	  function animateParticles() {
+	    ctx.clearRect(0, 0, canvas.width, canvas.height);
+	    particles.forEach(p => {
+	      p.update();
+	      p.draw();
+	    });
+	    // 连线
+	    for (let i = 0; i < particles.length; i++) {
+	      for (let j = i + 1; j < particles.length; j++) {
+	        const dx = particles[i].x - particles[j].x;
+	        const dy = particles[i].y - particles[j].y;
+	        const dist = Math.sqrt(dx * dx + dy * dy);
+	        if (dist < 120) {
+	          ctx.beginPath();
+	          ctx.moveTo(particles[i].x, particles[i].y);
+	          ctx.lineTo(particles[j].x, particles[j].y);
+	          ctx.strokeStyle = `rgba(201, 168, 76, ${0.06 * (1 - dist / 120)})`;
+	          ctx.lineWidth = 0.5;
+	          ctx.stroke();
+	        }
+	      }
+	    }
+	    requestAnimationFrame(animateParticles);
+	  }
+	  animateParticles();
+	  // ===== 光标跟随 =====
+	  const cursorGlow = document.getElementById('cursorGlow');
+	  document.addEventListener('mousemove', e => {
+	    mouseX = e.clientX;
+	    mouseY = e.clientY;
+	    cursorGlow.style.left = e.clientX + 'px';
+	    cursorGlow.style.top = e.clientY + 'px';
+	  });
+	  // ===== 导航滚动 =====
+	  const nav = document.getElementById('mainNav');
+	  window.addEventListener('scroll', () => {
+	    nav.classList.toggle('scrolled', window.scrollY > 60);
+	  });
+	  // ===== 滚动显现 =====
+	  const reveals = document.querySelectorAll('.reveal');
+	  const observer = new IntersectionObserver((entries) => {
+	    entries.forEach(entry => {
+	      if (entry.isIntersecting) {
+	        entry.target.classList.add('visible');
+	      }
+	    });
+	  }, { threshold: 0.15 });
+	  reveals.forEach(el => observer.observe(el));
+	  // ===== 数字递增动画 =====
+	  const statNumbers = document.querySelectorAll('.stat-number[data-target]');
+	  const statsObserver = new IntersectionObserver((entries) => {
+	    entries.forEach(entry => {
+	      if (entry.isIntersecting) {
+	        const el = entry.target;
+	        const target = parseInt(el.dataset.target);
+	        animateNumber(el, target);
+	        statsObserver.unobserve(el);
+	      }
+	    });
+	  }, { threshold: 0.5 });
+	  statNumbers.forEach(el => statsObserver.observe(el));
+	  function animateNumber(el, target) {
+	    const duration = 1500;
+	    const start = performance.now();
+	    function update(now) {
+	      const progress = Math.min((now - start) / duration, 1);
+	      const eased = 1 - Math.pow(1 - progress, 3);
+	      el.textContent = Math.floor(target * eased).toLocaleString();
+	      if (progress < 1) requestAnimationFrame(update);
+	    }
+	    requestAnimationFrame(update);
+	  }
+	  // ===== 利润计算器 =====
+	  const dailySlider = document.getElementById('dailyOrders');
+	  const profitSlider = document.getElementById('perProfit');
+	  const dailyVal = document.getElementById('dailyVal');
+	  const profitVal = document.getElementById('profitVal');
+	  const monthIncome = document.getElementById('monthIncome');
+	  function calcIncome() {
+	    const daily = parseInt(dailySlider.value);
+	    const profit = parseInt(profitSlider.value);
+	    dailyVal.textContent = daily;
+	    profitVal.textContent = profit;
+	    const total = daily * profit * 30;
+	    monthIncome.textContent = total.toLocaleString();
+	  }
+	  dailySlider.addEventListener('input', calcIncome);
+	  profitSlider.addEventListener('input', calcIncome);
+	  // ===== 微信号复制 =====
+	  document.getElementById('wechatCopy').addEventListener('click', () => {
+	    navigator.clipboard.writeText('bjzmdrkj').then(() => {
+	      showToast('微信号已复制，快去添加吧');
+	    }).catch(() => {
+	      showToast('微信号：MMMNFN，请手动添加');
+	    });
+	  });
+	  // ===== Toast =====
+	  function showToast(msg) {
+	    const toast = document.getElementById('toast');
+	    toast.textContent = msg;
+	    toast.classList.add('show');
+	    setTimeout(() => toast.classList.remove('show'), 3000);
+	  }
+	  // ===== 平滑锚点 =====
+	  document.querySelectorAll('a[href^="#"]').forEach(a => {
+	    a.addEventListener('click', e => {
+	      e.preventDefault();
+	      const target = document.querySelector(a.getAttribute('href'));
+	      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+	    });
+	  });
+	</script>
+	</body>
+	</html>
