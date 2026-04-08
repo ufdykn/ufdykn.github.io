@@ -1,0 +1,957 @@
+	<!DOCTYPE html>
+	<html lang="zh-CN">
+	<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>助梦网络达人 - 赋能计划书大全</title>
+	<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@700;900&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+	<style>
+	  /* ========== CSS 变量 ========== */
+	  :root {
+	    --bg: #0a0a0f;
+	    --bg-deep: #050508;
+	    --fg: #f0e6d3;
+	    --fg-dim: #8a7e6e;
+	    --accent: #ff6a00;
+	    --accent-light: #ffab40;
+	    --accent-glow: rgba(255, 106, 0, 0.4);
+	    --gold: #ffd700;
+	    --gold-dim: #b8960c;
+	    --card: rgba(18, 16, 22, 0.85);
+	    --card-hover: rgba(30, 26, 38, 0.95);
+	    --border: rgba(255, 106, 0, 0.15);
+	    --border-hover: rgba(255, 106, 0, 0.5);
+	  }
+	  /* ========== 全局重置 ========== */
+	  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+	  html {
+	    scroll-behavior: smooth;
+	    scrollbar-width: thin;
+	    scrollbar-color: var(--accent) var(--bg);
+	  }
+	  ::-webkit-scrollbar { width: 6px; }
+	  ::-webkit-scrollbar-track { background: var(--bg); }
+	  ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
+	  body {
+	    font-family: 'Noto Sans SC', sans-serif;
+	    background: var(--bg);
+	    color: var(--fg);
+	    overflow-x: hidden;
+	    line-height: 1.7;
+	  }
+	  /* ========== 鼠标跟随光晕 ========== */
+	  #cursor-glow {
+	    position: fixed;
+	    width: 400px; height: 400px;
+	    border-radius: 50%;
+	    background: radial-gradient(circle, rgba(255,106,0,0.08) 0%, transparent 70%);
+	    pointer-events: none;
+	    z-index: 9999;
+	    transform: translate(-50%, -50%);
+	    transition: opacity 0.3s;
+	  }
+	  /* ========== 粒子画布 ========== */
+	  #particle-canvas {
+	    position: fixed;
+	    top: 0; left: 0;
+	    width: 100%; height: 100%;
+	    z-index: 0;
+	    pointer-events: none;
+	  }
+	  /* ========== 导航栏 ========== */
+	  nav {
+	    position: fixed;
+	    top: 0; left: 0; right: 0;
+	    z-index: 1000;
+	    padding: 16px 40px;
+	    display: flex;
+	    justify-content: space-between;
+	    align-items: center;
+	    backdrop-filter: blur(20px);
+	    background: rgba(10, 10, 15, 0.7);
+	    border-bottom: 1px solid var(--border);
+	    transition: all 0.4s;
+	  }
+	  nav.scrolled {
+	    padding: 10px 40px;
+	    background: rgba(10, 10, 15, 0.92);
+	  }
+	  .nav-brand {
+	    font-family: 'Noto Serif SC', serif;
+	    font-weight: 900;
+	    font-size: 22px;
+	    color: var(--accent);
+	    letter-spacing: 2px;
+	    text-shadow: 0 0 20px var(--accent-glow);
+	  }
+	  .nav-links { display: flex; gap: 28px; list-style: none; }
+	  .nav-links a {
+	    color: var(--fg-dim);
+	    text-decoration: none;
+	    font-size: 14px;
+	    font-weight: 500;
+	    letter-spacing: 1px;
+	    transition: color 0.3s, text-shadow 0.3s;
+	    position: relative;
+	  }
+	  .nav-links a::after {
+	    content: '';
+	    position: absolute;
+	    bottom: -4px; left: 0;
+	    width: 0; height: 2px;
+	    background: var(--accent);
+	    transition: width 0.3s;
+	  }
+	  .nav-links a:hover { color: var(--accent); text-shadow: 0 0 10px var(--accent-glow); }
+	  .nav-links a:hover::after { width: 100%; }
+	  /* ========== 英雄区域 ========== */
+	  .hero {
+	    position: relative;
+	    min-height: 100vh;
+	    display: flex;
+	    flex-direction: column;
+	    justify-content: center;
+	    align-items: center;
+	    text-align: center;
+	    padding: 120px 20px 80px;
+	    z-index: 1;
+	  }
+	  .hero::before {
+	    content: '';
+	    position: absolute;
+	    top: 0; left: 0; right: 0; bottom: 0;
+	    background:
+	      radial-gradient(ellipse 80% 60% at 50% 40%, rgba(255,106,0,0.07) 0%, transparent 60%),
+	      radial-gradient(ellipse 60% 40% at 20% 80%, rgba(255,215,0,0.04) 0%, transparent 50%),
+	      radial-gradient(ellipse 50% 50% at 80% 20%, rgba(255,80,0,0.05) 0%, transparent 50%);
+	    z-index: -1;
+	  }
+	  .hero-badge {
+	    display: inline-flex;
+	    align-items: center;
+	    gap: 8px;
+	    padding: 8px 24px;
+	    border: 1px solid var(--border-hover);
+	    border-radius: 50px;
+	    font-size: 13px;
+	    color: var(--accent-light);
+	    letter-spacing: 2px;
+	    text-transform: uppercase;
+	    margin-bottom: 30px;
+	    background: rgba(255,106,0,0.05);
+	    animation: badge-pulse 3s ease-in-out infinite;
+	  }
+	  @keyframes badge-pulse {
+	    0%, 100% { box-shadow: 0 0 15px rgba(255,106,0,0.1); }
+	    50% { box-shadow: 0 0 30px rgba(255,106,0,0.25); }
+	  }
+	  .hero-title {
+	    font-family: 'Noto Serif SC', serif;
+	    font-weight: 900;
+	    font-size: clamp(42px, 7vw, 88px);
+	    line-height: 1.15;
+	    margin-bottom: 10px;
+	    background: linear-gradient(135deg, var(--accent) 0%, var(--gold) 50%, var(--accent-light) 100%);
+	    -webkit-background-clip: text;
+	    -webkit-text-fill-color: transparent;
+	    background-clip: text;
+	    filter: drop-shadow(0 0 30px rgba(255,106,0,0.3));
+	    animation: title-entrance 1.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+	  }
+	  @keyframes title-entrance {
+	    from { opacity: 0; transform: translateY(40px) scale(0.95); filter: drop-shadow(0 0 0 transparent); }
+	    to { opacity: 1; transform: translateY(0) scale(1); filter: drop-shadow(0 0 30px rgba(255,106,0,0.3)); }
+	  }
+	  .hero-sub {
+	    font-size: clamp(16px, 2.5vw, 22px);
+	    font-weight: 300;
+	    color: var(--fg-dim);
+	    margin-bottom: 50px;
+	    letter-spacing: 4px;
+	    animation: fade-up 1s 0.4s both;
+	  }
+	  /* 打字机区域 */
+	  .typewriter-box {
+	    max-width: 800px;
+	    background: var(--card);
+	    border: 1px solid var(--border);
+	    border-radius: 16px;
+	    padding: 32px 40px;
+	    text-align: left;
+	    position: relative;
+	    overflow: hidden;
+	    animation: fade-up 1s 0.6s both;
+	  }
+	  .typewriter-box::before {
+	    content: '';
+	    position: absolute;
+	    top: 0; left: 0; right: 0;
+	    height: 3px;
+	    background: linear-gradient(90deg, var(--accent), var(--gold), var(--accent));
+	    background-size: 200% 100%;
+	    animation: gradient-shift 3s linear infinite;
+	  }
+	  @keyframes gradient-shift {
+	    0% { background-position: 0% 50%; }
+	    100% { background-position: 200% 50%; }
+	  }
+	  .typewriter-text {
+	    font-size: 15px;
+	    line-height: 2;
+	    color: var(--fg);
+	    font-weight: 400;
+	    min-height: 200px;
+	  }
+	  .typewriter-cursor {
+	    display: inline-block;
+	    width: 2px;
+	    height: 18px;
+	    background: var(--accent);
+	    margin-left: 2px;
+	    vertical-align: text-bottom;
+	    animation: blink 0.8s step-end infinite;
+	  }
+	  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+	  /* 统计条 */
+	  .stats-bar {
+	    display: flex;
+	    justify-content: center;
+	    gap: 60px;
+	    margin-top: 60px;
+	    animation: fade-up 1s 0.8s both;
+	  }
+	  .stat-item { text-align: center; }
+	  .stat-num {
+	    font-family: 'Noto Serif SC', serif;
+	    font-size: 42px;
+	    font-weight: 900;
+	    color: var(--accent);
+	    text-shadow: 0 0 20px var(--accent-glow);
+	  }
+	  .stat-label { font-size: 13px; color: var(--fg-dim); letter-spacing: 2px; margin-top: 4px; }
+	  @keyframes fade-up {
+	    from { opacity: 0; transform: translateY(30px); }
+	    to { opacity: 1; transform: translateY(0); }
+	  }
+	  /* ========== 宣言区域 ========== */
+	  .manifesto {
+	    position: relative;
+	    z-index: 1;
+	    padding: 120px 20px;
+	    text-align: center;
+	  }
+	  .manifesto-inner {
+	    max-width: 900px;
+	    margin: 0 auto;
+	    position: relative;
+	  }
+	  .manifesto-quote {
+	    font-family: 'Noto Serif SC', serif;
+	    font-size: clamp(18px, 3vw, 28px);
+	    font-weight: 700;
+	    line-height: 2;
+	    color: var(--fg);
+	    position: relative;
+	    padding: 40px 0;
+	  }
+	  .manifesto-quote::before {
+	    content: '\201C';
+	    position: absolute;
+	    top: -20px; left: -30px;
+	    font-size: 120px;
+	    color: var(--accent);
+	    opacity: 0.15;
+	    font-family: serif;
+	    line-height: 1;
+	  }
+	  .manifesto-quote .highlight {
+	    color: var(--accent);
+	    text-shadow: 0 0 15px var(--accent-glow);
+	  }
+	  .manifesto-divider {
+	    width: 80px; height: 3px;
+	    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+	    margin: 40px auto;
+	  }
+	  /* ========== 计划书网格区域 ========== */
+	  .plans-section {
+	    position: relative;
+	    z-index: 1;
+	    padding: 80px 20px 120px;
+	  }
+	  .section-header {
+	    text-align: center;
+	    margin-bottom: 70px;
+	  }
+	  .section-tag {
+	    font-size: 12px;
+	    letter-spacing: 4px;
+	    color: var(--accent);
+	    text-transform: uppercase;
+	    margin-bottom: 16px;
+	  }
+	  .section-title {
+	    font-family: 'Noto Serif SC', serif;
+	    font-size: clamp(30px, 5vw, 52px);
+	    font-weight: 900;
+	    background: linear-gradient(135deg, var(--fg) 0%, var(--accent-light) 100%);
+	    -webkit-background-clip: text;
+	    -webkit-text-fill-color: transparent;
+	    background-clip: text;
+	  }
+	  /* 分类标签 */
+	  .filter-bar {
+	    display: flex;
+	    justify-content: center;
+	    flex-wrap: wrap;
+	    gap: 10px;
+	    margin-bottom: 50px;
+	  }
+	  .filter-btn {
+	    padding: 8px 20px;
+	    border: 1px solid var(--border);
+	    border-radius: 50px;
+	    background: transparent;
+	    color: var(--fg-dim);
+	    font-size: 13px;
+	    cursor: pointer;
+	    transition: all 0.3s;
+	    font-family: 'Noto Sans SC', sans-serif;
+	  }
+	  .filter-btn:hover, .filter-btn.active {
+	    border-color: var(--accent);
+	    color: var(--accent);
+	    background: rgba(255,106,0,0.08);
+	    box-shadow: 0 0 15px rgba(255,106,0,0.15);
+	  }
+	  /* 卡片网格 */
+	  .plans-grid {
+	    display: grid;
+	    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+	    gap: 24px;
+	    max-width: 1400px;
+	    margin: 0 auto;
+	  }
+	  .plan-card {
+	    position: relative;
+	    background: var(--card);
+	    border: 1px solid var(--border);
+	    border-radius: 16px;
+	    padding: 28px;
+	    cursor: pointer;
+	    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+	    overflow: hidden;
+	    opacity: 0;
+	    transform: translateY(40px);
+	  }
+	  .plan-card.visible {
+	    opacity: 1;
+	    transform: translateY(0);
+	  }
+	  .plan-card::before {
+	    content: '';
+	    position: absolute;
+	    top: 0; left: 0; right: 0; bottom: 0;
+	    border-radius: 16px;
+	    background: linear-gradient(135deg, rgba(255,106,0,0.05) 0%, transparent 50%);
+	    opacity: 0;
+	    transition: opacity 0.4s;
+	  }
+	  .plan-card:hover::before { opacity: 1; }
+	  .plan-card:hover {
+	    border-color: var(--border-hover);
+	    transform: translateY(-6px);
+	    box-shadow: 0 20px 60px rgba(255,106,0,0.1), 0 0 0 1px rgba(255,106,0,0.2);
+	  }
+	  .card-icon {
+	    width: 48px; height: 48px;
+	    border-radius: 12px;
+	    display: flex;
+	    align-items: center;
+	    justify-content: center;
+	    font-size: 20px;
+	    margin-bottom: 18px;
+	    position: relative;
+	    z-index: 1;
+	  }
+	  .card-icon.cat-ai { background: rgba(255,106,0,0.12); color: var(--accent); }
+	  .card-icon.cat-biz { background: rgba(255,215,0,0.12); color: var(--gold); }
+	  .card-icon.cat-local { background: rgba(0,200,150,0.12); color: #00c896; }
+	  .card-icon.cat-trade { background: rgba(100,150,255,0.12); color: #6496ff; }
+	  .card-icon.cat-other { background: rgba(200,100,255,0.12); color: #c864ff; }
+	  .card-title {
+	    font-weight: 700;
+	    font-size: 17px;
+	    color: var(--fg);
+	    margin-bottom: 8px;
+	    position: relative;
+	    z-index: 1;
+	    transition: color 0.3s;
+	  }
+	  .plan-card:hover .card-title { color: var(--accent-light); }
+	  .card-desc {
+	    font-size: 13px;
+	    color: var(--fg-dim);
+	    line-height: 1.6;
+	    position: relative;
+	    z-index: 1;
+	  }
+	  .card-tag {
+	    display: inline-block;
+	    margin-top: 14px;
+	    padding: 3px 10px;
+	    border-radius: 4px;
+	    font-size: 11px;
+	    letter-spacing: 1px;
+	    position: relative;
+	    z-index: 1;
+	  }
+	  .card-tag.cat-ai { background: rgba(255,106,0,0.1); color: var(--accent); }
+	  .card-tag.cat-biz { background: rgba(255,215,0,0.1); color: var(--gold); }
+	  .card-tag.cat-local { background: rgba(0,200,150,0.1); color: #00c896; }
+	  .card-tag.cat-trade { background: rgba(100,150,255,0.1); color: #6496ff; }
+	  .card-tag.cat-other { background: rgba(200,100,255,0.1); color: #c864ff; }
+	  /* 卡片角标光线 */
+	  .plan-card .corner-glow {
+	    position: absolute;
+	    width: 120px; height: 120px;
+	    border-radius: 50%;
+	    filter: blur(40px);
+	    opacity: 0;
+	    transition: opacity 0.5s;
+	    pointer-events: none;
+	  }
+	  .plan-card:hover .corner-glow { opacity: 0.3; }
+	  .corner-glow.cat-ai { background: var(--accent); top: -40px; right: -40px; }
+	  .corner-glow.cat-biz { background: var(--gold); top: -40px; right: -40px; }
+	  .corner-glow.cat-local { background: #00c896; top: -40px; right: -40px; }
+	  .corner-glow.cat-trade { background: #6496ff; top: -40px; right: -40px; }
+	  .corner-glow.cat-other { background: #c864ff; top: -40px; right: -40px; }
+	  /* ========== CTA 区域 ========== */
+	  .cta-section {
+	    position: relative;
+	    z-index: 1;
+	    padding: 120px 20px;
+	    text-align: center;
+	  }
+	  .cta-box {
+	    max-width: 700px;
+	    margin: 0 auto;
+	    padding: 60px 40px;
+	    border-radius: 24px;
+	    background: linear-gradient(135deg, rgba(255,106,0,0.08) 0%, rgba(255,215,0,0.05) 100%);
+	    border: 1px solid var(--border-hover);
+	    position: relative;
+	    overflow: hidden;
+	  }
+	  .cta-box::after {
+	    content: '';
+	    position: absolute;
+	    top: -50%; left: -50%;
+	    width: 200%; height: 200%;
+	    background: conic-gradient(from 0deg, transparent, rgba(255,106,0,0.05), transparent, rgba(255,215,0,0.05), transparent);
+	    animation: rotate-bg 10s linear infinite;
+	  }
+	  @keyframes rotate-bg { to { transform: rotate(360deg); } }
+	  .cta-content { position: relative; z-index: 1; }
+	  .cta-title {
+	    font-family: 'Noto Serif SC', serif;
+	    font-size: clamp(24px, 4vw, 36px);
+	    font-weight: 900;
+	    margin-bottom: 16px;
+	    color: var(--fg);
+	  }
+	  .cta-desc {
+	    font-size: 15px;
+	    color: var(--fg-dim);
+	    margin-bottom: 32px;
+	  }
+	  .cta-btn {
+	    display: inline-flex;
+	    align-items: center;
+	    gap: 10px;
+	    padding: 14px 36px;
+	    background: linear-gradient(135deg, var(--accent), var(--gold-dim));
+	    color: #0a0a0f;
+	    font-weight: 700;
+	    font-size: 15px;
+	    border: none;
+	    border-radius: 50px;
+	    cursor: pointer;
+	    text-decoration: none;
+	    transition: all 0.3s;
+	    box-shadow: 0 4px 20px rgba(255,106,0,0.3);
+	    font-family: 'Noto Sans SC', sans-serif;
+	  }
+	  .cta-btn:hover {
+	    transform: translateY(-2px);
+	    box-shadow: 0 8px 30px rgba(255,106,0,0.5);
+	  }
+	  /* ========== 页脚 ========== */
+	  footer {
+	    position: relative;
+	    z-index: 1;
+	    text-align: center;
+	    padding: 40px 20px;
+	    border-top: 1px solid var(--border);
+	    color: var(--fg-dim);
+	    font-size: 13px;
+	  }
+	  footer .footer-brand {
+	    font-family: 'Noto Serif SC', serif;
+	    font-weight: 900;
+	    font-size: 18px;
+	    color: var(--accent);
+	    margin-bottom: 8px;
+	  }
+	  /* ========== Toast ========== */
+	  .toast-container {
+	    position: fixed;
+	    top: 80px; right: 20px;
+	    z-index: 10000;
+	    display: flex;
+	    flex-direction: column;
+	    gap: 10px;
+	  }
+	  .toast {
+	    padding: 14px 24px;
+	    background: var(--card-hover);
+	    border: 1px solid var(--border-hover);
+	    border-radius: 12px;
+	    color: var(--fg);
+	    font-size: 14px;
+	    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+	    animation: toast-in 0.4s both;
+	    display: flex;
+	    align-items: center;
+	    gap: 10px;
+	  }
+	  .toast i { color: var(--accent); }
+	  @keyframes toast-in {
+	    from { opacity: 0; transform: translateX(60px); }
+	    to { opacity: 1; transform: translateX(0); }
+	  }
+	  .toast.out { animation: toast-out 0.3s both; }
+	  @keyframes toast-out {
+	    to { opacity: 0; transform: translateX(60px); }
+	  }
+	  /* ========== 滚动到顶部 ========== */
+	  .scroll-top {
+	    position: fixed;
+	    bottom: 30px; right: 30px;
+	    width: 48px; height: 48px;
+	    border-radius: 50%;
+	    background: var(--accent);
+	    color: var(--bg);
+	    border: none;
+	    cursor: pointer;
+	    font-size: 18px;
+	    display: flex;
+	    align-items: center;
+	    justify-content: center;
+	    z-index: 1000;
+	    opacity: 0;
+	    transform: translateY(20px);
+	    transition: all 0.4s;
+	    box-shadow: 0 4px 20px var(--accent-glow);
+	  }
+	  .scroll-top.show { opacity: 1; transform: translateY(0); }
+	  .scroll-top:hover { transform: translateY(-3px); box-shadow: 0 8px 30px var(--accent-glow); }
+	  /* ========== 流星 ========== */
+	  .meteor {
+	    position: fixed;
+	    width: 2px;
+	    height: 80px;
+	    background: linear-gradient(to bottom, var(--accent), transparent);
+	    opacity: 0;
+	    z-index: 0;
+	    pointer-events: none;
+	    border-radius: 2px;
+	  }
+	  /* ========== 响应式 ========== */
+	  @media (max-width: 768px) {
+	    nav { padding: 12px 20px; }
+	    .nav-links { display: none; }
+	    .stats-bar { gap: 30px; flex-wrap: wrap; }
+	    .stat-num { font-size: 32px; }
+	    .plans-grid { grid-template-columns: 1fr; }
+	    .typewriter-box { padding: 24px; }
+	  }
+	  /* ========== 减弱动画偏好 ========== */
+	  @media (prefers-reduced-motion: reduce) {
+	    *, *::before, *::after {
+	      animation-duration: 0.01ms !important;
+	      transition-duration: 0.01ms !important;
+	    }
+	  }
+	</style>
+	</head>
+	<body>
+	<!-- 鼠标跟随光晕 -->
+	<div id="cursor-glow"></div>
+	<!-- 粒子画布 -->
+	<canvas id="particle-canvas"></canvas>
+	<!-- 流星容器 -->
+	<div id="meteor-container"></div>
+	<!-- 导航 -->
+	<nav id="main-nav" role="navigation" aria-label="主导航">
+	  <div class="nav-brand">助梦网络达人</div>
+	  <ul class="nav-links">
+	    <li><a href="#hero">首页</a></li>
+	    <li><a href="#manifesto">宣言</a></li>
+	    <li><a href="#plans">计划书</a></li>
+	    <li><a href="#cta">加入我们</a></li>
+	  </ul>
+	</nav>
+	<!-- 英雄区域 -->
+	<section class="hero" id="hero">
+	  <div class="hero-badge">
+	    <i class="fas fa-fire"></i>
+	    <span>赋能实战 · 死磕到底</span>
+	  </div>
+	  <h1 class="hero-title">助梦网络达人</h1>
+	  <p class="hero-sub">全领域赋能计划书 · 实战落地</p>
+	  <div class="typewriter-box">
+	    <div class="typewriter-text" id="typewriter-text"></div>
+	    <span class="typewriter-cursor" id="typewriter-cursor"></span>
+	  </div>
+	  <div class="stats-bar">
+	    <div class="stat-item">
+	      <div class="stat-num" data-target="29">0</div>
+	      <div class="stat-label">赋能计划书</div>
+	    </div>
+	    <div class="stat-item">
+	      <div class="stat-num" data-target="5">0</div>
+	      <div class="stat-label">覆盖领域</div>
+	    </div>
+	    <div class="stat-item">
+	      <div class="stat-num" data-target="100">0</div>
+	      <div class="stat-label">实战指数%</div>
+	    </div>
+	  </div>
+	</section>
+	<!-- 宣言区域 -->
+	<section class="manifesto" id="manifesto">
+	  <div class="manifesto-inner">
+	    <div class="section-tag">宣言</div>
+	    <div class="manifesto-quote reveal-item">
+	      死犹未肯输心去，贫亦其能奈我何！<br><br>
+	      别抱怨现状不够好，不努力你永远就是这个样子！<br>
+	      今天你有多懒，明天你要还的债就有多重！<br>
+	      一万个美丽的未来，抵不上一个<span class="highlight">死磕到底</span>的现在！<br>
+	      撑不住的时候，可以对自己说声"我好累"，<br>
+	      但永远别在心里承认<span class="highlight">"我不行"</span>！<br><br>
+	      记住：不下水，一辈子不会游泳；不扬帆，一辈子不会撑船！<br>
+	      人生没有等出来的辉煌，只有<span class="highlight">拼出来的霸气</span>！<br>
+	      一只站在树上的鸟，从来不会害怕树枝断裂，<br>
+	      因为它相信的不是树枝，而是它自己的翅膀！<br>
+	      与其每天担心未来，不如现在拼命！<br><br>
+	      只有流过血的手指，才能弹出世间的绝唱；<br>
+	      只有经历过地狱般的折磨，才有征服天堂的力量！<br>
+	      关注<span class="highlight">助梦网络达人</span>，和过去的软弱死磕，向未来的巅峰亮剑！<br>
+	      在这里，<span class="highlight">不将就，不放弃</span>，自己给自己打气，<br>
+	      直起腰板做人，<span class="highlight">干就完了</span>！
+	    </div>
+	    <div class="manifesto-divider"></div>
+	  </div>
+	</section>
+	<!-- 计划书区域 -->
+	<section class="plans-section" id="plans">
+	  <div class="section-header">
+	    <div class="section-tag">PLAN LIBRARY</div>
+	    <h2 class="section-title">全领域赋能计划书</h2>
+	  </div>
+	  <div class="filter-bar" role="tablist" aria-label="分类筛选">
+	    <button class="filter-btn active" data-filter="all" role="tab" aria-selected="true">全部</button>
+	    <button class="filter-btn" data-filter="cat-ai" role="tab">AI赋能</button>
+	    <button class="filter-btn" data-filter="cat-biz" role="tab">商业计划</button>
+	    <button class="filter-btn" data-filter="cat-local" role="tab">本地服务</button>
+	    <button class="filter-btn" data-filter="cat-trade" role="tab">贸易交易</button>
+	    <button class="filter-btn" data-filter="cat-other" role="tab">其他</button>
+	  </div>
+	  <div class="plans-grid" id="plans-grid">
+	    <!-- 卡片由JS动态生成 -->
+	  </div>
+	</section>
+	<!-- CTA 区域 -->
+	<section class="cta-section" id="cta">
+	  <div class="cta-box">
+	    <div class="cta-content">
+	      <h2 class="cta-title">和过去的软弱死磕，向未来的巅峰亮剑</h2>
+	      <p class="cta-desc">关注助梦网络达人，获取全部赋能计划书，开启你的实战之路</p>
+	      <button class="cta-btn" id="cta-button">
+	        <i class="fas fa-rocket"></i>
+	        立即关注，干就完了
+	      </button>
+	    </div>
+	  </div>
+	</section>
+	<!-- 页脚 -->
+	<footer>
+	  <div class="footer-brand">助梦网络达人</div>
+	  <p>死犹未肯输心去 · 贫亦其能奈我何</p>
+	  <p style="margin-top:8px;opacity:0.5;">赋能实战 · 全领域覆盖 · 2026</p>
+	</footer>
+	<!-- 回到顶部 -->
+	<button class="scroll-top" id="scroll-top" aria-label="回到顶部">
+	  <i class="fas fa-chevron-up"></i>
+	</button>
+	<!-- Toast 容器 -->
+	<div class="toast-container" id="toast-container"></div>
+	<script>
+	// ========== 数据：所有计划书 ==========
+	const plansData = [
+	  { title: "AI赋能网站仿造计划书", cat: "cat-ai", icon: "fa-robot", desc: "利用AI技术快速仿造与部署网站，降低开发门槛，实现批量产出与变现。" },
+	  { title: "高铁玻璃赋能计划书", cat: "cat-trade", icon: "fa-train", desc: "切入高铁玻璃供应链，从生产资质到渠道铺设的全链路赋能方案。" },
+	  { title: "关于赋能的商业计划书", cat: "cat-biz", icon: "fa-briefcase", desc: "系统性阐述赋能商业模式的核心逻辑、盈利路径与落地步骤。" },
+	  { title: "本地生活落地方案", cat: "cat-local", icon: "fa-map-marker-alt", desc: "深耕本地生活服务赛道，从流量获取到商家合作的完整落地路径。" },
+	  { title: "随身WiFi与AI赋能计划书", cat: "cat-ai", icon: "fa-wifi", desc: "随身WiFi硬件+AI智能运营，打造移动互联新生态的赋能方案。" },
+	  { title: "一人量化交易公司实操赋能", cat: "cat-ai", icon: "fa-chart-line", desc: "个人量化交易从零搭建，策略开发、风控体系与自动交易全流程实操。" },
+	  { title: "拉新工作室落地方案", cat: "cat-biz", icon: "fa-users", desc: "APP拉新工作室从选址、团队到结算的全流程落地实操方案。" },
+	  { title: "AI引流任意粉赋能方案", cat: "cat-ai", icon: "fa-magic", desc: "借助AI工具实现精准引流，不限行业、不限粉丝类型的全渠道获客方案。" },
+	  { title: "搭建自己的AI体消耗Token", cat: "cat-ai", icon: "fa-microchip", desc: "自建AI智能体平台，从Token消耗中构建可持续的盈利模型。" },
+	  { title: "原创AI赋能计划书", cat: "cat-ai", icon: "fa-lightbulb", desc: "原创AI赋能方法论，从概念验证到商业化的完整计划书框架。" },
+	  { title: "高端无地域公司转让赋能计划书", cat: "cat-biz", icon: "fa-building", desc: "无地域限制的高端公司转让市场，从资源获取到交易闭环的赋能方案。" },
+	  { title: "全域推广AI赋能计划书", cat: "cat-ai", icon: "fa-globe", desc: "AI驱动全域推广，覆盖公域+私域全渠道的智能营销赋能方案。" },
+	  { title: "本地装修赋能", cat: "cat-local", icon: "fa-paint-roller", desc: "本地装修行业数字化转型，从获客到交付的全流程赋能升级。" },
+	  { title: "键合丝&单晶铜销售赋能计划书", cat: "cat-trade", icon: "fa-industry", desc: "半导体材料键合丝与单晶铜的销售渠道建设与客户赋能方案。" },
+	  { title: "大宗马东煤交易赋能计划书", cat: "cat-trade", icon: "fa-mountain", desc: "大宗煤炭交易从源头采购到终端交付的全链路赋能体系。" },
+	  { title: "大总贸易赋能计划书", cat: "cat-trade", icon: "fa-handshake", desc: "综合性贸易赋能方案，整合上下游资源实现规模化交易。" },
+	  { title: "大总煤交易赋能计划书", cat: "cat-trade", icon: "fa-fire-alt", desc: "聚焦煤炭大宗交易，从供应链金融到物流调度的深度赋能。" },
+	  { title: "全品优惠券玩法赋能计划书", cat: "cat-biz", icon: "fa-ticket-alt", desc: "全品类优惠券运营玩法，从设计到分发到转化的全链路策略。" },
+	  { title: "外卖平台拉新或自建计划书", cat: "cat-biz", icon: "fa-utensils", desc: "外卖赛道双路径：为平台拉新变现，或自建本地外卖平台。" },
+	  { title: "华为元服务赋能计划书", cat: "cat-ai", icon: "fa-mobile-alt", desc: "基于华为元服务生态开发与运营，抢占鸿蒙流量红利的赋能方案。" },
+	  { title: "手机+网吧赋能计划书", cat: "cat-biz", icon: "fa-gamepad", desc: "手机与网吧行业融合创新，从场景升级到流量变现的赋能路径。" },
+	  { title: "安利赋能计划书", cat: "cat-other", icon: "fa-share-alt", desc: "安利模式深度解析与赋能，从产品到团队裂变的系统化方案。" },
+	  { title: "法律咨询赋能计划书", cat: "cat-other", icon: "fa-gavel", desc: "法律咨询行业数字化赋能，从线上获客到智能法务的转型方案。" },
+	  { title: "互联网项目运营计划书", cat: "cat-biz", icon: "fa-cogs", desc: "互联网项目从0到1运营全攻略，涵盖产品、增长、变现三驾马车。" },
+	  { title: "算力杠杆落地方案", cat: "cat-ai", icon: "fa-server", desc: "以算力为核心杠杆，构建AI基础设施服务的商业落地路径。" },
+	  { title: "本地婚纱摄影赋能方案", cat: "cat-local", icon: "fa-camera", desc: "婚纱摄影本地化运营升级，从获客到拍摄到后期的全流程赋能。" },
+	  { title: "树洞创业计划书", cat: "cat-other", icon: "fa-comment-dots", desc: "匿名社交树洞平台创业方案，从产品设计到社区运营的全景规划。" },
+	  { title: "项目合作交流计划书", cat: "cat-other", icon: "fa-handshake-angle", desc: "搭建项目合作对接平台，促进资源方与执行方高效匹配。" },
+	  { title: "青创港湾·青年数字人才实训", cat: "cat-other", icon: "fa-graduation-cap", desc: "青年数字人才培养与实训基地，从技能培训到就业输出的闭环赋能。" },
+	];
+	// ========== Toast通知 ==========
+	function showToast(msg, icon = 'fa-check-circle') {
+	  const container = document.getElementById('toast-container');
+	  const toast = document.createElement('div');
+	  toast.className = 'toast';
+	  toast.innerHTML = `<i class="fas ${icon}"></i><span>${msg}</span>`;
+	  container.appendChild(toast);
+	  setTimeout(() => {
+	    toast.classList.add('out');
+	    setTimeout(() => toast.remove(), 300);
+	  }, 3000);
+	}
+	// ========== 渲染卡片 ==========
+	function renderCards(filter = 'all') {
+	  const grid = document.getElementById('plans-grid');
+	  grid.innerHTML = '';
+	  const filtered = filter === 'all' ? plansData : plansData.filter(p => p.cat === filter);
+	  filtered.forEach((plan, i) => {
+	    const card = document.createElement('article');
+	    card.className = `plan-card`;
+	    card.dataset.cat = plan.cat;
+	    card.style.transitionDelay = `${i * 0.05}s`;
+	    card.innerHTML = `
+	      <div class="corner-glow ${plan.cat}"></div>
+	      <div class="card-icon ${plan.cat}"><i class="fas ${plan.icon}"></i></div>
+	      <div class="card-title">${plan.title}</div>
+	      <div class="card-desc">${plan.desc}</div>
+	      <span class="card-tag ${plan.cat}">${
+	        plan.cat === 'cat-ai' ? 'AI赋能' :
+	        plan.cat === 'cat-biz' ? '商业计划' :
+	        plan.cat === 'cat-local' ? '本地服务' :
+	        plan.cat === 'cat-trade' ? '贸易交易' : '其他'
+	      }</span>
+	    `;
+	    card.addEventListener('click', () => {
+	      showToast(`已打开「${plan.title}」`, 'fa-file-alt');
+	    });
+	    grid.appendChild(card);
+	    // 渐入动画
+	    requestAnimationFrame(() => {
+	      setTimeout(() => card.classList.add('visible'), 50 + i * 60);
+	    });
+	  });
+	}
+	// ========== 分类筛选 ==========
+	document.querySelectorAll('.filter-btn').forEach(btn => {
+	  btn.addEventListener('click', () => {
+	    document.querySelectorAll('.filter-btn').forEach(b => {
+	      b.classList.remove('active');
+	      b.setAttribute('aria-selected', 'false');
+	    });
+	    btn.classList.add('active');
+	    btn.setAttribute('aria-selected', 'true');
+	    renderCards(btn.dataset.filter);
+	  });
+	});
+	// ========== 打字机效果 ==========
+	const typewriterContent = `死犹未肯输心去，贫亦其能奈我何！别抱怨现状不够好，不努力你永远就是这个样子！一万个美丽的未来，抵不上一个死磕到底的现在！人生没有等出来的辉煌，只有拼出来的霸气！关注助梦网络达人，干就完了！`;
+	const typewriterEl = document.getElementById('typewriter-text');
+	const cursorEl = document.getElementById('typewriter-cursor');
+	let twIndex = 0;
+	function typeWriter() {
+	  if (twIndex < typewriterContent.length) {
+	    typewriterEl.textContent += typewriterContent.charAt(twIndex);
+	    twIndex++;
+	    setTimeout(typeWriter, 40 + Math.random() * 30);
+	  } else {
+	    // 打完后光标继续闪烁
+	    cursorEl.style.animation = 'blink 0.8s step-end infinite';
+	  }
+	}
+	// ========== 数字计数器 ==========
+	function animateCounters() {
+	  document.querySelectorAll('.stat-num').forEach(el => {
+	    const target = parseInt(el.dataset.target);
+	    const duration = 2000;
+	    const start = performance.now();
+	    function update(now) {
+	      const progress = Math.min((now - start) / duration, 1);
+	      const eased = 1 - Math.pow(1 - progress, 3);
+	      el.textContent = Math.round(target * eased);
+	      if (progress < 1) requestAnimationFrame(update);
+	    }
+	    requestAnimationFrame(update);
+	  });
+	}
+	// ========== 粒子系统 ==========
+	const canvas = document.getElementById('particle-canvas');
+	const ctx = canvas.getContext('2d');
+	let particles = [];
+	let mouseX = 0, mouseY = 0;
+	function resizeCanvas() {
+	  canvas.width = window.innerWidth;
+	  canvas.height = window.innerHeight;
+	}
+	resizeCanvas();
+	window.addEventListener('resize', resizeCanvas);
+	class Particle {
+	  constructor() { this.reset(); }
+	  reset() {
+	    this.x = Math.random() * canvas.width;
+	    this.y = Math.random() * canvas.height;
+	    this.size = Math.random() * 2 + 0.5;
+	    this.speedX = (Math.random() - 0.5) * 0.3;
+	    this.speedY = -Math.random() * 0.8 - 0.2;
+	    this.opacity = Math.random() * 0.5 + 0.1;
+	    this.life = Math.random() * 200 + 100;
+	    this.maxLife = this.life;
+	    // 火焰色调
+	    const hue = Math.random() * 40 + 15; // 15-55
+	    this.color = `hsla(${hue}, 100%, 60%, `;
+	  }
+	  update() {
+	    this.x += this.speedX;
+	    this.y += this.speedY;
+	    this.life--;
+	    // 鼠标排斥
+	    const dx = this.x - mouseX;
+	    const dy = this.y - mouseY;
+	    const dist = Math.sqrt(dx * dx + dy * dy);
+	    if (dist < 120) {
+	      const force = (120 - dist) / 120 * 0.5;
+	      this.speedX += (dx / dist) * force;
+	      this.speedY += (dy / dist) * force;
+	    }
+	    if (this.life <= 0 || this.y < -10 || this.x < -10 || this.x > canvas.width + 10) {
+	      this.reset();
+	      this.y = canvas.height + 10;
+	    }
+	  }
+	  draw() {
+	    const fade = this.life / this.maxLife;
+	    ctx.beginPath();
+	    ctx.arc(this.x, this.y, Math.max(0.1, this.size * fade), 0, Math.PI * 2);
+	    ctx.fillStyle = this.color + (this.opacity * fade) + ')';
+	    ctx.fill();
+	  }
+	}
+	// 初始化粒子
+	for (let i = 0; i < 120; i++) particles.push(new Particle());
+	function animateParticles() {
+	  ctx.clearRect(0, 0, canvas.width, canvas.height);
+	  particles.forEach(p => { p.update(); p.draw(); });
+	  requestAnimationFrame(animateParticles);
+	}
+	animateParticles();
+	// ========== 鼠标跟随光晕 ==========
+	const cursorGlow = document.getElementById('cursor-glow');
+	document.addEventListener('mousemove', e => {
+	  mouseX = e.clientX;
+	  mouseY = e.clientY;
+	  cursorGlow.style.left = e.clientX + 'px';
+	  cursorGlow.style.top = e.clientY + 'px';
+	});
+	// ========== 导航滚动效果 ==========
+	const nav = document.getElementById('main-nav');
+	const scrollTopBtn = document.getElementById('scroll-top');
+	window.addEventListener('scroll', () => {
+	  if (window.scrollY > 80) {
+	    nav.classList.add('scrolled');
+	  } else {
+	    nav.classList.remove('scrolled');
+	  }
+	  // 回到顶部按钮
+	  if (window.scrollY > 600) {
+	    scrollTopBtn.classList.add('show');
+	  } else {
+	    scrollTopBtn.classList.remove('show');
+	  }
+	});
+	scrollTopBtn.addEventListener('click', () => {
+	  window.scrollTo({ top: 0, behavior: 'smooth' });
+	});
+	// ========== IntersectionObserver 滚动渐入 ==========
+	const revealObserver = new IntersectionObserver((entries) => {
+	  entries.forEach(entry => {
+	    if (entry.isIntersecting) {
+	      entry.target.classList.add('revealed');
+	      entry.target.style.opacity = '1';
+	      entry.target.style.transform = 'translateY(0)';
+	    }
+	  });
+	}, { threshold: 0.1 });
+	document.querySelectorAll('.reveal-item').forEach(el => {
+	  el.style.opacity = '0';
+	  el.style.transform = 'translateY(30px)';
+	  el.style.transition = 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1)';
+	  revealObserver.observe(el);
+	});
+	// ========== 流星效果 ==========
+	function createMeteor() {
+	  const container = document.getElementById('meteor-container');
+	  const meteor = document.createElement('div');
+	  meteor.className = 'meteor';
+	  meteor.style.left = Math.random() * window.innerWidth + 'px';
+	  meteor.style.top = Math.random() * window.innerHeight * 0.5 + 'px';
+	  meteor.style.transform = `rotate(${30 + Math.random() * 20}deg)`;
+	  container.appendChild(meteor);
+	  meteor.animate([
+	    { opacity: 0, transform: `rotate(35deg) translateY(0)` },
+	    { opacity: 0.8, offset: 0.1 },
+	    { opacity: 0, transform: `rotate(35deg) translateY(300px)` }
+	  ], {
+	    duration: 1500 + Math.random() * 1000,
+	    easing: 'ease-out'
+	  }).onfinish = () => meteor.remove();
+	}
+	setInterval(createMeteor, 3000 + Math.random() * 2000);
+	// ========== CTA按钮 ==========
+	document.getElementById('cta-button').addEventListener('click', () => {
+	  showToast('已关注助梦网络达人！干就完了！', 'fa-fire');
+	});
+	// ========== 初始化 ==========
+	window.addEventListener('DOMContentLoaded', () => {
+	  renderCards('all');
+	  // 延迟启动打字机
+	  setTimeout(typeWriter, 1200);
+	  // 延迟启动计数器
+	  setTimeout(animateCounters, 800);
+	});
+	</script>
+	</body>
+	</html>
