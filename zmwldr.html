@@ -1,0 +1,1953 @@
+	<!DOCTYPE html>
+	<html lang="zh-CN">
+	<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>墨迹博客 - 记录生活点滴</title>
+	<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+	<style>
+	  :root {
+	    --bg: #f5f0e8;
+	    --bg-deep: #ece5d8;
+	    --fg: #2c2c2c;
+	    --fg-light: #6b6560;
+	    --muted: #9e9589;
+	    --accent: #c8943e;
+	    --accent-hover: #b07e2f;
+	    --accent-light: rgba(200,148,62,0.12);
+	    --card: #ffffff;
+	    --card-hover: #fdfcfa;
+	    --border: #e0d8cc;
+	    --border-light: #ebe5da;
+	    --shadow: rgba(40,30,10,0.06);
+	    --shadow-md: rgba(40,30,10,0.1);
+	    --green: #3a6b4c;
+	    --green-light: rgba(58,107,76,0.1);
+	    --red: #c45c4a;
+	    --radius: 10px;
+	    --radius-sm: 6px;
+	    --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	    --font-serif: 'Noto Serif SC', serif;
+	    --font-sans: 'Noto Sans SC', sans-serif;
+	  }
+	  .dark {
+	    --bg: #1a1e1c;
+	    --bg-deep: #141816;
+	    --fg: #e8e2d8;
+	    --fg-light: #a8a098;
+	    --muted: #706860;
+	    --accent: #d4a853;
+	    --accent-hover: #e0b862;
+	    --accent-light: rgba(212,168,83,0.15);
+	    --card: #242a27;
+	    --card-hover: #2a302d;
+	    --border: #3a3e3c;
+	    --border-light: #2e3432;
+	    --shadow: rgba(0,0,0,0.2);
+	    --shadow-md: rgba(0,0,0,0.3);
+	    --green: #5a9b6c;
+	    --green-light: rgba(90,155,108,0.15);
+	    --red: #d46a58;
+	  }
+	  * { margin: 0; padding: 0; box-sizing: border-box; }
+	  html { scroll-behavior: smooth; }
+	  body {
+	    font-family: var(--font-sans);
+	    background: var(--bg);
+	    color: var(--fg);
+	    line-height: 1.7;
+	    transition: background var(--transition), color var(--transition);
+	    overflow-x: hidden;
+	  }
+	  /* 背景装饰 */
+	  body::before {
+	    content: '';
+	    position: fixed;
+	    top: -50%;
+	    right: -30%;
+	    width: 80vw;
+	    height: 80vw;
+	    background: radial-gradient(circle, var(--accent-light) 0%, transparent 70%);
+	    pointer-events: none;
+	    z-index: 0;
+	    transition: background var(--transition);
+	  }
+	  body::after {
+	    content: '';
+	    position: fixed;
+	    bottom: -40%;
+	    left: -20%;
+	    width: 60vw;
+	    height: 60vw;
+	    background: radial-gradient(circle, var(--green-light) 0%, transparent 70%);
+	    pointer-events: none;
+	    z-index: 0;
+	    transition: background var(--transition);
+	  }
+	  /* ===== 顶部导航 ===== */
+	  .navbar {
+	    position: sticky;
+	    top: 0;
+	    z-index: 100;
+	    background: rgba(245,240,232,0.85);
+	    backdrop-filter: blur(20px) saturate(1.5);
+	    -webkit-backdrop-filter: blur(20px) saturate(1.5);
+	    border-bottom: 1px solid var(--border-light);
+	    transition: background var(--transition), border-color var(--transition);
+	  }
+	  .dark .navbar {
+	    background: rgba(26,30,28,0.88);
+	  }
+	  .nav-inner {
+	    max-width: 1200px;
+	    margin: 0 auto;
+	    padding: 0 24px;
+	    height: 64px;
+	    display: flex;
+	    align-items: center;
+	    justify-content: space-between;
+	  }
+	  .nav-brand {
+	    display: flex;
+	    align-items: center;
+	    gap: 10px;
+	    text-decoration: none;
+	    color: var(--fg);
+	  }
+	  .nav-brand-icon {
+	    width: 36px;
+	    height: 36px;
+	    background: linear-gradient(135deg, var(--accent), var(--green));
+	    border-radius: 8px;
+	    display: flex;
+	    align-items: center;
+	    justify-content: center;
+	    color: #fff;
+	    font-size: 16px;
+	    font-weight: 900;
+	    font-family: var(--font-serif);
+	    flex-shrink: 0;
+	  }
+	  .nav-brand-text {
+	    font-family: var(--font-serif);
+	    font-size: 20px;
+	    font-weight: 700;
+	    letter-spacing: 1px;
+	  }
+	  .nav-links {
+	    display: flex;
+	    align-items: center;
+	    gap: 4px;
+	    list-style: none;
+	  }
+	  .nav-links a {
+	    text-decoration: none;
+	    color: var(--fg-light);
+	    padding: 8px 16px;
+	    border-radius: var(--radius-sm);
+	    font-size: 14px;
+	    font-weight: 500;
+	    transition: all var(--transition);
+	    position: relative;
+	  }
+	  .nav-links a:hover, .nav-links a.active {
+	    color: var(--accent);
+	    background: var(--accent-light);
+	  }
+	  .nav-right {
+	    display: flex;
+	    align-items: center;
+	    gap: 8px;
+	  }
+	  .nav-btn {
+	    width: 36px;
+	    height: 36px;
+	    border: none;
+	    background: transparent;
+	    color: var(--fg-light);
+	    border-radius: var(--radius-sm);
+	    cursor: pointer;
+	    font-size: 16px;
+	    display: flex;
+	    align-items: center;
+	    justify-content: center;
+	    transition: all var(--transition);
+	  }
+	  .nav-btn:hover {
+	    background: var(--accent-light);
+	    color: var(--accent);
+	  }
+	  .mobile-menu-btn { display: none; }
+	  /* ===== 头部横幅 ===== */
+	  .hero {
+	    position: relative;
+	    z-index: 1;
+	    max-width: 1200px;
+	    margin: 0 auto;
+	    padding: 48px 24px 32px;
+	  }
+	  .hero-card {
+	    background: linear-gradient(135deg, #2a3a2e 0%, #1a2a1e 50%, #2a3528 100%);
+	    border-radius: 16px;
+	    padding: 56px 48px;
+	    position: relative;
+	    overflow: hidden;
+	    display: flex;
+	    align-items: center;
+	    min-height: 240px;
+	  }
+	  .dark .hero-card {
+	    background: linear-gradient(135deg, #2a3a2e 0%, #1e2e22 50%, #283828 100%);
+	  }
+	  .hero-card::before {
+	    content: '';
+	    position: absolute;
+	    top: -60%;
+	    right: -10%;
+	    width: 500px;
+	    height: 500px;
+	    background: radial-gradient(circle, rgba(200,148,62,0.25) 0%, transparent 70%);
+	    pointer-events: none;
+	  }
+	  .hero-card::after {
+	    content: '';
+	    position: absolute;
+	    bottom: 0;
+	    right: 40px;
+	    width: 280px;
+	    height: 100%;
+	    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cpath d='M20 180 Q60 120 100 140 T180 60' stroke='rgba(200,148,62,0.15)' fill='none' stroke-width='2'/%3E%3Cpath d='M10 160 Q50 100 90 120 T170 40' stroke='rgba(200,148,62,0.1)' fill='none' stroke-width='1.5'/%3E%3Ccircle cx='160' cy='50' r='30' fill='rgba(200,148,62,0.08)'/%3E%3Ccircle cx='140' cy='80' r='15' fill='rgba(58,107,76,0.1)'/%3E%3C/svg%3E") no-repeat center bottom;
+	    background-size: contain;
+	    pointer-events: none;
+	    opacity: 0.8;
+	  }
+	  .hero-content {
+	    position: relative;
+	    z-index: 2;
+	    max-width: 600px;
+	  }
+	  .hero-title {
+	    font-family: var(--font-serif);
+	    font-size: 36px;
+	    font-weight: 900;
+	    color: #f0ebe0;
+	    line-height: 1.3;
+	    margin-bottom: 12px;
+	  }
+	  .hero-title span {
+	    color: var(--accent);
+	  }
+	  .hero-desc {
+	    color: rgba(240,235,224,0.7);
+	    font-size: 15px;
+	    line-height: 1.8;
+	    margin-bottom: 24px;
+	  }
+	  .hero-stats {
+	    display: flex;
+	    gap: 32px;
+	  }
+	  .hero-stat-num {
+	    font-family: var(--font-serif);
+	    font-size: 28px;
+	    font-weight: 700;
+	    color: var(--accent);
+	  }
+	  .hero-stat-label {
+	    font-size: 12px;
+	    color: rgba(240,235,224,0.5);
+	    margin-top: 2px;
+	  }
+	  /* ===== 主体布局 ===== */
+	  .main-wrap {
+	    position: relative;
+	    z-index: 1;
+	    max-width: 1200px;
+	    margin: 0 auto;
+	    padding: 0 24px 60px;
+	    display: grid;
+	    grid-template-columns: 1fr 320px;
+	    gap: 32px;
+	  }
+	  /* ===== 文章列表 ===== */
+	  .content-area { min-width: 0; }
+	  .section-header {
+	    display: flex;
+	    align-items: center;
+	    justify-content: space-between;
+	    margin-bottom: 20px;
+	  }
+	  .section-title {
+	    font-family: var(--font-serif);
+	    font-size: 20px;
+	    font-weight: 700;
+	    display: flex;
+	    align-items: center;
+	    gap: 8px;
+	  }
+	  .section-title::before {
+	    content: '';
+	    width: 4px;
+	    height: 20px;
+	    background: var(--accent);
+	    border-radius: 2px;
+	  }
+	  .section-more {
+	    font-size: 13px;
+	    color: var(--muted);
+	    text-decoration: none;
+	    transition: color var(--transition);
+	  }
+	  .section-more:hover { color: var(--accent); }
+	  /* 文章卡片 */
+	  .article-card {
+	    background: var(--card);
+	    border: 1px solid var(--border-light);
+	    border-radius: var(--radius);
+	    padding: 28px;
+	    margin-bottom: 20px;
+	    transition: all var(--transition);
+	    cursor: pointer;
+	    position: relative;
+	    overflow: hidden;
+	  }
+	  .article-card::after {
+	    content: '';
+	    position: absolute;
+	    top: 0;
+	    left: 0;
+	    width: 3px;
+	    height: 0;
+	    background: var(--accent);
+	    transition: height var(--transition);
+	  }
+	  .article-card:hover {
+	    background: var(--card-hover);
+	    border-color: var(--border);
+	    box-shadow: 0 8px 30px var(--shadow), 0 2px 8px var(--shadow);
+	    transform: translateY(-2px);
+	  }
+	  .article-card:hover::after {
+	    height: 100%;
+	  }
+	  .article-card-top {
+	    display: flex;
+	    align-items: center;
+	    gap: 8px;
+	    margin-bottom: 12px;
+	    flex-wrap: wrap;
+	  }
+	  .article-tag {
+	    font-size: 11px;
+	    padding: 2px 10px;
+	    border-radius: 20px;
+	    font-weight: 500;
+	    letter-spacing: 0.5px;
+	  }
+	  .tag-tech { background: var(--accent-light); color: var(--accent); }
+	  .tag-life { background: var(--green-light); color: var(--green); }
+	  .tag-read { background: rgba(196,92,74,0.1); color: var(--red); }
+	  .article-sticky {
+	    font-size: 11px;
+	    padding: 2px 10px;
+	    border-radius: 20px;
+	    background: var(--accent);
+	    color: #fff;
+	    font-weight: 500;
+	  }
+	  .article-title {
+	    font-family: var(--font-serif);
+	    font-size: 19px;
+	    font-weight: 700;
+	    line-height: 1.5;
+	    margin-bottom: 10px;
+	    transition: color var(--transition);
+	  }
+	  .article-card:hover .article-title { color: var(--accent); }
+	  .article-excerpt {
+	    font-size: 14px;
+	    color: var(--fg-light);
+	    line-height: 1.8;
+	    margin-bottom: 16px;
+	    display: -webkit-box;
+	    -webkit-line-clamp: 3;
+	    -webkit-box-orient: vertical;
+	    overflow: hidden;
+	  }
+	  .article-meta {
+	    display: flex;
+	    align-items: center;
+	    justify-content: space-between;
+	    font-size: 12px;
+	    color: var(--muted);
+	  }
+	  .article-meta-left {
+	    display: flex;
+	    align-items: center;
+	    gap: 16px;
+	  }
+	  .article-meta-left i {
+	    margin-right: 4px;
+	    font-size: 11px;
+	  }
+	  .article-meta-right {
+	    display: flex;
+	    align-items: center;
+	    gap: 12px;
+	  }
+	  .article-meta-right span {
+	    display: flex;
+	    align-items: center;
+	    gap: 4px;
+	    cursor: pointer;
+	    transition: color var(--transition);
+	  }
+	  .article-meta-right span:hover { color: var(--accent); }
+	  .article-thumb {
+	    float: right;
+	    width: 160px;
+	    height: 110px;
+	    border-radius: var(--radius-sm);
+	    object-fit: cover;
+	    margin-left: 20px;
+	    margin-bottom: 8px;
+	  }
+	  /* 置顶卡片特殊样式 */
+	  .article-card.sticky {
+	    border-color: var(--accent);
+	    background: linear-gradient(135deg, var(--card) 0%, var(--accent-light) 100%);
+	  }
+	  .dark .article-card.sticky {
+	    background: linear-gradient(135deg, var(--card) 0%, rgba(212,168,83,0.08) 100%);
+	  }
+	  /* 分页 */
+	  .pagination {
+	    display: flex;
+	    align-items: center;
+	    justify-content: center;
+	    gap: 6px;
+	    margin-top: 32px;
+	  }
+	  .pagination a, .pagination span {
+	    display: inline-flex;
+	    align-items: center;
+	    justify-content: center;
+	    min-width: 36px;
+	    height: 36px;
+	    padding: 0 12px;
+	    border: 1px solid var(--border);
+	    border-radius: var(--radius-sm);
+	    font-size: 13px;
+	    text-decoration: none;
+	    color: var(--fg-light);
+	    background: var(--card);
+	    transition: all var(--transition);
+	    cursor: pointer;
+	  }
+	  .pagination a:hover, .pagination span.current {
+	    background: var(--accent);
+	    color: #fff;
+	    border-color: var(--accent);
+	  }
+	  .pagination span.disabled {
+	    opacity: 0.4;
+	    cursor: not-allowed;
+	  }
+	  /* ===== 侧边栏 ===== */
+	  .sidebar { position: relative; }
+	  .sidebar-inner {
+	    position: sticky;
+	    top: 88px;
+	    display: flex;
+	    flex-direction: column;
+	    gap: 20px;
+	  }
+	  .widget {
+	    background: var(--card);
+	    border: 1px solid var(--border-light);
+	    border-radius: var(--radius);
+	    padding: 24px;
+	    transition: all var(--transition);
+	  }
+	  .widget:hover {
+	    border-color: var(--border);
+	  }
+	  .widget-title {
+	    font-family: var(--font-serif);
+	    font-size: 15px;
+	    font-weight: 700;
+	    margin-bottom: 16px;
+	    display: flex;
+	    align-items: center;
+	    gap: 8px;
+	    color: var(--fg);
+	  }
+	  .widget-title i {
+	    color: var(--accent);
+	    font-size: 14px;
+	  }
+	  /* 搜索组件 */
+	  .search-box {
+	    display: flex;
+	    gap: 8px;
+	  }
+	  .search-input {
+	    flex: 1;
+	    height: 40px;
+	    padding: 0 14px;
+	    border: 1px solid var(--border);
+	    border-radius: var(--radius-sm);
+	    background: var(--bg);
+	    color: var(--fg);
+	    font-size: 13px;
+	    outline: none;
+	    transition: all var(--transition);
+	    font-family: var(--font-sans);
+	  }
+	  .search-input::placeholder { color: var(--muted); }
+	  .search-input:focus {
+	    border-color: var(--accent);
+	    box-shadow: 0 0 0 3px var(--accent-light);
+	  }
+	  .search-btn {
+	    height: 40px;
+	    padding: 0 16px;
+	    background: var(--accent);
+	    color: #fff;
+	    border: none;
+	    border-radius: var(--radius-sm);
+	    font-size: 13px;
+	    cursor: pointer;
+	    transition: all var(--transition);
+	    font-family: var(--font-sans);
+	    font-weight: 500;
+	  }
+	  .search-btn:hover { background: var(--accent-hover); }
+	  /* 个人信息组件 */
+	  .profile-widget {
+	    text-align: center;
+	    padding: 32px 24px;
+	  }
+	  .profile-avatar {
+	    width: 80px;
+	    height: 80px;
+	    border-radius: 50%;
+	    object-fit: cover;
+	    border: 3px solid var(--accent);
+	    margin-bottom: 12px;
+	    transition: transform var(--transition);
+	  }
+	  .profile-avatar:hover { transform: scale(1.08) rotate(5deg); }
+	  .profile-name {
+	    font-family: var(--font-serif);
+	    font-size: 18px;
+	    font-weight: 700;
+	    margin-bottom: 6px;
+	  }
+	  .profile-bio {
+	    font-size: 13px;
+	    color: var(--fg-light);
+	    line-height: 1.7;
+	    margin-bottom: 16px;
+	  }
+	  .profile-social {
+	    display: flex;
+	    justify-content: center;
+	    gap: 12px;
+	  }
+	  .profile-social a {
+	    width: 34px;
+	    height: 34px;
+	    display: flex;
+	    align-items: center;
+	    justify-content: center;
+	    border-radius: 50%;
+	    background: var(--bg);
+	    color: var(--fg-light);
+	    font-size: 14px;
+	    text-decoration: none;
+	    transition: all var(--transition);
+	  }
+	  .profile-social a:hover {
+	    background: var(--accent);
+	    color: #fff;
+	    transform: translateY(-2px);
+	  }
+	  /* 分类组件 */
+	  .category-list {
+	    list-style: none;
+	    display: flex;
+	    flex-direction: column;
+	    gap: 2px;
+	  }
+	  .category-list li a {
+	    display: flex;
+	    align-items: center;
+	    justify-content: space-between;
+	    padding: 10px 14px;
+	    border-radius: var(--radius-sm);
+	    text-decoration: none;
+	    color: var(--fg-light);
+	    font-size: 13px;
+	    transition: all var(--transition);
+	  }
+	  .category-list li a:hover {
+	    background: var(--accent-light);
+	    color: var(--accent);
+	  }
+	  .category-list li a .cat-count {
+	    font-size: 11px;
+	    background: var(--bg);
+	    padding: 1px 8px;
+	    border-radius: 10px;
+	    color: var(--muted);
+	    transition: all var(--transition);
+	  }
+	  .category-list li a:hover .cat-count {
+	    background: var(--accent);
+	    color: #fff;
+	  }
+	  /* 标签云组件 */
+	  .tag-cloud {
+	    display: flex;
+	    flex-wrap: wrap;
+	    gap: 8px;
+	  }
+	  .tag-cloud a {
+	    font-size: 12px;
+	    padding: 4px 12px;
+	    border: 1px solid var(--border);
+	    border-radius: 20px;
+	    text-decoration: none;
+	    color: var(--fg-light);
+	    transition: all var(--transition);
+	  }
+	  .tag-cloud a:hover {
+	    background: var(--accent);
+	    color: #fff;
+	    border-color: var(--accent);
+	    transform: translateY(-1px);
+	  }
+	  .tag-cloud a.hot {
+	    background: var(--accent-light);
+	    color: var(--accent);
+	    border-color: transparent;
+	    font-weight: 500;
+	  }
+	  /* 最新文章组件 */
+	  .recent-list {
+	    display: flex;
+	    flex-direction: column;
+	    gap: 14px;
+	  }
+	  .recent-item {
+	    display: flex;
+	    gap: 12px;
+	    align-items: center;
+	    text-decoration: none;
+	    color: var(--fg);
+	    padding: 8px;
+	    border-radius: var(--radius-sm);
+	    transition: all var(--transition);
+	    cursor: pointer;
+	  }
+	  .recent-item:hover {
+	    background: var(--accent-light);
+	  }
+	  .recent-item-num {
+	    width: 24px;
+	    height: 24px;
+	    border-radius: 6px;
+	    display: flex;
+	    align-items: center;
+	    justify-content: center;
+	    font-size: 11px;
+	    font-weight: 700;
+	    background: var(--bg);
+	    color: var(--muted);
+	    flex-shrink: 0;
+	  }
+	  .recent-item:nth-child(1) .recent-item-num { background: var(--accent); color: #fff; }
+	  .recent-item:nth-child(2) .recent-item-num { background: var(--green); color: #fff; }
+	  .recent-item:nth-child(3) .recent-item-num { background: var(--red); color: #fff; }
+	  .recent-item-title {
+	    font-size: 13px;
+	    line-height: 1.5;
+	    display: -webkit-box;
+	    -webkit-line-clamp: 2;
+	    -webkit-box-orient: vertical;
+	    overflow: hidden;
+	    transition: color var(--transition);
+	  }
+	  .recent-item:hover .recent-item-title { color: var(--accent); }
+	  /* 归档组件 */
+	  .archive-list {
+	    list-style: none;
+	    display: flex;
+	    flex-direction: column;
+	    gap: 2px;
+	  }
+	  .archive-list li a {
+	    display: flex;
+	    align-items: center;
+	    justify-content: space-between;
+	    padding: 8px 14px;
+	    border-radius: var(--radius-sm);
+	    text-decoration: none;
+	    color: var(--fg-light);
+	    font-size: 13px;
+	    transition: all var(--transition);
+	  }
+	  .archive-list li a:hover {
+	    background: var(--accent-light);
+	    color: var(--accent);
+	  }
+	  /* ===== 文章详情模态框 ===== */
+	  .modal-overlay {
+	    display: none;
+	    position: fixed;
+	    inset: 0;
+	    background: rgba(0,0,0,0.5);
+	    backdrop-filter: blur(8px);
+	    z-index: 200;
+	    animation: fadeIn 0.3s ease;
+	    overflow-y: auto;
+	    padding: 40px 20px;
+	  }
+	  .modal-overlay.show { display: flex; justify-content: center; align-items: flex-start; }
+	  .modal-content {
+	    background: var(--card);
+	    border-radius: 16px;
+	    max-width: 780px;
+	    width: 100%;
+	    padding: 48px;
+	    position: relative;
+	    animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+	    border: 1px solid var(--border);
+	  }
+	  .modal-close {
+	    position: absolute;
+	    top: 16px;
+	    right: 16px;
+	    width: 36px;
+	    height: 36px;
+	    border: none;
+	    background: var(--bg);
+	    color: var(--fg-light);
+	    border-radius: 50%;
+	    cursor: pointer;
+	    font-size: 16px;
+	    display: flex;
+	    align-items: center;
+	    justify-content: center;
+	    transition: all var(--transition);
+	  }
+	  .modal-close:hover { background: var(--red); color: #fff; }
+	  .modal-article-tag {
+	    display: inline-block;
+	    font-size: 12px;
+	    padding: 3px 12px;
+	    border-radius: 20px;
+	    margin-bottom: 16px;
+	  }
+	  .modal-article-title {
+	    font-family: var(--font-serif);
+	    font-size: 28px;
+	    font-weight: 900;
+	    line-height: 1.4;
+	    margin-bottom: 16px;
+	  }
+	  .modal-article-meta {
+	    display: flex;
+	    align-items: center;
+	    gap: 20px;
+	    font-size: 13px;
+	    color: var(--muted);
+	    margin-bottom: 32px;
+	    padding-bottom: 24px;
+	    border-bottom: 1px solid var(--border-light);
+	  }
+	  .modal-article-meta i { margin-right: 6px; }
+	  .modal-article-body {
+	    font-size: 15px;
+	    line-height: 2;
+	    color: var(--fg);
+	  }
+	  .modal-article-body p { margin-bottom: 18px; }
+	  .modal-article-body h2 {
+	    font-family: var(--font-serif);
+	    font-size: 20px;
+	    font-weight: 700;
+	    margin: 32px 0 16px;
+	    padding-left: 14px;
+	    border-left: 3px solid var(--accent);
+	  }
+	  .modal-article-body blockquote {
+	    border-left: 3px solid var(--accent);
+	    padding: 16px 20px;
+	    background: var(--accent-light);
+	    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+	    margin: 20px 0;
+	    font-style: italic;
+	    color: var(--fg-light);
+	  }
+	  .modal-article-body code {
+	    background: var(--bg);
+	    padding: 2px 8px;
+	    border-radius: 4px;
+	    font-size: 13px;
+	    color: var(--accent);
+	    font-family: 'Fira Code', monospace;
+	  }
+	  .modal-article-body pre {
+	    background: #1e2420;
+	    color: #c8d0c0;
+	    padding: 20px;
+	    border-radius: var(--radius-sm);
+	    overflow-x: auto;
+	    margin: 20px 0;
+	    font-size: 13px;
+	    line-height: 1.7;
+	  }
+	  /* 评论区 */
+	  .comment-section {
+	    margin-top: 40px;
+	    padding-top: 32px;
+	    border-top: 1px solid var(--border-light);
+	  }
+	  .comment-section h3 {
+	    font-family: var(--font-serif);
+	    font-size: 18px;
+	    font-weight: 700;
+	    margin-bottom: 20px;
+	  }
+	  .comment-form {
+	    display: flex;
+	    flex-direction: column;
+	    gap: 12px;
+	    margin-bottom: 28px;
+	  }
+	  .comment-form-row {
+	    display: grid;
+	    grid-template-columns: 1fr 1fr;
+	    gap: 12px;
+	  }
+	  .comment-input {
+	    height: 40px;
+	    padding: 0 14px;
+	    border: 1px solid var(--border);
+	    border-radius: var(--radius-sm);
+	    background: var(--bg);
+	    color: var(--fg);
+	    font-size: 13px;
+	    outline: none;
+	    transition: all var(--transition);
+	    font-family: var(--font-sans);
+	  }
+	  .comment-input:focus {
+	    border-color: var(--accent);
+	    box-shadow: 0 0 0 3px var(--accent-light);
+	  }
+	  .comment-textarea {
+	    height: 100px;
+	    padding: 12px 14px;
+	    border: 1px solid var(--border);
+	    border-radius: var(--radius-sm);
+	    background: var(--bg);
+	    color: var(--fg);
+	    font-size: 13px;
+	    outline: none;
+	    resize: vertical;
+	    transition: all var(--transition);
+	    font-family: var(--font-sans);
+	    line-height: 1.7;
+	  }
+	  .comment-textarea:focus {
+	    border-color: var(--accent);
+	    box-shadow: 0 0 0 3px var(--accent-light);
+	  }
+	  .comment-submit {
+	    align-self: flex-end;
+	    height: 40px;
+	    padding: 0 28px;
+	    background: var(--accent);
+	    color: #fff;
+	    border: none;
+	    border-radius: var(--radius-sm);
+	    font-size: 13px;
+	    font-weight: 500;
+	    cursor: pointer;
+	    transition: all var(--transition);
+	    font-family: var(--font-sans);
+	  }
+	  .comment-submit:hover { background: var(--accent-hover); }
+	  .comment-list {
+	    display: flex;
+	    flex-direction: column;
+	    gap: 16px;
+	  }
+	  .comment-item {
+	    display: flex;
+	    gap: 14px;
+	    padding: 16px;
+	    background: var(--bg);
+	    border-radius: var(--radius-sm);
+	  }
+	  .comment-avatar {
+	    width: 40px;
+	    height: 40px;
+	    border-radius: 50%;
+	    object-fit: cover;
+	    flex-shrink: 0;
+	  }
+	  .comment-body { flex: 1; min-width: 0; }
+	  .comment-header {
+	    display: flex;
+	    align-items: center;
+	    gap: 10px;
+	    margin-bottom: 6px;
+	  }
+	  .comment-author {
+	    font-size: 13px;
+	    font-weight: 700;
+	    color: var(--fg);
+	  }
+	  .comment-date {
+	    font-size: 11px;
+	    color: var(--muted);
+	  }
+	  .comment-text {
+	    font-size: 13px;
+	    color: var(--fg-light);
+	    line-height: 1.7;
+	  }
+	  /* ===== 搜索结果遮罩 ===== */
+	  .search-overlay {
+	    display: none;
+	    position: fixed;
+	    inset: 0;
+	    background: rgba(0,0,0,0.5);
+	    backdrop-filter: blur(8px);
+	    z-index: 200;
+	    animation: fadeIn 0.3s ease;
+	    overflow-y: auto;
+	    padding: 40px 20px;
+	  }
+	  .search-overlay.show { display: flex; justify-content: center; align-items: flex-start; }
+	  .search-panel {
+	    background: var(--card);
+	    border-radius: 16px;
+	    max-width: 600px;
+	    width: 100%;
+	    padding: 32px;
+	    animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+	    border: 1px solid var(--border);
+	  }
+	  .search-panel-close {
+	    float: right;
+	    background: none;
+	    border: none;
+	    color: var(--muted);
+	    cursor: pointer;
+	    font-size: 18px;
+	    transition: color var(--transition);
+	  }
+	  .search-panel-close:hover { color: var(--red); }
+	  .search-result-item {
+	    padding: 14px 0;
+	    border-bottom: 1px solid var(--border-light);
+	    cursor: pointer;
+	    transition: all var(--transition);
+	  }
+	  .search-result-item:last-child { border-bottom: none; }
+	  .search-result-item:hover { padding-left: 8px; }
+	  .search-result-item h4 {
+	    font-size: 14px;
+	    font-weight: 700;
+	    margin-bottom: 4px;
+	    transition: color var(--transition);
+	  }
+	  .search-result-item:hover h4 { color: var(--accent); }
+	  .search-result-item p {
+	    font-size: 12px;
+	    color: var(--muted);
+	    line-height: 1.6;
+	  }
+	  .search-no-result {
+	    text-align: center;
+	    padding: 32px;
+	    color: var(--muted);
+	    font-size: 14px;
+	  }
+	  /* ===== Toast提示 ===== */
+	  .toast-container {
+	    position: fixed;
+	    top: 80px;
+	    right: 24px;
+	    z-index: 300;
+	    display: flex;
+	    flex-direction: column;
+	    gap: 8px;
+	  }
+	  .toast {
+	    background: var(--card);
+	    border: 1px solid var(--border);
+	    border-radius: var(--radius-sm);
+	    padding: 12px 20px;
+	    font-size: 13px;
+	    box-shadow: 0 8px 30px var(--shadow-md);
+	    display: flex;
+	    align-items: center;
+	    gap: 10px;
+	    animation: slideInRight 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+	    min-width: 220px;
+	  }
+	  .toast i { color: var(--accent); }
+	  .toast.success i { color: var(--green); }
+	  .toast.error i { color: var(--red); }
+	  .toast.fadeOut { animation: fadeOut 0.3s ease forwards; }
+	  /* ===== 回到顶部 ===== */
+	  .back-to-top {
+	    position: fixed;
+	    bottom: 32px;
+	    right: 32px;
+	    width: 44px;
+	    height: 44px;
+	    background: var(--accent);
+	    color: #fff;
+	    border: none;
+	    border-radius: 50%;
+	    cursor: pointer;
+	    font-size: 16px;
+	    display: flex;
+	    align-items: center;
+	    justify-content: center;
+	    z-index: 50;
+	    opacity: 0;
+	    transform: translateY(20px);
+	    transition: all var(--transition);
+	    box-shadow: 0 4px 16px rgba(200,148,62,0.3);
+	  }
+	  .back-to-top.visible {
+	    opacity: 1;
+	    transform: translateY(0);
+	  }
+	  .back-to-top:hover {
+	    transform: translateY(-3px);
+	    box-shadow: 0 6px 24px rgba(200,148,62,0.4);
+	  }
+	  /* ===== 页脚 ===== */
+	  .footer {
+	    position: relative;
+	    z-index: 1;
+	    background: var(--bg-deep);
+	    border-top: 1px solid var(--border-light);
+	    transition: all var(--transition);
+	  }
+	  .footer-inner {
+	    max-width: 1200px;
+	    margin: 0 auto;
+	    padding: 40px 24px;
+	    display: grid;
+	    grid-template-columns: 2fr 1fr 1fr 1fr;
+	    gap: 32px;
+	  }
+	  .footer-brand-name {
+	    font-family: var(--font-serif);
+	    font-size: 18px;
+	    font-weight: 700;
+	    margin-bottom: 10px;
+	    display: flex;
+	    align-items: center;
+	    gap: 8px;
+	  }
+	  .footer-brand-name i { color: var(--accent); }
+	  .footer-desc {
+	    font-size: 13px;
+	    color: var(--fg-light);
+	    line-height: 1.8;
+	    margin-bottom: 16px;
+	  }
+	  .footer-heading {
+	    font-size: 13px;
+	    font-weight: 700;
+	    margin-bottom: 14px;
+	    color: var(--fg);
+	    text-transform: uppercase;
+	    letter-spacing: 1px;
+	  }
+	  .footer-links {
+	    list-style: none;
+	    display: flex;
+	    flex-direction: column;
+	    gap: 8px;
+	  }
+	  .footer-links a {
+	    font-size: 13px;
+	    color: var(--fg-light);
+	    text-decoration: none;
+	    transition: color var(--transition);
+	  }
+	  .footer-links a:hover { color: var(--accent); }
+	  .footer-bottom {
+	    max-width: 1200px;
+	    margin: 0 auto;
+	    padding: 20px 24px;
+	    border-top: 1px solid var(--border-light);
+	    display: flex;
+	    align-items: center;
+	    justify-content: space-between;
+	    font-size: 12px;
+	    color: var(--muted);
+	  }
+	  /* ===== 动画 ===== */
+	  @keyframes fadeIn {
+	    from { opacity: 0; }
+	    to { opacity: 1; }
+	  }
+	  @keyframes slideUp {
+	    from { opacity: 0; transform: translateY(30px); }
+	    to { opacity: 1; transform: translateY(0); }
+	  }
+	  @keyframes slideInRight {
+	    from { opacity: 0; transform: translateX(60px); }
+	    to { opacity: 1; transform: translateX(0); }
+	  }
+	  @keyframes fadeOut {
+	    to { opacity: 0; transform: translateX(40px); }
+	  }
+	  /* 入场动画 */
+	  .animate-in {
+	    opacity: 0;
+	    transform: translateY(20px);
+	    transition: opacity 0.6s ease, transform 0.6s ease;
+	  }
+	  .animate-in.visible {
+	    opacity: 1;
+	    transform: translateY(0);
+	  }
+	  /* ===== 移动端菜单 ===== */
+	  .mobile-nav {
+	    display: none;
+	    position: fixed;
+	    inset: 0;
+	    background: rgba(0,0,0,0.5);
+	    backdrop-filter: blur(8px);
+	    z-index: 150;
+	  }
+	  .mobile-nav.show { display: block; }
+	  .mobile-nav-panel {
+	    position: absolute;
+	    top: 0;
+	    right: 0;
+	    width: 280px;
+	    height: 100%;
+	    background: var(--card);
+	    padding: 24px;
+	    animation: slideInRight 0.3s ease;
+	  }
+	  .mobile-nav-close {
+	    background: none;
+	    border: none;
+	    color: var(--fg-light);
+	    font-size: 20px;
+	    cursor: pointer;
+	    float: right;
+	  }
+	  .mobile-nav-links {
+	    list-style: none;
+	    margin-top: 40px;
+	    display: flex;
+	    flex-direction: column;
+	    gap: 4px;
+	    clear: both;
+	  }
+	  .mobile-nav-links a {
+	    display: block;
+	    padding: 12px 16px;
+	    text-decoration: none;
+	    color: var(--fg);
+	    font-size: 15px;
+	    border-radius: var(--radius-sm);
+	    transition: all var(--transition);
+	  }
+	  .mobile-nav-links a:hover {
+	    background: var(--accent-light);
+	    color: var(--accent);
+	  }
+	  /* ===== 响应式 ===== */
+	  @media (max-width: 1024px) {
+	    .main-wrap {
+	      grid-template-columns: 1fr;
+	    }
+	    .sidebar-inner {
+	      position: static;
+	      display: grid;
+	      grid-template-columns: 1fr 1fr;
+	      gap: 16px;
+	    }
+	    .profile-widget {
+	      grid-column: 1 / -1;
+	    }
+	  }
+	  @media (max-width: 768px) {
+	    .nav-links { display: none; }
+	    .mobile-menu-btn { display: flex; }
+	    .hero-card { padding: 36px 24px; }
+	    .hero-title { font-size: 26px; }
+	    .hero-stats { gap: 20px; }
+	    .hero-stat-num { font-size: 22px; }
+	    .article-thumb { float: none; width: 100%; height: 180px; margin-left: 0; margin-bottom: 12px; }
+	    .sidebar-inner { grid-template-columns: 1fr; }
+	    .modal-content { padding: 28px 20px; }
+	    .modal-article-title { font-size: 22px; }
+	    .comment-form-row { grid-template-columns: 1fr; }
+	    .footer-inner { grid-template-columns: 1fr 1fr; }
+	    .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
+	  }
+	  @media (max-width: 480px) {
+	    .hero-stats { flex-wrap: wrap; gap: 16px; }
+	    .footer-inner { grid-template-columns: 1fr; }
+	  }
+	  /* 减少动画偏好 */
+	  @media (prefers-reduced-motion: reduce) {
+	    *, *::before, *::after {
+	      animation-duration: 0.01ms !important;
+	      transition-duration: 0.01ms !important;
+	    }
+	  }
+	</style>
+	</head>
+	<body>
+	<!-- 导航栏 -->
+	<nav class="navbar" role="navigation" aria-label="主导航">
+	  <div class="nav-inner">
+	    <a href="#" class="nav-brand" aria-label="墨迹博客首页">
+	      <div class="nav-brand-icon">墨</div>
+	      <span class="nav-brand-text">墨迹博客</span>
+	    </a>
+	    <ul class="nav-links">
+	      <li><a href="#" class="active">首页</a></li>
+	      <li><a href="#" onclick="showToast('分类页面开发中', 'info')">分类</a></li>
+	      <li><a href="#" onclick="showToast('归档页面开发中', 'info')">归档</a></li>
+	      <li><a href="#" onclick="showToast('友链页面开发中', 'info')">友链</a></li>
+	      <li><a href="#" onclick="showToast('关于页面开发中', 'info')">关于</a></li>
+	    </ul>
+	    <div class="nav-right">
+	      <button class="nav-btn" onclick="openSearch()" aria-label="搜索" title="搜索"><i class="fas fa-search"></i></button>
+	      <button class="nav-btn" id="themeToggle" onclick="toggleTheme()" aria-label="切换主题" title="切换主题"><i class="fas fa-moon"></i></button>
+	      <button class="nav-btn mobile-menu-btn" onclick="openMobileNav()" aria-label="菜单" title="菜单"><i class="fas fa-bars"></i></button>
+	    </div>
+	  </div>
+	</nav>
+	<!-- 头部横幅 -->
+	<section class="hero">
+	  <div class="hero-card">
+	    <div class="hero-content">
+	      <h1 class="hero-title">以文字为墨，<span>书写时光</span></h1>
+	      <p class="hero-desc">一个关于技术、阅读与生活的个人博客。在这里记录编程路上的思考，分享阅读中的感悟，留存生活里的点滴。</p>
+	      <div class="hero-stats">
+	        <div>
+	          <div class="hero-stat-num" id="statArticles">0</div>
+	          <div class="hero-stat-label">篇文章</div>
+	        </div>
+	        <div>
+	          <div class="hero-stat-num" id="statComments">0</div>
+	          <div class="hero-stat-label">条评论</div>
+	        </div>
+	        <div>
+	          <div class="hero-stat-num" id="statDays">0</div>
+	          <div class="hero-stat-label">天运营</div>
+	        </div>
+	      </div>
+	    </div>
+	  </div>
+	</section>
+	<!-- 主体 -->
+	<div class="main-wrap">
+	  <!-- 文章列表 -->
+	  <main class="content-area" role="main">
+	    <div class="section-header">
+	      <h2 class="section-title">最新文章</h2>
+	      <a href="#" class="section-more" onclick="showToast('查看全部文章功能开发中', 'info')">查看全部 <i class="fas fa-arrow-right" style="font-size:11px"></i></a>
+	    </div>
+	    <div id="articleList"></div>
+	    <div class="pagination" id="pagination"></div>
+	  </main>
+	  <!-- 侧边栏 -->
+	  <aside class="sidebar" role="complementary">
+	    <div class="sidebar-inner">
+	      <!-- 搜索 -->
+	      <div class="widget">
+	        <div class="widget-title"><i class="fas fa-search"></i> 搜索</div>
+	        <div class="search-box">
+	          <input type="text" class="search-input" id="sidebarSearch" placeholder="输入关键词搜索..." onkeydown="if(event.key==='Enter')doSearch()">
+	          <button class="search-btn" onclick="doSearch()">搜索</button>
+	        </div>
+	      </div>
+	      <!-- 个人信息 -->
+	      <div class="widget profile-widget">
+	        <img src="https://picsum.photos/seed/blogger-avatar/160/160.jpg" alt="博主头像" class="profile-avatar">
+	        <div class="profile-name">墨客</div>
+	        <div class="profile-bio">全栈开发者 / 阅读爱好者<br>用代码构筑世界，用文字丈量人生</div>
+	        <div class="profile-social">
+	          <a href="#" aria-label="GitHub" title="GitHub" onclick="showToast('跳转GitHub', 'info')"><i class="fab fa-github"></i></a>
+	          <a href="#" aria-label="微博" title="微博" onclick="showToast('跳转微博', 'info')"><i class="fab fa-weibo"></i></a>
+	          <a href="#" aria-label="邮箱" title="邮箱" onclick="showToast('已复制邮箱地址', 'success')"><i class="fas fa-envelope"></i></a>
+	          <a href="#" aria-label="RSS" title="RSS订阅" onclick="showToast('RSS订阅功能开发中', 'info')"><i class="fas fa-rss"></i></a>
+	        </div>
+	      </div>
+	      <!-- 分类 -->
+	      <div class="widget">
+	        <div class="widget-title"><i class="fas fa-folder"></i> 分类</div>
+	        <ul class="category-list" id="categoryList"></ul>
+	      </div>
+	      <!-- 标签云 -->
+	      <div class="widget">
+	        <div class="widget-title"><i class="fas fa-tags"></i> 标签云</div>
+	        <div class="tag-cloud" id="tagCloud"></div>
+	      </div>
+	      <!-- 最新文章 -->
+	      <div class="widget">
+	        <div class="widget-title"><i class="fas fa-fire"></i> 热门文章</div>
+	        <div class="recent-list" id="recentList"></div>
+	      </div>
+	      <!-- 归档 -->
+	      <div class="widget">
+	        <div class="widget-title"><i class="fas fa-calendar-alt"></i> 归档</div>
+	        <ul class="archive-list" id="archiveList"></ul>
+	      </div>
+	    </div>
+	  </aside>
+	</div>
+	<!-- 文章详情模态框 -->
+	<div class="modal-overlay" id="articleModal" onclick="if(event.target===this)closeArticle()">
+	  <div class="modal-content" role="dialog" aria-label="文章详情">
+	    <button class="modal-close" onclick="closeArticle()" aria-label="关闭"><i class="fas fa-times"></i></button>
+	    <div id="modalBody"></div>
+	  </div>
+	</div>
+	<!-- 搜索结果面板 -->
+	<div class="search-overlay" id="searchOverlay" onclick="if(event.target===this)closeSearch()">
+	  <div class="search-panel">
+	    <button class="search-panel-close" onclick="closeSearch()" aria-label="关闭"><i class="fas fa-times"></i></button>
+	    <h3 style="font-family:var(--font-serif);font-size:18px;font-weight:700;margin-bottom:20px;">搜索结果</h3>
+	    <div id="searchResults"></div>
+	  </div>
+	</div>
+	<!-- 移动端导航 -->
+	<div class="mobile-nav" id="mobileNav" onclick="if(event.target===this)closeMobileNav()">
+	  <div class="mobile-nav-panel">
+	    <button class="mobile-nav-close" onclick="closeMobileNav()" aria-label="关闭菜单"><i class="fas fa-times"></i></button>
+	    <ul class="mobile-nav-links">
+	      <li><a href="#" onclick="closeMobileNav()">首页</a></li>
+	      <li><a href="#" onclick="showToast('分类页面开发中','info');closeMobileNav()">分类</a></li>
+	      <li><a href="#" onclick="showToast('归档页面开发中','info');closeMobileNav()">归档</a></li>
+	      <li><a href="#" onclick="showToast('友链页面开发中','info');closeMobileNav()">友链</a></li>
+	      <li><a href="#" onclick="showToast('关于页面开发中','info');closeMobileNav()">关于</a></li>
+	    </ul>
+	  </div>
+	</div>
+	<!-- Toast容器 -->
+	<div class="toast-container" id="toastContainer"></div>
+	<!-- 回到顶部 -->
+	<button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="回到顶部" title="回到顶部">
+	  <i class="fas fa-arrow-up"></i>
+	</button>
+	<!-- 页脚 -->
+	<footer class="footer">
+	  <div class="footer-inner">
+	    <div>
+	      <div class="footer-brand-name"><i class="fas fa-feather-alt"></i> 墨迹博客</div>
+	      <p class="footer-desc">记录技术探索与生活感悟的个人博客。基于emlog系统搭建，追求简洁、高效的阅读体验。</p>
+	    </div>
+	    <div>
+	      <div class="footer-heading">导航</div>
+	      <ul class="footer-links">
+	        <li><a href="#">首页</a></li>
+	        <li><a href="#" onclick="showToast('分类页面开发中','info')">分类</a></li>
+	        <li><a href="#" onclick="showToast('归档页面开发中','info')">归档</a></li>
+	        <li><a href="#" onclick="showToast('友链页面开发中','info')">友链</a></li>
+	      </ul>
+	    </div>
+	    <div>
+	      <div class="footer-heading">分类</div>
+	      <ul class="footer-links">
+	        <li><a href="#">技术笔记</a></li>
+	        <li><a href="#">读书随笔</a></li>
+	        <li><a href="#">生活记录</a></li>
+	        <li><a href="#">资源分享</a></li>
+	      </ul>
+	    </div>
+	    <div>
+	      <div class="footer-heading">更多</div>
+	      <ul class="footer-links">
+	        <li><a href="#" onclick="showToast('RSS订阅功能开发中','info')">RSS订阅</a></li>
+	        <li><a href="#" onclick="showToast('站点地图功能开发中','info')">站点地图</a></li>
+	        <li><a href="#" onclick="showToast('留言板开发中','info')">留言板</a></li>
+	        <li><a href="#" onclick="showToast('关于页面开发中','info')">关于博主</a></li>
+	      </ul>
+	    </div>
+	  </div>
+	  <div class="footer-bottom">
+	    <span>Copyright &copy; 2026 墨迹博客. Powered by emlog.</span>
+	    <span>Theme by MoInk v2.1</span>
+	  </div>
+	</footer>
+	<script>
+	// ===== 数据 =====
+	const articles = [
+	  {
+	    id: 1, title: 'GitHub Copilot：AI编程助手的实战体验与思考',
+	    excerpt: '最近深度体验了GitHub与OpenAI联合推出的Copilot编程助手。它从已有代码和注释中提取上下文，理解开发者意图，生成一行、多行代码甚至整个函数。正如OpenAI员工所言，使用Copilot好比雇佣一名翻译，让你无需在写代码时查阅大量文档。',
+	    category: '技术笔记', tag: 'tag-tech', sticky: true,
+	    date: '2026-04-08', views: 1832, likes: 246, comments: 38,
+	    thumb: 'https://picsum.photos/seed/copilot-ai/400/280.jpg',
+	    tags: ['AI', 'GitHub', '编程工具'],
+	    content: `<p>最近深度体验了GitHub与OpenAI联合推出的Copilot编程助手。这个工具的核心理念是从开发者已经编写的代码和注释中提取上下文，试图理解开发者意图，生成需要添加的一行、多行代码或整个函数。</p>
+	    <h2>核心功能体验</h2>
+	    <p>当程序员接受或拒绝建议时，模型就会学习越来越适应和匹配开发者的编程风格。这使得程序员无需在写代码时去查阅大量文档或搜索相关示例，更加聚焦于开发工作本身。</p>
+	    <blockquote>正如OpenAI员工Harri Edwards所言："用一种不熟悉的语言编写代码，用谷歌搜索所有东西，就像用一本短语手册去浏览一个外国国家。而使用GitHub Copilot，好比雇佣一名翻译。"</blockquote>
+	    <h2>技术实现</h2>
+	    <p>Copilot所做的可不仅是像"鹦鹉学舌"那样照搬见过的代码，它推荐的绝大多数代码都是唯一生成的、训练集中并不存在的。OpenAI联合创始人兼CTO Greg Brockman将这项工具比作"编程的最后一英里"。</p>
+	    <p>技术预览版最适合Python、JavaScript、TypeScript、Ruby和Go。Nat Friedman将GitHub Copilot描述为结对编程（pair programming）的演进。</p>
+	    <h2>使用建议</h2>
+	    <p>对于开发老将，Copilot可以加速日常编码；对于初学者，它能让编程本身更加容易上手。无论你是在用一种新的语言或框架，还是只是刚刚开始学习写代码，都能借助这一新工具更快上手编程。</p>`
+	  },
+	  {
+	    id: 2, title: '用CSS容器查询构建真正的组件化响应式布局',
+	    excerpt: 'CSS容器查询（Container Queries）终于获得了主流浏览器的全面支持。与媒体查询不同，容器查询允许组件根据其父容器的尺寸来调整样式，而非视口大小。这意味着同一组件在不同容器中可以自适应呈现不同形态。',
+	    category: '技术笔记', tag: 'tag-tech', sticky: false,
+	    date: '2026-04-05', views: 956, likes: 128, comments: 22,
+	    thumb: 'https://picsum.photos/seed/css-container/400/280.jpg',
+	    tags: ['CSS', '前端', '响应式'],
+	    content: `<p>CSS容器查询（Container Queries）终于获得了主流浏览器的全面支持，这可能是近年来CSS最重要的进化之一。</p>
+	    <h2>为什么需要容器查询</h2>
+	    <p>与媒体查询不同，容器查询允许组件根据其父容器的尺寸来调整样式，而非视口大小。这意味着同一组件在不同容器中可以自适应呈现不同形态，真正实现组件级别的响应式设计。</p>
+	    <h2>基础用法</h2>
+	    <pre><code>.card-container {
+	  container-type: inline-size;
+	  container-name: card;
+	}
+	@container card (min-width: 400px) {
+	  .card { flex-direction: row; }
+	}</code></pre>
+	    <p>这种写法让.card组件在父容器宽度大于400px时自动切换为横向布局，无需关心外部视口的宽度。</p>
+	    <h2>实际应用场景</h2>
+	    <p>侧边栏与主内容区共享同一组件、弹窗中的表单自适应、卡片网格中不同列宽的适配——这些都是容器查询的绝佳应用场景。</p>`
+	  },
+	  {
+	    id: 3, title: '读《百年孤独》：魔幻与现实交织的马孔多',
+	    excerpt: '第三次重读《百年孤独》，每一遍都有新的体悟。马尔克斯用魔幻现实主义的笔触，将布恩迪亚家族七代人的命运编织成一部关于孤独、时间与命运的史诗。那些看似荒诞的情节背后，是对拉丁美洲历史最深沉的凝视。',
+	    category: '读书随笔', tag: 'tag-read', sticky: false,
+	    date: '2026-04-02', views: 1243, likes: 198, comments: 45,
+	    thumb: 'https://picsum.photos/seed/reading-solitude/400/280.jpg',
+	    tags: ['读书', '文学', '拉美文学'],
+	    content: `<p>第三次重读《百年孤独》，每一遍都有新的体悟。马尔克斯用魔幻现实主义的笔触，将布恩迪亚家族七代人的命运编织成一部关于孤独、时间与命运的史诗。</p>
+	    <h2>孤独的多重面孔</h2>
+	    <p>布恩迪亚家族的每个成员都以不同的方式体验着孤独：奥雷里亚诺上校的战争孤独、阿玛兰妲的爱情孤独、乌尔苏拉的守望孤独。这些孤独不是简单的情感缺失，而是一种存在状态。</p>
+	    <blockquote>家族的第一个人被绑在树上，最后一个人正被蚂蚁吃掉。——这句预言般的结语，道出了循环宿命的必然。</blockquote>
+	    <h2>时间的轮回</h2>
+	    <p>马孔多的时间不是线性的，而是螺旋式的。同样的事件反复发生，同样的名字代代相传，仿佛历史是一个永不停歇的转轮。这种时间观深刻反映了拉美大陆的历史困境。</p>`
+	  },
+	  {
+	    id: 4, title: 'Vite 6.0 新特性全解析：构建性能再提升',
+	    excerpt: 'Vite 6.0正式发布，带来了环境API（Environment API）、改进的HMR边界处理、更快的冷启动速度等重磅更新。新版本对Rollup 4的深度集成使得生产构建的效率提升了约30%。',
+	    category: '技术笔记', tag: 'tag-tech', sticky: false,
+	    date: '2026-03-28', views: 721, likes: 89, comments: 15,
+	    thumb: 'https://picsum.photos/seed/vite-build/400/280.jpg',
+	    tags: ['Vite', '前端工程化', '构建工具'],
+	    content: `<p>Vite 6.0正式发布，这是自Vite 5以来的又一次重大升级。本文将全面解析新版本的核心变化。</p>
+	    <h2>环境API</h2>
+	    <p>最引人注目的新特性是Environment API，它允许开发者在单个Vite Dev Server中配置和运行多个运行时环境。这意味着你可以同时在浏览器和SSR环境中进行HMR。</p>
+	    <h2>性能提升</h2>
+	    <p>新版本对Rollup 4的深度集成使得生产构建的效率提升了约30%。冷启动速度也有了显著改善，大型项目的首次加载时间减少了约40%。</p>
+	    <h2>迁移建议</h2>
+	    <p>如果你正在使用Vite 5，升级过程相对平滑。主要需要注意Node.js 18+的要求，以及部分插件API的变更。</p>`
+	  },
+	  {
+	    id: 5, title: '春日徒步记：穿越徽杭古道的二十四小时',
+	    excerpt: '三月的徽杭古道，山花烂漫，溪水淙淙。从绩溪出发，翻越清凉峰，一路见证了古徽商的行商之路。晨雾中的古驿站、石板路上的马蹄印、山巅的云海日出——每一步都是与历史的对话。',
+	    category: '生活记录', tag: 'tag-life', sticky: false,
+	    date: '2026-03-25', views: 1087, likes: 167, comments: 31,
+	    thumb: 'https://picsum.photos/seed/hiking-trail/400/280.jpg',
+	    tags: ['徒步', '旅行', '徽杭古道'],
+	    content: `<p>三月的徽杭古道，山花烂漫，溪水淙淙。从绩溪出发，翻越清凉峰，一路见证了古徽商的行商之路。</p>
+	    <h2>出发</h2>
+	    <p>清晨六点从绩溪县城出发，空气中弥漫着油菜花的香气。古道的入口并不起眼，一块斑驳的石碑标记着这段千年商路的起点。</p>
+	    <h2>山中</h2>
+	    <p>随着海拔上升，植被从竹林逐渐变为针叶林。最难忘的是黄茅培到蓝天凹的一段，山脊两侧是起伏的云海，脚下是古人凿出的石阶。每一步都踏在千年的商旅记忆之上。</p>
+	    <blockquote>行至最高处，云海在脚下翻涌，远处的山峰如岛屿般浮在白色海洋中。那一刻，所有的疲惫都化为了平静。</blockquote>
+	    <h2>归来</h2>
+	    <p>傍晚抵达杭州临安，二十四小时的穿越，仿佛走过了徽商数百年的沧桑。古道依旧，行者更迭，唯有山川不变。</p>`
+	  },
+	  {
+	    id: 6, title: 'React Server Components实战：从原理到生产实践',
+	    excerpt: 'React Server Components（RSC）已经从实验性特性逐步走向成熟。本文从RSC的核心原理出发，结合实际项目中的使用经验，探讨如何在生产环境中有效利用服务端组件来优化首屏性能和数据获取策略。',
+	    category: '技术笔记', tag: 'tag-tech', sticky: false,
+	    date: '2026-03-20', views: 645, likes: 72, comments: 11,
+	    thumb: 'https://picsum.photos/seed/react-rsc/400/280.jpg',
+	    tags: ['React', '服务端渲染', '性能优化'],
+	    content: `<p>React Server Components（RSC）已经从实验性特性逐步走向成熟，越来越多的团队开始在项目中采用这一模式。</p>
+	    <h2>核心原理</h2>
+	    <p>RSC的核心思想是让组件在服务端执行，只将渲染结果（而非组件代码）发送到客户端。这意味着你可以直接在组件中访问数据库、文件系统等服务端资源，而无需额外的API层。</p>
+	    <h2>数据获取策略</h2>
+	    <p>在传统React应用中，数据获取通常需要useEffect + fetch的模式，而RSC允许你在组件顶层直接await异步操作，大幅简化了数据流。</p>
+	    <h2>生产实践建议</h2>
+	    <p>不是所有组件都适合作为服务端组件。交互密集的组件（如表单、拖拽）仍应保持为客户端组件。关键在于找到服务端渲染与客户端交互的平衡点。</p>`
+	  },
+	  {
+	    id: 7, title: '我的极简阅读体系：从输入到输出的闭环',
+	    excerpt: '经过三年的摸索，我建立了一套适合自己的阅读体系：精选—精读—笔记—输出。核心工具只有三个：微信读书做标注、Notion整理笔记、博客做输出。阅读不是目的，思考与表达才是。',
+	    category: '读书随笔', tag: 'tag-read', sticky: false,
+	    date: '2026-03-15', views: 892, likes: 143, comments: 27,
+	    thumb: 'https://picsum.photos/seed/reading-system/400/280.jpg',
+	    tags: ['阅读', '方法论', '笔记'],
+	    content: `<p>经过三年的摸索，我建立了一套适合自己的阅读体系：精选—精读—笔记—输出。</p>
+	    <h2>精选：少即是多</h2>
+	    <p>每年我只精读20-25本书。与其追求数量，不如把每本好书读透。选书的标准很简单：经过时间考验的经典，或解决当前问题的实用书籍。</p>
+	    <h2>精读：深度对话</h2>
+	    <p>精读不是逐字逐句地看，而是与作者对话。在阅读过程中不断提问：作者的核心论点是什么？我同意吗？这对我有什么启发？</p>
+	    <h2>输出：知识的闭环</h2>
+	    <p>阅读不是目的，思考与表达才是。每读完一本书，我都会写一篇读书笔记发到博客上。这个过程强迫我重新组织思路，将他人的知识内化为自己的理解。</p>`
+	  },
+	  {
+	    id: 8, title: '周末厨房：五道适合程序员的快手菜',
+	    excerpt: '作为程序员，工作日往往没时间好好做饭。但周末花一小时准备几道快手菜，既省钱又健康。本文分享五道我反复实践的菜品：从15分钟的蒜蓉西兰花到40分钟的番茄牛腩，每道都有详细的火候和时间控制。',
+	    category: '生活记录', tag: 'tag-life', sticky: false,
+	    date: '2026-03-10', views: 1543, likes: 213, comments: 52,
+	    thumb: 'https://picsum.photos/seed/cooking-food/400/280.jpg',
+	    tags: ['烹饪', '生活', '效率'],
+	    content: `<p>作为程序员，工作日往往没时间好好做饭。但周末花一小时准备几道快手菜，既省钱又健康。</p>
+	    <h2>第一道：蒜蓉西兰花（15分钟）</h2>
+	    <p>最简单也最健康的一道。关键在于西兰花焯水时间不超过30秒，保持脆嫩口感。蒜蓉一定要小火慢炒至金黄，才能释放出足够的香气。</p>
+	    <h2>第二道：番茄炒蛋（10分钟）</h2>
+	    <p>看似简单，要做好不容易。秘诀是蛋液中加少许料酒和淀粉水，番茄要选熟透的。先炒蛋至半凝固盛出，再炒番茄出汁后合炒。</p>
+	    <h2>第三道：番茄牛腩（40分钟）</h2>
+	    <p>周末的压轴菜。牛腩冷水下锅焯水，番茄炒出浓汁后加入牛腩和香料，小火炖煮30分钟至酥烂。这道菜的等待时间可以用来写代码。</p>`
+	  }
+	];
+	const categories = [
+	  { name: '技术笔记', count: 4, icon: 'fa-code' },
+	  { name: '读书随笔', count: 2, icon: 'fa-book' },
+	  { name: '生活记录', count: 2, icon: 'fa-leaf' },
+	  { name: '资源分享', count: 0, icon: 'fa-share-alt' }
+	];
+	const tags = [
+	  { name: 'AI', hot: true }, { name: 'GitHub', hot: true }, { name: 'CSS', hot: false },
+	  { name: 'React', hot: true }, { name: 'Vite', hot: false }, { name: '前端', hot: false },
+	  { name: '编程工具', hot: false }, { name: '读书', hot: false }, { name: '文学', hot: false },
+	  { name: '徒步', hot: false }, { name: '旅行', hot: false }, { name: '阅读', hot: false },
+	  { name: '方法论', hot: false }, { name: '烹饪', hot: false }, { name: '生活', hot: false },
+	  { name: '响应式', hot: false }, { name: '性能优化', hot: false }, { name: '服务端渲染', hot: false }
+	];
+	const archives = [
+	  { month: '2026年04月', count: 2 },
+	  { month: '2026年03月', count: 6 },
+	  { month: '2026年02月', count: 3 },
+	  { month: '2026年01月', count: 5 },
+	  { month: '2025年12月', count: 4 }
+	];
+	const sampleComments = [
+	  { author: '前端小白', avatar: 'https://picsum.photos/seed/user1/80/80.jpg', date: '2小时前', text: '写得太好了，正好在学这个，受益匪浅！' },
+	  { author: '代码工匠', avatar: 'https://picsum.photos/seed/user2/80/80.jpg', date: '5小时前', text: '容器查询确实是CSS的重大进化，终于不用到处写媒体查询了。' },
+	  { author: '山间行者', avatar: 'https://picsum.photos/seed/user3/80/80.jpg', date: '1天前', text: '徽杭古道我也走过，那片云海真的太震撼了，你的文字让我又回到了那里。' }
+	];
+	// ===== 状态 =====
+	let currentPage = 1;
+	const perPage = 5;
+	let likedArticles = new Set();
+	let isDark = false;
+	// ===== 渲染函数 =====
+	// 渲染文章列表
+	function renderArticles(page) {
+	  currentPage = page;
+	  const start = (page - 1) * perPage;
+	  const pageArticles = articles.slice(start, start + perPage);
+	  const list = document.getElementById('articleList');
+	  list.innerHTML = '';
+	  pageArticles.forEach((a, idx) => {
+	    const card = document.createElement('article');
+	    card.className = `article-card animate-in${a.sticky ? ' sticky' : ''}`;
+	    card.style.transitionDelay = `${idx * 0.08}s`;
+	    card.onclick = () => openArticle(a.id);
+	    card.innerHTML = `
+	      <div class="article-card-top">
+	        ${a.sticky ? '<span class="article-sticky"><i class="fas fa-thumbtack" style="margin-right:4px"></i>置顶</span>' : ''}
+	        <span class="article-tag ${a.tag}">${a.category}</span>
+	      </div>
+	      <img src="${a.thumb}" alt="" class="article-thumb" loading="lazy">
+	      <h3 class="article-title">${a.title}</h3>
+	      <p class="article-excerpt">${a.excerpt}</p>
+	      <div class="article-meta">
+	        <div class="article-meta-left">
+	          <span><i class="far fa-calendar"></i>${a.date}</span>
+	          <span><i class="far fa-eye"></i>${a.views}</span>
+	        </div>
+	        <div class="article-meta-right">
+	          <span onclick="event.stopPropagation();toggleLike(${a.id},this)"><i class="${likedArticles.has(a.id)?'fas':'far'} fa-heart" style="color:${likedArticles.has(a.id)?'var(--red)':''}"></i>${likedArticles.has(a.id)?a.likes+1:a.likes}</span>
+	          <span><i class="far fa-comment"></i>${a.comments}</span>
+	        </div>
+	      </div>
+	    `;
+	    list.appendChild(card);
+	  });
+	  // 触发入场动画
+	  requestAnimationFrame(() => {
+	    document.querySelectorAll('.article-card.animate-in').forEach(el => el.classList.add('visible'));
+	  });
+	  renderPagination();
+	}
+	// 渲染分页
+	function renderPagination() {
+	  const total = Math.ceil(articles.length / perPage);
+	  const pg = document.getElementById('pagination');
+	  let html = '';
+	  html += currentPage > 1
+	    ? `<a onclick="renderArticles(${currentPage-1})"><i class="fas fa-chevron-left"></i></a>`
+	    : `<span class="disabled"><i class="fas fa-chevron-left"></i></span>`;
+	  for (let i = 1; i <= total; i++) {
+	    html += i === currentPage
+	      ? `<span class="current">${i}</span>`
+	      : `<a onclick="renderArticles(${i})">${i}</a>`;
+	  }
+	  html += currentPage < total
+	    ? `<a onclick="renderArticles(${currentPage+1})"><i class="fas fa-chevron-right"></i></a>`
+	    : `<span class="disabled"><i class="fas fa-chevron-right"></i></span>`;
+	  pg.innerHTML = html;
+	}
+	// 渲染分类
+	function renderCategories() {
+	  const cl = document.getElementById('categoryList');
+	  cl.innerHTML = categories.map(c => `
+	    <li><a href="#" onclick="filterByCategory('${c.name}');return false">
+	      <span><i class="fas ${c.icon}" style="margin-right:8px;font-size:12px;color:var(--accent)"></i>${c.name}</span>
+	      <span class="cat-count">${c.count}</span>
+	    </a></li>
+	  `).join('');
+	}
+	// 渲染标签云
+	function renderTagCloud() {
+	  const tc = document.getElementById('tagCloud');
+	  tc.innerHTML = tags.map(t => `
+	    <a href="#" class="${t.hot ? 'hot' : ''}" onclick="filterByTag('${t.name}');return false">${t.name}</a>
+	  `).join('');
+	}
+	// 渲染热门文章
+	function renderRecent() {
+	  const rl = document.getElementById('recentList');
+	  const sorted = [...articles].sort((a, b) => b.views - a.views).slice(0, 5);
+	  rl.innerHTML = sorted.map((a, i) => `
+	    <div class="recent-item" onclick="openArticle(${a.id})">
+	      <div class="recent-item-num">${i + 1}</div>
+	      <div class="recent-item-title">${a.title}</div>
+	    </div>
+	  `).join('');
+	}
+	// 渲染归档
+	function renderArchives() {
+	  const al = document.getElementById('archiveList');
+	  al.innerHTML = archives.map(a => `
+	    <li><a href="#" onclick="showToast('归档筛选功能开发中','info');return false">
+	      <span>${a.month}</span>
+	      <span>${a.count}篇</span>
+	    </a></li>
+	  `).join('');
+	}
+	// ===== 交互功能 =====
+	// 打开文章详情
+	function openArticle(id) {
+	  const a = articles.find(x => x.id === id);
+	  if (!a) return;
+	  const modal = document.getElementById('articleModal');
+	  const body = document.getElementById('modalBody');
+	  body.innerHTML = `
+	    <span class="modal-article-tag ${a.tag}">${a.category}</span>
+	    <h1 class="modal-article-title">${a.title}</h1>
+	    <div class="modal-article-meta">
+	      <span><i class="far fa-calendar"></i>${a.date}</span>
+	      <span><i class="far fa-eye"></i>${a.views}次阅读</span>
+	      <span><i class="far fa-heart"></i>${a.likes}人喜欢</span>
+	      <span><i class="far fa-comment"></i>${a.comments}条评论</span>
+	    </div>
+	    <div class="modal-article-body">${a.content}</div>
+	    <div class="comment-section">
+	      <h3>评论 (${sampleComments.length})</h3>
+	      <div class="comment-form">
+	        <div class="comment-form-row">
+	          <input type="text" class="comment-input" placeholder="昵称" id="commentName">
+	          <input type="email" class="comment-input" placeholder="邮箱（不会公开）" id="commentEmail">
+	        </div>
+	        <textarea class="comment-textarea" placeholder="写下你的评论..." id="commentText"></textarea>
+	        <button class="comment-submit" onclick="submitComment(${a.id})">发表评论</button>
+	      </div>
+	      <div class="comment-list" id="commentList">
+	        ${sampleComments.map(c => `
+	          <div class="comment-item">
+	            <img src="${c.avatar}" alt="${c.author}" class="comment-avatar">
+	            <div class="comment-body">
+	              <div class="comment-header">
+	                <span class="comment-author">${c.author}</span>
+	                <span class="comment-date">${c.date}</span>
+	              </div>
+	              <div class="comment-text">${c.text}</div>
+	            </div>
+	          </div>
+	        `).join('')}
+	      </div>
+	    </div>
+	  `;
+	  modal.classList.add('show');
+	  document.body.style.overflow = 'hidden';
+	}
+	function closeArticle() {
+	  document.getElementById('articleModal').classList.remove('show');
+	  document.body.style.overflow = '';
+	}
+	// 提交评论
+	function submitComment(articleId) {
+	  const name = document.getElementById('commentName').value.trim();
+	  const email = document.getElementById('commentEmail').value.trim();
+	  const text = document.getElementById('commentText').value.trim();
+	  if (!name) { showToast('请输入昵称', 'error'); return; }
+	  if (!text) { showToast('请输入评论内容', 'error'); return; }
+	  const commentList = document.getElementById('commentList');
+	  const newComment = document.createElement('div');
+	  newComment.className = 'comment-item';
+	  newComment.style.animation = 'slideUp 0.4s ease';
+	  newComment.innerHTML = `
+	    <img src="https://picsum.photos/seed/new-user-${Date.now()}/80/80.jpg" alt="${name}" class="comment-avatar">
+	    <div class="comment-body">
+	      <div class="comment-header">
+	        <span class="comment-author">${name}</span>
+	        <span class="comment-date">刚刚</span>
+	      </div>
+	      <div class="comment-text">${text}</div>
+	    </div>
+	  `;
+	  commentList.insertBefore(newComment, commentList.firstChild);
+	  document.getElementById('commentName').value = '';
+	  document.getElementById('commentEmail').value = '';
+	  document.getElementById('commentText').value = '';
+	  showToast('评论发表成功', 'success');
+	}
+	// 点赞
+	function toggleLike(id, el) {
+	  const a = articles.find(x => x.id === id);
+	  if (!a) return;
+	  if (likedArticles.has(id)) {
+	    likedArticles.delete(id);
+	    showToast('已取消喜欢', 'info');
+	  } else {
+	    likedArticles.add(id);
+	    showToast('已添加喜欢', 'success');
+	  }
+	  renderArticles(currentPage);
+	}
+	// 搜索
+	function openSearch() {
+	  document.getElementById('searchOverlay').classList.add('show');
+	  document.body.style.overflow = 'hidden';
+	  setTimeout(() => {
+	    const si = document.getElementById('sidebarSearch');
+	    si && si.focus();
+	  }, 100);
+	}
+	function closeSearch() {
+	  document.getElementById('searchOverlay').classList.remove('show');
+	  document.body.style.overflow = '';
+	}
+	function doSearch() {
+	  const keyword = document.getElementById('sidebarSearch').value.trim();
+	  if (!keyword) { showToast('请输入搜索关键词', 'error'); return; }
+	  const results = articles.filter(a =>
+	    a.title.includes(keyword) || a.excerpt.includes(keyword) || a.tags.some(t => t.includes(keyword)) || a.category.includes(keyword)
+	  );
+	  const container = document.getElementById('searchResults');
+	  if (results.length === 0) {
+	    container.innerHTML = `<div class="search-no-result"><i class="fas fa-search" style="font-size:24px;margin-bottom:12px;display:block;color:var(--muted)"></i>未找到与"${keyword}"相关的文章</div>`;
+	  } else {
+	    container.innerHTML = results.map(a => `
+	      <div class="search-result-item" onclick="closeSearch();openArticle(${a.id})">
+	        <h4>${a.title}</h4>
+	        <p>${a.excerpt.substring(0, 60)}...</p>
+	      </div>
+	    `).join('');
+	  }
+	  openSearch();
+	}
+	// 分类筛选
+	function filterByCategory(cat) {
+	  const filtered = articles.filter(a => a.category === cat);
+	  const list = document.getElementById('articleList');
+	  list.innerHTML = '';
+	  if (filtered.length === 0) {
+	    list.innerHTML = `<div style="text-align:center;padding:60px;color:var(--muted)">
+	      <i class="fas fa-folder-open" style="font-size:32px;margin-bottom:12px;display:block"></i>
+	      该分类暂无文章
+	    </div>`;
+	  } else {
+	    filtered.forEach((a, idx) => {
+	      const card = document.createElement('article');
+	      card.className = `article-card animate-in${a.sticky ? ' sticky' : ''}`;
+	      card.style.transitionDelay = `${idx * 0.08}s`;
+	      card.onclick = () => openArticle(a.id);
+	      card.innerHTML = `
+	        <div class="article-card-top">
+	          ${a.sticky ? '<span class="article-sticky"><i class="fas fa-thumbtack" style="margin-right:4px"></i>置顶</span>' : ''}
+	          <span class="article-tag ${a.tag}">${a.category}</span>
+	        </div>
+	        <img src="${a.thumb}" alt="" class="article-thumb" loading="lazy">
+	        <h3 class="article-title">${a.title}</h3>
+	        <p class="article-excerpt">${a.excerpt}</p>
+	        <div class="article-meta">
+	          <div class="article-meta-left">
+	            <span><i class="far fa-calendar"></i>${a.date}</span>
+	            <span><i class="far fa-eye"></i>${a.views}</span>
+	          </div>
+	          <div class="article-meta-right">
+	            <span onclick="event.stopPropagation();toggleLike(${a.id},this)"><i class="${likedArticles.has(a.id)?'fas':'far'} fa-heart"></i>${likedArticles.has(a.id)?a.likes+1:a.likes}</span>
+	            <span><i class="far fa-comment"></i>${a.comments}</span>
+	          </div>
+	        </div>
+	      `;
+	      list.appendChild(card);
+	    });
+	    requestAnimationFrame(() => {
+	      document.querySelectorAll('.article-card.animate-in').forEach(el => el.classList.add('visible'));
+	    });
+	  }
+	  document.getElementById('pagination').innerHTML = '';
+	  showToast(`已筛选：${cat}`, 'success');
+	  window.scrollTo({ top: document.querySelector('.content-area').offsetTop - 100, behavior: 'smooth' });
+	}
+	// 标签筛选
+	function filterByTag(tag) {
+	  const filtered = articles.filter(a => a.tags.includes(tag));
+	  const list = document.getElementById('articleList');
+	  list.innerHTML = '';
+	  if (filtered.length === 0) {
+	    list.innerHTML = `<div style="text-align:center;padding:60px;color:var(--muted)">
+	      <i class="fas fa-tag" style="font-size:32px;margin-bottom:12px;display:block"></i>
+	      该标签暂无文章
+	    </div>`;
+	  } else {
+	    filtered.forEach((a, idx) => {
+	      const card = document.createElement('article');
+	      card.className = `article-card animate-in`;
+	      card.style.transitionDelay = `${idx * 0.08}s`;
+	      card.onclick = () => openArticle(a.id);
+	      card.innerHTML = `
+	        <div class="article-card-top">
+	          <span class="article-tag ${a.tag}">${a.category}</span>
+	        </div>
+	        <img src="${a.thumb}" alt="" class="article-thumb" loading="lazy">
+	        <h3 class="article-title">${a.title}</h3>
+	        <p class="article-excerpt">${a.excerpt}</p>
+	        <div class="article-meta">
+	          <div class="article-meta-left">
+	            <span><i class="far fa-calendar"></i>${a.date}</span>
+	            <span><i class="far fa-eye"></i>${a.views}</span>
+	          </div>
+	          <div class="article-meta-right">
+	            <span onclick="event.stopPropagation();toggleLike(${a.id},this)"><i class="${likedArticles.has(a.id)?'fas':'far'} fa-heart"></i>${likedArticles.has(a.id)?a.likes+1:a.likes}</span>
+	            <span><i class="far fa-comment"></i>${a.comments}</span>
+	          </div>
+	        </div>
+	      `;
+	      list.appendChild(card);
+	    });
+	    requestAnimationFrame(() => {
+	      document.querySelectorAll('.article-card.animate-in').forEach(el => el.classList.add('visible'));
+	    });
+	  }
+	  document.getElementById('pagination').innerHTML = '';
+	  showToast(`标签：${tag}`, 'success');
+	  window.scrollTo({ top: document.querySelector('.content-area').offsetTop - 100, behavior: 'smooth' });
+	}
+	// 主题切换
+	function toggleTheme() {
+	  isDark = !isDark;
+	  document.body.classList.toggle('dark', isDark);
+	  const icon = document.querySelector('#themeToggle i');
+	  icon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+	  showToast(isDark ? '已切换至深色模式' : '已切换至浅色模式', 'success');
+	}
+	// 移动端导航
+	function openMobileNav() {
+	  document.getElementById('mobileNav').classList.add('show');
+	  document.body.style.overflow = 'hidden';
+	}
+	function closeMobileNav() {
+	  document.getElementById('mobileNav').classList.remove('show');
+	  document.body.style.overflow = '';
+	}
+	// Toast提示
+	function showToast(msg, type = 'info') {
+	  const container = document.getElementById('toastContainer');
+	  const toast = document.createElement('div');
+	  toast.className = `toast ${type}`;
+	  const icons = { info: 'fa-info-circle', success: 'fa-check-circle', error: 'fa-exclamation-circle' };
+	  toast.innerHTML = `<i class="fas ${icons[type] || icons.info}"></i><span>${msg}</span>`;
+	  container.appendChild(toast);
+	  setTimeout(() => {
+	    toast.classList.add('fadeOut');
+	    setTimeout(() => toast.remove(), 300);
+	  }, 2500);
+	}
+	// 回到顶部按钮显隐
+	window.addEventListener('scroll', () => {
+	  const btn = document.getElementById('backToTop');
+	  btn.classList.toggle('visible', window.scrollY > 400);
+	});
+	// IntersectionObserver 入场动画
+	const observer = new IntersectionObserver((entries) => {
+	  entries.forEach(entry => {
+	    if (entry.isIntersecting) {
+	      entry.target.classList.add('visible');
+	    }
+	  });
+	}, { threshold: 0.1 });
+	// 数字递增动画
+	function animateNumber(el, target, duration = 1200) {
+	  let start = 0;
+	  const startTime = performance.now();
+	  function step(now) {
+	    const progress = Math.min((now - startTime) / duration, 1);
+	    const eased = 1 - Math.pow(1 - progress, 3);
+	    el.textContent = Math.floor(eased * target);
+	    if (progress < 1) requestAnimationFrame(step);
+	    else el.textContent = target;
+	  }
+	  requestAnimationFrame(step);
+	}
+	// ===== 初始化 =====
+	document.addEventListener('DOMContentLoaded', () => {
+	  renderArticles(1);
+	  renderCategories();
+	  renderTagCloud();
+	  renderRecent();
+	  renderArchives();
+	  // 数字动画
+	  animateNumber(document.getElementById('statArticles'), 42);
+	  animateNumber(document.getElementById('statComments'), 286);
+	  animateNumber(document.getElementById('statDays'), 892);
+	  // 键盘快捷键
+	  document.addEventListener('keydown', (e) => {
+	    if (e.key === 'Escape') {
+	      closeArticle();
+	      closeSearch();
+	      closeMobileNav();
+	    }
+	    // Ctrl+K 搜索
+	    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+	      e.preventDefault();
+	      openSearch();
+	    }
+	  });
+	});
+	</script>
+	</body>
+	</html>
+  
