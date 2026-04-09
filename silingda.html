@@ -1,0 +1,340 @@
+```html
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SILINDA 思啉达 - 招募令</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Noto+Serif+SC:wght@400;700&display=swap');
+
+        :root {
+            --bg-color: #050505;
+            --card-bg: rgba(20, 20, 20, 0.6);
+            --gold: #D4AF37;
+            --gold-light: #F3E5AB;
+            --gold-dark: #AA8C2C;
+            --text-main: #ffffff;
+            --text-sub: #cccccc;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Noto Serif SC', serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* 顶部Hero区域 */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            text-align: center;
+            background: radial-gradient(circle at center, #1a1a1a 0%, #000000 100%);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, rgba(0,0,0,0) 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: pulse 4s infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.4; transform: translate(-50%, -50%) scale(1); }
+            100% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.2); }
+        }
+
+        .brand-en {
+            font-family: 'Cinzel', serif;
+            font-size: 6rem;
+            letter-spacing: 0.2em;
+            color: var(--gold);
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+            position: relative;
+            z-index: 1;
+            margin-bottom: 1rem;
+            animation: fadeInDown 1.5s ease-out;
+        }
+
+        .brand-cn {
+            font-size: 2rem;
+            letter-spacing: 0.5em;
+            color: var(--text-sub);
+            margin-bottom: 3rem;
+            position: relative;
+            z-index: 1;
+            animation: fadeInDown 1.5s ease-out 0.3s backwards;
+        }
+
+        .hero-title {
+            font-size: 1.5rem;
+            letter-spacing: 0.4em;
+            color: var(--gold-light);
+            border-top: 1px solid var(--gold-dark);
+            border-bottom: 1px solid var(--gold-dark);
+            padding: 1rem 3rem;
+            position: relative;
+            z-index: 1;
+            animation: fadeInUp 1.5s ease-out 0.6s backwards;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 招聘卡片区 */
+        .positions {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 3rem 2rem;
+            width: 340px;
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+            transition: 0.5s;
+        }
+
+        .card:hover::before {
+            left: 100%;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: var(--gold);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 30px rgba(212, 175, 55, 0.1);
+        }
+
+        .card-title {
+            font-size: 1.8rem;
+            color: var(--gold-light);
+            margin-bottom: 1rem;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .card-salary {
+            text-align: center;
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            color: var(--gold);
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .card-list {
+            list-style: none;
+        }
+
+        .card-list li {
+            color: var(--text-sub);
+            margin-bottom: 0.8rem;
+            padding-left: 1.2rem;
+            position: relative;
+            font-size: 0.95rem;
+        }
+
+        .card-list li::before {
+            content: '◆';
+            position: absolute;
+            left: 0;
+            color: var(--gold-dark);
+            font-size: 0.6rem;
+            top: 0.35rem;
+        }
+
+        /* 底部联系区 */
+        .contact {
+            padding: 5rem 2rem;
+            text-align: center;
+            background: linear-gradient(to bottom, #050505, #0a0808, #050505);
+            position: relative;
+        }
+
+        .contact-title {
+            font-family: 'Cinzel', serif;
+            font-size: 2.5rem;
+            color: var(--gold);
+            margin-bottom: 3rem;
+            letter-spacing: 0.1em;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 4rem;
+            margin-bottom: 4rem;
+        }
+
+        .contact-item {
+            text-align: center;
+        }
+
+        .contact-label {
+            display: block;
+            color: var(--gold-dark);
+            font-size: 0.9rem;
+            letter-spacing: 0.2em;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .contact-value {
+            color: var(--text-main);
+            font-size: 1.4rem;
+            font-weight: bold;
+        }
+
+        .btn-apply {
+            display: inline-block;
+            padding: 1rem 4rem;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            text-decoration: none;
+            font-size: 1.2rem;
+            letter-spacing: 0.2em;
+            transition: all 0.3s ease;
+            background: transparent;
+        }
+
+        .btn-apply:hover {
+            background: var(--gold);
+            color: var(--bg-color);
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+        }
+
+        footer {
+            padding: 2rem;
+            text-align: center;
+            color: #555;
+            font-size: 0.8rem;
+            border-top: 1px solid #111;
+        }
+
+        /* 响应式适配 */
+        @media (max-width: 768px) {
+            .brand-en { font-size: 3rem; }
+            .brand-cn { font-size: 1.2rem; letter-spacing: 0.3em; }
+            .hero-title { font-size: 1.2rem; padding: 1rem 2rem; }
+            .positions { padding: 4rem 1rem; }
+            .card { width: 100%; max-width: 400px; }
+            .contact-info { flex-direction: column; gap: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <section class="hero">
+        <h1 class="brand-en">SILINDA</h1>
+        <h2 class="brand-cn">思 啉 达</h2>
+        <div class="hero-title">2 0 2 6 招 募 令</div>
+    </section>
+
+    <section class="positions">
+        <!-- 酒水促销员 -->
+        <div class="card">
+            <h3 class="card-title">酒水促销员</h3>
+            <div class="card-salary">15K - 50K / 月</div>
+            <ul class="card-list">
+                <li>女性18-28周岁，身高160CM以上</li>
+                <li>形象好，气质佳，热爱夜生活</li>
+                <li>活泼开朗，执行力强，善于团队协作</li>
+                <li>热爱娱乐事业，有客资者优先</li>
+                <li>无经验者一对一培训</li>
+            </ul>
+        </div>
+
+        <!-- 营销经理 -->
+        <div class="card">
+            <h3 class="card-title">营销经理</h3>
+            <div class="card-salary">10K - 50K / 月</div>
+            <ul class="card-list">
+                <li>男女不限</li>
+                <li>熟悉当地市场，具备一定业务能力</li>
+                <li>形象气质良好，有一定的沟通能力</li>
+            </ul>
+        </div>
+
+        <!-- 服务员 -->
+        <div class="card">
+            <h3 class="card-title">服务员</h3>
+            <div class="card-salary">6K - 10K / 月</div>
+            <ul class="card-list">
+                <li>吃苦耐劳、有责任心、善于交际</li>
+                <li>语言表达及沟通能力强</li>
+                <li>具有行业同岗位经验者优先</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="contact">
+        <h2 class="contact-title">JOIN US</h2>
+        <div class="contact-info">
+            <div class="contact-item">
+                <span class="contact-label">Contact Number</span>
+                <span class="contact-value">17745130089 (沈总)</span>
+            </div>
+            <div class="contact-item">
+                <span class="contact-label">Address</span>
+                <span class="contact-value">高新区祁连街国宾壹号底商</span>
+            </div>
+        </div>
+        <a href="tel:17745130089" class="btn-apply">立 即 应 聘</a>
+    </section>
+
+    <footer>
+        © 2026 SILINDA 思啉达. All Rights Reserved.
+    </footer>
+
+</body>
+</html>
+```
