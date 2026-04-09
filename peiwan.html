@@ -1,0 +1,470 @@
+```html
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DLX电竞 · 顶级护航</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+SC:wght@300;400;700;900&display=swap');
+
+        :root {
+            --bg-color: #050505;
+            --neon-blue: #00f3ff;
+            --neon-purple: #bc13fe;
+            --text-main: #ffffff;
+            --text-sub: #a0a0a0;
+            --card-bg: rgba(255, 255, 255, 0.03);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Noto Sans SC', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* 全局赛博网格背景 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            z-index: -1;
+        }
+
+        /* 顶部流光 */
+        .top-glow {
+            position: fixed;
+            top: -200px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 400px;
+            background: radial-gradient(ellipse, rgba(188, 19, 254, 0.15) 0%, rgba(0, 243, 255, 0.05) 40%, transparent 70%);
+            z-index: -1;
+            animation: glowPulse 6s infinite alternate;
+        }
+
+        @keyframes glowPulse {
+            0% { opacity: 0.6; transform: translateX(-50%) scale(1); }
+            100% { opacity: 1; transform: translateX(-50%) scale(1.2); }
+        }
+
+        /* 导航 */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            background: rgba(5, 5, 5, 0.7);
+            z-index: 100;
+            border-bottom: 1px solid rgba(0, 243, 255, 0.1);
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 900;
+            background: linear-gradient(to right, var(--neon-blue), var(--neon-purple));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
+            letter-spacing: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-sub);
+            text-decoration: none;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--neon-blue);
+        }
+
+        /* 核心Hero区 */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 2rem;
+            position: relative;
+        }
+
+        .hero-tag {
+            font-size: 0.9rem;
+            color: var(--neon-blue);
+            letter-spacing: 4px;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            padding: 0.5rem 1.5rem;
+            border-radius: 30px;
+            display: inline-block;
+        }
+
+        .hero-title {
+            font-size: 4.5rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 20px rgba(188, 19, 254, 0.4);
+        }
+
+        .hero-title span {
+            background: linear-gradient(to right, #fff, var(--neon-blue));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-sub);
+            max-width: 600px;
+            margin-bottom: 3rem;
+            font-weight: 300;
+        }
+
+        /* 超级醒目按钮 */
+        .cta-button {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 1.2rem 3rem;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #000;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.3s, box-shadow 0.3s;
+            z-index: 1;
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.4);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 0 40px rgba(188, 19, 254, 0.6);
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: -2px; left: -2px; right: -2px; bottom: -2px;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+            border-radius: 52px;
+            z-index: -1;
+            filter: blur(15px);
+            opacity: 0.6;
+            animation: rotateGlow 3s linear infinite;
+        }
+
+        @keyframes rotateGlow {
+            0% { filter: blur(15px) hue-rotate(0deg); }
+            100% { filter: blur(15px) hue-rotate(360deg); }
+        }
+
+        .wechat-id-toast {
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.5);
+            letter-spacing: 1px;
+        }
+
+        /* 业务特色区 */
+        .features {
+            padding: 6rem 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 3px;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .feature-card:hover {
+            border-color: rgba(0, 243, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateY(-5px);
+        }
+
+        .feature-card:hover::after {
+            opacity: 1;
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-title {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: var(--text-main);
+        }
+
+        .feature-desc {
+            font-size: 0.95rem;
+            color: var(--text-sub);
+            line-height: 1.6;
+        }
+
+        /* 底部合作招聘区 */
+        .cooperation {
+            padding: 6rem 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .cooperation::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 10%; right: 10%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+        }
+
+        .coop-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .coop-subtitle {
+            color: var(--text-sub);
+            margin-bottom: 3rem;
+            font-size: 1.1rem;
+        }
+
+        .coop-tags {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .coop-tag {
+            padding: 0.8rem 2.5rem;
+            border: 1px solid rgba(188, 19, 254, 0.3);
+            color: var(--neon-purple);
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            background: rgba(188, 19, 254, 0.05);
+            transition: all 0.3s;
+        }
+
+        .coop-tag:hover {
+            background: rgba(188, 19, 254, 0.15);
+            box-shadow: 0 0 20px rgba(188, 19, 254, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .coop-btn {
+            display: inline-block;
+            padding: 1rem 3rem;
+            border: 1px solid var(--neon-blue);
+            color: var(--neon-blue);
+            font-size: 1.1rem;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: all 0.3s;
+            background: transparent;
+        }
+
+        .coop-btn:hover {
+            background: rgba(0, 243, 255, 0.1);
+            box-shadow: 0 0 25px rgba(0, 243, 255, 0.2);
+        }
+
+        footer {
+            padding: 2rem;
+            text-align: center;
+            color: #444;
+            font-size: 0.8rem;
+            border-top: 1px solid rgba(255,255,255,0.03);
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            .hero-title { font-size: 2.8rem; }
+            .hero-subtitle { font-size: 1rem; }
+            .cta-button { font-size: 1.1rem; padding: 1rem 2.5rem; }
+            .coop-title { font-size: 2rem; }
+            .nav-links { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-glow"></div>
+
+    <nav>
+        <div class="logo">DLX ESPORTS</div>
+        <div class="nav-links">
+            <a href="#home">首页</a>
+            <a href="#services">业务</a>
+            <a href="#join">合作</a>
+        </div>
+    </nav>
+
+    <section class="hero" id="home">
+        <div class="hero-tag">⚡ 顶级实力 峡谷护航</div>
+        <h1 class="hero-title">
+            你的上分<br>
+            <span>我们来守护</span>
+        </h1>
+        <p class="hero-subtitle">
+            专治各种不服与连败，国服前十/百星大神实时在线，极致体验，安全高效，让你的每一局都成为享受。
+        </p>
+        
+        <!-- 核心跳转按钮 -->
+        <button class="cta-button" onclick="goToWechat()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 01.213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 00.167-.054l1.903-1.114a.864.864 0 01.717-.098 10.16 10.16 0 002.837.403c.276 0 .543-.027.811-.05-.857-2.578.157-4.972 1.932-6.446 1.703-1.415 3.882-1.98 5.853-1.838-.576-3.583-4.196-6.348-8.596-6.348zM5.785 5.991c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 01-1.162 1.178A1.17 1.17 0 014.623 7.17c0-.651.52-1.18 1.162-1.18zm5.813 0c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 01-1.162 1.178 1.17 1.17 0 01-1.162-1.178c0-.651.52-1.18 1.162-1.18zm5.34 2.867c-1.797-.052-3.746.512-5.28 1.786-1.72 1.428-2.687 3.72-1.78 6.22.942 2.453 3.666 4.229 6.884 4.229.826 0 1.622-.12 2.361-.336a.722.722 0 01.598.082l1.584.926a.272.272 0 00.14.045c.134 0 .24-.111.24-.247 0-.06-.023-.12-.038-.177l-.327-1.233a.582.582 0 01-.023-.156.49.49 0 01.201-.398C23.024 18.48 24 16.82 24 14.98c0-3.21-2.931-5.837-7.062-6.122zm-2.036 2.84c.535 0 .969.44.969.982a.976.976 0 01-.969.983.976.976 0 01-.969-.983c0-.542.434-.983.97-.983zm4.072 0c.535 0 .969.44.969.982a.976.976 0 01-.969.983.976.976 0 01-.969-.983c0-.542.434-.983.969-.983z"/></svg>
+            立即添加微信 马上开黑
+        </button>
+        <div class="wechat-id-toast">微信号: dlx02034 (点击自动复制并跳转)</div>
+    </section>
+
+    <section class="features" id="services">
+        <div class="feature-card">
+            <div class="feature-icon">🎮</div>
+            <h3 class="feature-title">硬核代练</h3>
+            <p class="feature-desc">全游戏覆盖，国标/省标大神实名认证，纯手工操作，安全无忧，极速上分。</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🎧</div>
+            <h3 class="feature-title">优质陪玩</h3>
+            <p class="feature-desc">声优御姐/技术大神任你选，连麦开黑不冷场，带你体验沉浸式上分快感。</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🛡️</div>
+            <h3 class="feature-title">安全护航</h3>
+            <p class="feature-desc">资金担保，隐私加密，不达目标全额退款，打造最安心的电竞服务平台。</p>
+        </div>
+    </section>
+
+    <section class="cooperation" id="join">
+        <h2 class="coop-title">共赢未来</h2>
+        <p class="coop-subtitle">海量订单 稳定客源 专注电竞生态</p>
+        
+        <div class="coop-tags">
+            <div class="coop-tag">招聘入职</div>
+            <div class="coop-tag">工作室合作</div>
+            <div class="coop-tag">公会入驻</div>
+            <div class="coop-tag">流量变现</div>
+        </div>
+
+        <a href="javascript:void(0)" onclick="goToWechat()" class="coop-btn">联系我们 获取报价</a>
+    </section>
+
+    <footer>
+        © 2026 DLX ESPORTS. All Rights Reserved. Designed for Gamers.
+    </footer>
+
+    <script>
+        function goToWechat() {
+            const wechatId = 'dlx02034';
+            
+            // 尝试复制到剪贴板
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(wechatId).then(() => {
+                    alert('✅ 微信号 [' + dlx02034 + '] 已复制！\n正在尝试跳转微信，请在微信中粘贴搜索添加。');
+                    window.location.href = 'weixin://';
+                }).catch(err => {
+                    fallbackCopy(wechatId);
+                });
+            } else {
+                fallbackCopy(wechatId);
+            }
+        }
+
+        // 兼容性降级复制方案
+        function fallbackCopy(text) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            // 避免在底部出现输入框
+            textArea.style.position = "fixed";
+            textArea.style.top = "0";
+            textArea.style.left = "0";
+            textArea.style.opacity = "0";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    alert('✅ 微信号 [' + dlx02034 + '] 已复制！\n正在尝试跳转微信，请在微信中粘贴搜索添加。');
+                    window.location.href = 'weixin://';
+                } else {
+                    alert('❌ 复制失败，请手动复制微信号: ' + text);
+                }
+            } catch (err) {
+                alert('❌ 复制失败，请手动复制微信号: ' + text);
+            }
+            
+            document.body.removeChild(textArea);
+        }
+    </script>
+</body>
+</html>
+```
