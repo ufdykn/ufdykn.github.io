@@ -1,0 +1,944 @@
+	<!DOCTYPE html>
+	<html lang="zh-CN">
+	<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<title>便民服务中心</title>
+	<style>
+	  /* ========== CSS变量 & 全局重置 ========== */
+	  :root {
+	    --bg: #0a0e1a;
+	    --bg-card: #141929;
+	    --bg-card-hover: #1a2038;
+	    --fg: #e8ecf4;
+	    --fg-muted: #7a8299;
+	    --accent: #00e8a2;
+	    --accent-glow: rgba(0,232,162,0.25);
+	    --accent2: #ff6b4a;
+	    --accent3: #3d8bff;
+	    --accent4: #fbbf24;
+	    --accent5: #e84393;
+	    --accent6: #a78bfa;
+	    --border: rgba(255,255,255,0.06);
+	    --radius: 16px;
+	    --radius-sm: 10px;
+	    --shadow: 0 4px 24px rgba(0,0,0,0.3);
+	  }
+	  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+	  html { font-size:16px; }
+	  body {
+	    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif;
+	    background: var(--bg);
+	    color: var(--fg);
+	    min-height: 100vh;
+	    overflow-x: hidden;
+	    padding-bottom: 80px;
+	    position: relative;
+	  }
+	  /* ========== 背景氛围 ========== */
+	  body::before {
+	    content: '';
+	    position: fixed;
+	    top: -30%; left: -20%;
+	    width: 70vw; height: 70vw;
+	    background: radial-gradient(circle, rgba(0,232,162,0.08) 0%, transparent 70%);
+	    pointer-events: none;
+	    z-index: 0;
+	    animation: floatBlob1 12s ease-in-out infinite;
+	  }
+	  body::after {
+	    content: '';
+	    position: fixed;
+	    bottom: -20%; right: -20%;
+	    width: 60vw; height: 60vw;
+	    background: radial-gradient(circle, rgba(61,139,255,0.07) 0%, transparent 70%);
+	    pointer-events: none;
+	    z-index: 0;
+	    animation: floatBlob2 15s ease-in-out infinite;
+	  }
+	  @keyframes floatBlob1 {
+	    0%,100% { transform: translate(0,0) scale(1); }
+	    50% { transform: translate(5vw, 8vh) scale(1.15); }
+	  }
+	  @keyframes floatBlob2 {
+	    0%,100% { transform: translate(0,0) scale(1); }
+	    50% { transform: translate(-4vw, -6vh) scale(1.1); }
+	  }
+	  /* ========== 顶部状态栏 ========== */
+	  .status-bar {
+	    position: sticky; top: 0; z-index: 100;
+	    background: rgba(10,14,26,0.85);
+	    backdrop-filter: blur(20px);
+	    -webkit-backdrop-filter: blur(20px);
+	    border-bottom: 1px solid var(--border);
+	    padding: 12px 20px 14px;
+	  }
+	  .status-bar .greeting {
+	    font-size: 0.8rem; color: var(--fg-muted); margin-bottom: 2px;
+	  }
+	  .status-bar .title-row {
+	    display: flex; align-items: center; justify-content: space-between;
+	  }
+	  .status-bar .title-row h1 {
+	    font-size: 1.35rem; font-weight: 800; letter-spacing: -0.02em;
+	    background: linear-gradient(135deg, var(--fg) 40%, var(--accent) 100%);
+	    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+	    background-clip: text;
+	  }
+	  .status-bar .avatar {
+	    width: 36px; height: 36px; border-radius: 50%;
+	    background: linear-gradient(135deg, var(--accent), var(--accent3));
+	    display: flex; align-items: center; justify-content: center;
+	    font-size: 0.85rem; font-weight: 700; color: var(--bg);
+	    box-shadow: 0 0 12px var(--accent-glow);
+	    cursor: pointer; transition: transform 0.2s;
+	  }
+	  .status-bar .avatar:hover { transform: scale(1.08); }
+	  /* ========== 搜索栏 ========== */
+	  .search-wrap {
+	    padding: 10px 20px 6px;
+	    position: relative; z-index: 1;
+	  }
+	  .search-box {
+	    display: flex; align-items: center; gap: 10px;
+	    background: var(--bg-card);
+	    border: 1px solid var(--border);
+	    border-radius: 40px;
+	    padding: 10px 18px;
+	    transition: border-color 0.3s, box-shadow 0.3s;
+	  }
+	  .search-box:focus-within {
+	    border-color: var(--accent);
+	    box-shadow: 0 0 0 3px var(--accent-glow);
+	  }
+	  .search-box svg { flex-shrink:0; width:18px; height:18px; stroke:var(--fg-muted); }
+	  .search-box input {
+	    flex:1; background:none; border:none; outline:none;
+	    color: var(--fg); font-size: 0.9rem;
+	  }
+	  .search-box input::placeholder { color: var(--fg-muted); }
+	  .search-box .search-btn {
+	    background: linear-gradient(135deg, var(--accent), #00c98a);
+	    color: var(--bg); border: none; border-radius: 30px;
+	    padding: 6px 16px; font-size: 0.8rem; font-weight: 700;
+	    cursor: pointer; transition: transform 0.15s, box-shadow 0.15s;
+	  }
+	  .search-box .search-btn:active { transform: scale(0.95); }
+	  /* ========== 公告滚动 ========== */
+	  .notice-bar {
+	    margin: 10px 20px 4px;
+	    display: flex; align-items: center; gap: 8px;
+	    background: rgba(255,107,74,0.08);
+	    border: 1px solid rgba(255,107,74,0.15);
+	    border-radius: var(--radius-sm);
+	    padding: 8px 14px;
+	    overflow: hidden;
+	    position: relative; z-index: 1;
+	  }
+	  .notice-bar .tag {
+	    background: var(--accent2); color: #fff;
+	    font-size: 0.65rem; font-weight: 700;
+	    padding: 2px 6px; border-radius: 4px;
+	    flex-shrink: 0;
+	  }
+	  .notice-bar .scroll-text {
+	    flex: 1; overflow: hidden; white-space: nowrap;
+	  }
+	  .notice-bar .scroll-text span {
+	    display: inline-block;
+	    animation: scrollText 18s linear infinite;
+	    font-size: 0.78rem; color: var(--fg-muted);
+	  }
+	  @keyframes scrollText {
+	    0% { transform: translateX(100%); }
+	    100% { transform: translateX(-100%); }
+	  }
+	  /* ========== 横幅区 ========== */
+	  .banner-section {
+	    padding: 12px 20px 4px;
+	    position: relative; z-index: 1;
+	  }
+	  .banner-card {
+	    position: relative;
+	    border-radius: var(--radius);
+	    overflow: hidden;
+	    height: 150px;
+	    cursor: pointer;
+	    transition: transform 0.25s;
+	  }
+	  .banner-card:active { transform: scale(0.98); }
+	  .banner-card .banner-bg {
+	    position: absolute; inset: 0;
+	    background: linear-gradient(135deg, #0d2818 0%, #0a1628 50%, #1a0a28 100%);
+	  }
+	  .banner-card .banner-decor {
+	    position: absolute; top: -20px; right: -20px;
+	    width: 160px; height: 160px;
+	    border-radius: 50%;
+	    background: radial-gradient(circle, rgba(0,232,162,0.2), transparent 70%);
+	    animation: pulseDecor 4s ease-in-out infinite;
+	  }
+	  @keyframes pulseDecor {
+	    0%,100% { transform: scale(1); opacity:0.6; }
+	    50% { transform: scale(1.2); opacity:1; }
+	  }
+	  .banner-card .banner-content {
+	    position: relative; z-index: 2;
+	    padding: 24px;
+	    height: 100%;
+	    display: flex; flex-direction: column; justify-content: center;
+	  }
+	  .banner-card .banner-content h2 {
+	    font-size: 1.3rem; font-weight: 800; margin-bottom: 6px;
+	    color: var(--fg);
+	  }
+	  .banner-card .banner-content h2 em {
+	    font-style: normal;
+	    background: linear-gradient(90deg, var(--accent), var(--accent4));
+	    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+	    background-clip: text;
+	  }
+	  .banner-card .banner-content p {
+	    font-size: 0.82rem; color: var(--fg-muted); line-height: 1.5;
+	  }
+	  .banner-dots {
+	    display: flex; justify-content: center; gap: 6px;
+	    margin-top: 10px;
+	  }
+	  .banner-dots .dot {
+	    width: 6px; height: 6px; border-radius: 3px;
+	    background: var(--fg-muted); opacity: 0.3;
+	    transition: all 0.3s;
+	  }
+	  .banner-dots .dot.active {
+	    width: 18px; background: var(--accent); opacity: 1;
+	  }
+	  /* ========== 服务网格 ========== */
+	  .section-header {
+	    display: flex; align-items: center; justify-content: space-between;
+	    padding: 18px 20px 10px;
+	    position: relative; z-index: 1;
+	  }
+	  .section-header h3 {
+	    font-size: 1.05rem; font-weight: 700;
+	  }
+	  .section-header .more {
+	    font-size: 0.78rem; color: var(--fg-muted);
+	    cursor: pointer; transition: color 0.2s;
+	  }
+	  .section-header .more:hover { color: var(--accent); }
+	  .service-grid {
+	    display: grid;
+	    grid-template-columns: repeat(4, 1fr);
+	    gap: 6px;
+	    padding: 0 16px;
+	    position: relative; z-index: 1;
+	  }
+	  .service-item {
+	    display: flex; flex-direction: column; align-items: center;
+	    gap: 6px; padding: 14px 4px 12px;
+	    border-radius: var(--radius-sm);
+	    cursor: pointer;
+	    transition: background 0.2s, transform 0.15s;
+	    position: relative;
+	  }
+	  .service-item:active { transform: scale(0.92); }
+	  .service-item:hover { background: var(--bg-card-hover); }
+	  .service-item .icon-wrap {
+	    width: 44px; height: 44px;
+	    border-radius: 14px;
+	    display: flex; align-items: center; justify-content: center;
+	    font-size: 1.3rem;
+	    position: relative;
+	    transition: box-shadow 0.3s;
+	  }
+	  .service-item:hover .icon-wrap {
+	    box-shadow: 0 0 16px rgba(0,0,0,0.2);
+	  }
+	  .service-item .icon-wrap svg { width: 22px; height: 22px; }
+	  .service-item span {
+	    font-size: 0.72rem; color: var(--fg-muted);
+	    text-align: center; line-height: 1.3;
+	    transition: color 0.2s;
+	  }
+	  .service-item:hover span { color: var(--fg); }
+	  .service-item .badge {
+	    position: absolute; top: 6px; right: 12px;
+	    background: var(--accent2); color: #fff;
+	    font-size: 0.55rem; font-weight: 700;
+	    padding: 1px 5px; border-radius: 6px;
+	    line-height: 1.4;
+	  }
+	  /* 图标颜色组 */
+	  .ic-green { background: rgba(0,232,162,0.12); color: var(--accent); }
+	  .ic-orange { background: rgba(255,107,74,0.12); color: var(--accent2); }
+	  .ic-blue { background: rgba(61,139,255,0.12); color: var(--accent3); }
+	  .ic-yellow { background: rgba(251,191,36,0.12); color: var(--accent4); }
+	  .ic-pink { background: rgba(232,67,147,0.12); color: var(--accent5); }
+	  .ic-purple { background: rgba(167,139,250,0.12); color: var(--accent6); }
+	  /* ========== 快捷操作卡片 ========== */
+	  .quick-cards {
+	    display: grid;
+	    grid-template-columns: 1fr 1fr;
+	    gap: 10px;
+	    padding: 0 20px;
+	    position: relative; z-index: 1;
+	  }
+	  .quick-card {
+	    background: var(--bg-card);
+	    border: 1px solid var(--border);
+	    border-radius: var(--radius);
+	    padding: 18px 16px;
+	    cursor: pointer;
+	    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+	    position: relative;
+	    overflow: hidden;
+	  }
+	  .quick-card:active { transform: scale(0.97); }
+	  .quick-card:hover {
+	    border-color: rgba(255,255,255,0.1);
+	    box-shadow: var(--shadow);
+	  }
+	  .quick-card .qc-icon {
+	    width: 36px; height: 36px; border-radius: 10px;
+	    display: flex; align-items: center; justify-content: center;
+	    margin-bottom: 12px; font-size: 1.1rem;
+	  }
+	  .quick-card h4 {
+	    font-size: 0.92rem; font-weight: 700; margin-bottom: 4px;
+	  }
+	  .quick-card p {
+	    font-size: 0.72rem; color: var(--fg-muted); line-height: 1.4;
+	  }
+	  .quick-card .qc-arrow {
+	    position: absolute; top: 18px; right: 16px;
+	    color: var(--fg-muted); font-size: 0.8rem;
+	    transition: transform 0.2s, color 0.2s;
+	  }
+	  .quick-card:hover .qc-arrow { transform: translateX(3px); color: var(--accent); }
+	  .quick-card .qc-decor {
+	    position: absolute; bottom: -15px; right: -15px;
+	    width: 60px; height: 60px; border-radius: 50%;
+	    opacity: 0.06;
+	  }
+	  /* ========== 热门列表 ========== */
+	  .hot-list {
+	    padding: 0 20px;
+	    position: relative; z-index: 1;
+	  }
+	  .hot-item {
+	    display: flex; align-items: center; gap: 14px;
+	    padding: 14px 0;
+	    border-bottom: 1px solid var(--border);
+	    cursor: pointer;
+	    transition: background 0.2s;
+	  }
+	  .hot-item:last-child { border-bottom: none; }
+	  .hot-item:hover { background: rgba(255,255,255,0.02); }
+	  .hot-item .rank {
+	    width: 24px; height: 24px; border-radius: 6px;
+	    display: flex; align-items: center; justify-content: center;
+	    font-size: 0.72rem; font-weight: 800; flex-shrink: 0;
+	  }
+	  .rank-top1 { background: linear-gradient(135deg, #ff6b4a, #ff9a44); color: #fff; }
+	  .rank-top2 { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #1a1a2e; }
+	  .rank-top3 { background: linear-gradient(135deg, #3d8bff, #60a5fa); color: #fff; }
+	  .rank-normal { background: var(--bg-card); color: var(--fg-muted); }
+	  .hot-item .hot-info { flex: 1; min-width: 0; }
+	  .hot-item .hot-info h5 {
+	    font-size: 0.88rem; font-weight: 600;
+	    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+	  }
+	  .hot-item .hot-info p {
+	    font-size: 0.7rem; color: var(--fg-muted); margin-top: 2px;
+	  }
+	  .hot-item .hot-tag {
+	    font-size: 0.62rem; padding: 2px 8px;
+	    border-radius: 4px; flex-shrink: 0;
+	    font-weight: 600;
+	  }
+	  .tag-hot { background: rgba(255,107,74,0.12); color: var(--accent2); }
+	  .tag-new { background: rgba(0,232,162,0.12); color: var(--accent); }
+	  .tag-rec { background: rgba(61,139,255,0.12); color: var(--accent3); }
+	  /* ========== 数据统计条 ========== */
+	  .stats-bar {
+	    display: flex; gap: 0;
+	    margin: 4px 20px 0;
+	    background: var(--bg-card);
+	    border: 1px solid var(--border);
+	    border-radius: var(--radius);
+	    overflow: hidden;
+	    position: relative; z-index: 1;
+	  }
+	  .stat-item {
+	    flex: 1; text-align: center;
+	    padding: 16px 8px;
+	    position: relative;
+	  }
+	  .stat-item + .stat-item::before {
+	    content: '';
+	    position: absolute; left: 0; top: 20%; height: 60%;
+	    width: 1px; background: var(--border);
+	  }
+	  .stat-item .stat-num {
+	    font-size: 1.3rem; font-weight: 800;
+	    background: linear-gradient(135deg, var(--accent), var(--accent3));
+	    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+	    background-clip: text;
+	  }
+	  .stat-item .stat-label {
+	    font-size: 0.68rem; color: var(--fg-muted); margin-top: 2px;
+	  }
+	  /* ========== 底部导航 ========== */
+	  .bottom-nav {
+	    position: fixed; bottom: 0; left: 0; right: 0;
+	    z-index: 200;
+	    background: rgba(10,14,26,0.92);
+	    backdrop-filter: blur(20px);
+	    -webkit-backdrop-filter: blur(20px);
+	    border-top: 1px solid var(--border);
+	    display: flex;
+	    padding: 6px 0 env(safe-area-inset-bottom, 8px);
+	  }
+	  .nav-item {
+	    flex: 1; display: flex; flex-direction: column;
+	    align-items: center; gap: 2px;
+	    padding: 6px 0;
+	    cursor: pointer;
+	    transition: transform 0.15s;
+	    position: relative;
+	  }
+	  .nav-item:active { transform: scale(0.9); }
+	  .nav-item svg { width: 22px; height: 22px; transition: all 0.2s; }
+	  .nav-item span { font-size: 0.62rem; transition: color 0.2s; color: var(--fg-muted); }
+	  .nav-item.active svg { stroke: var(--accent); }
+	  .nav-item.active span { color: var(--accent); font-weight: 600; }
+	  .nav-item.active::before {
+	    content: '';
+	    position: absolute; top: -1px; left: 50%; transform: translateX(-50%);
+	    width: 20px; height: 2px;
+	    background: var(--accent);
+	    border-radius: 1px;
+	    box-shadow: 0 0 8px var(--accent-glow);
+	  }
+	  .nav-item .nav-badge {
+	    position: absolute; top: 2px; right: calc(50% - 18px);
+	    width: 8px; height: 8px; border-radius: 50%;
+	    background: var(--accent2);
+	    box-shadow: 0 0 6px rgba(255,107,74,0.5);
+	  }
+	  /* ========== Toast 提示 ========== */
+	  .toast {
+	    position: fixed; top: 60px; left: 50%; transform: translateX(-50%) translateY(-20px);
+	    background: var(--bg-card);
+	    border: 1px solid var(--accent);
+	    color: var(--fg);
+	    padding: 10px 24px;
+	    border-radius: 30px;
+	    font-size: 0.82rem;
+	    z-index: 9999;
+	    opacity: 0;
+	    pointer-events: none;
+	    transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
+	    box-shadow: 0 4px 20px rgba(0,232,162,0.2);
+	  }
+	  .toast.show {
+	    opacity: 1; transform: translateX(-50%) translateY(0);
+	  }
+	  /* ========== 模态框 ========== */
+	  .modal-overlay {
+	    position: fixed; inset: 0; z-index: 500;
+	    background: rgba(0,0,0,0.6);
+	    backdrop-filter: blur(6px);
+	    display: flex; align-items: flex-end; justify-content: center;
+	    opacity: 0; pointer-events: none;
+	    transition: opacity 0.3s;
+	  }
+	  .modal-overlay.show { opacity: 1; pointer-events: auto; }
+	  .modal-sheet {
+	    background: var(--bg-card);
+	    border-radius: 20px 20px 0 0;
+	    width: 100%; max-width: 500px;
+	    padding: 24px 20px 40px;
+	    transform: translateY(100%);
+	    transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+	  }
+	  .modal-overlay.show .modal-sheet { transform: translateY(0); }
+	  .modal-sheet .modal-handle {
+	    width: 36px; height: 4px; border-radius: 2px;
+	    background: rgba(255,255,255,0.15);
+	    margin: 0 auto 20px;
+	  }
+	  .modal-sheet h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 16px; }
+	  .modal-sheet .modal-btn {
+	    display: block; width: 100%;
+	    padding: 14px; margin-bottom: 10px;
+	    border-radius: var(--radius-sm);
+	    border: 1px solid var(--border);
+	    background: var(--bg);
+	    color: var(--fg);
+	    font-size: 0.9rem; font-weight: 600;
+	    cursor: pointer;
+	    transition: all 0.2s;
+	    text-align: left;
+	  }
+	  .modal-sheet .modal-btn:hover {
+	    border-color: var(--accent);
+	    background: rgba(0,232,162,0.05);
+	  }
+	  .modal-sheet .modal-btn-primary {
+	    background: linear-gradient(135deg, var(--accent), #00c98a);
+	    color: var(--bg); border: none; text-align: center;
+	    margin-top: 10px;
+	  }
+	  /* ========== 入场动画 ========== */
+	  .fade-in {
+	    opacity: 0; transform: translateY(16px);
+	    animation: fadeInUp 0.5s ease forwards;
+	  }
+	  @keyframes fadeInUp {
+	    to { opacity: 1; transform: translateY(0); }
+	  }
+	  .delay-1 { animation-delay: 0.06s; }
+	  .delay-2 { animation-delay: 0.12s; }
+	  .delay-3 { animation-delay: 0.18s; }
+	  .delay-4 { animation-delay: 0.24s; }
+	  .delay-5 { animation-delay: 0.30s; }
+	  .delay-6 { animation-delay: 0.36s; }
+	  .delay-7 { animation-delay: 0.42s; }
+	  /* ========== 粒子画布 ========== */
+	  #particles-canvas {
+	    position: fixed; top: 0; left: 0;
+	    width: 100%; height: 100%;
+	    pointer-events: none;
+	    z-index: 0;
+	  }
+	  /* ========== 涟漪效果 ========== */
+	  .ripple {
+	    position: absolute; border-radius: 50%;
+	    background: rgba(0,232,162,0.15);
+	    transform: scale(0);
+	    animation: rippleEffect 0.6s ease-out;
+	    pointer-events: none;
+	  }
+	  @keyframes rippleEffect {
+	    to { transform: scale(4); opacity: 0; }
+	  }
+	  /* ========== 减弱动效偏好 ========== */
+	  @media (prefers-reduced-motion: reduce) {
+	    *, *::before, *::after {
+	      animation-duration: 0.01ms !important;
+	      transition-duration: 0.01ms !important;
+	    }
+	  }
+	</style>
+	</head>
+	<body>
+	<!-- 粒子背景画布 -->
+	<canvas id="particles-canvas" aria-hidden="true"></canvas>
+	<!-- Toast 提示 -->
+	<div class="toast" id="toast"></div>
+	<!-- 模态框 -->
+	<div class="modal-overlay" id="modal" role="dialog" aria-modal="true" aria-label="功能面板">
+	  <div class="modal-sheet">
+	    <div class="modal-handle"></div>
+	    <h3 id="modal-title">选择操作</h3>
+	    <div id="modal-body"></div>
+	    <button class="modal-btn modal-btn-primary" onclick="closeModal()">关闭</button>
+	  </div>
+	</div>
+	<!-- ===== 顶部状态栏 ===== -->
+	<header class="status-bar fade-in">
+	  <div class="greeting" id="greeting-text">上午好</div>
+	  <div class="title-row">
+	    <h1>便民服务中心</h1>
+	    <div class="avatar" onclick="showToast('个人中心开发中')" tabindex="0" role="button" aria-label="个人中心">U</div>
+	  </div>
+	</header>
+	<!-- ===== 搜索栏 ===== -->
+	<div class="search-wrap fade-in delay-1">
+	  <div class="search-box">
+	    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+	      <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+	    </svg>
+	    <input type="text" id="search-input" placeholder="搜索服务、工具、资讯..." aria-label="搜索">
+	    <button class="search-btn" onclick="handleSearch()">搜索</button>
+	  </div>
+	</div>
+	<!-- ===== 公告滚动条 ===== -->
+	<div class="notice-bar fade-in delay-2">
+	  <span class="tag">公告</span>
+	  <div class="scroll-text">
+	    <span>系统已全面升级至v3.2版本，新增多项在线服务功能，使用更便捷，安全更有保障。如有问题请联系在线客服。</span>
+	  </div>
+	</div>
+	<!-- ===== 横幅区 ===== -->
+	<section class="banner-section fade-in delay-3" aria-label="推荐横幅">
+	  <div class="banner-card" onclick="showToast('活动详情页开发中')">
+	    <div class="banner-bg"></div>
+	    <div class="banner-decor"></div>
+	    <div class="banner-content">
+	      <h2>全新升级 <em>智享生活</em></h2>
+	      <p>一站式便民服务平台，让生活更简单、更高效、更安心</p>
+	    </div>
+	  </div>
+	  <div class="banner-dots">
+	    <div class="dot active"></div>
+	    <div class="dot"></div>
+	    <div class="dot"></div>
+	  </div>
+	</section>
+	<!-- ===== 数据统计 ===== -->
+	<div class="stats-bar fade-in delay-3">
+	  <div class="stat-item">
+	    <div class="stat-num" id="stat-users">0</div>
+	    <div class="stat-label">服务用户</div>
+	  </div>
+	  <div class="stat-item">
+	    <div class="stat-num" id="stat-services">0</div>
+	    <div class="stat-label">在线服务</div>
+	  </div>
+	  <div class="stat-item">
+	    <div class="stat-num" id="stat-rate">0</div>
+	    <div class="stat-label">满意度</div>
+	  </div>
+	</div>
+	<!-- ===== 常用服务 ===== -->
+	<section>
+	  <div class="section-header fade-in delay-4">
+	    <h3>常用服务</h3>
+	    <span class="more" onclick="showToast('全部服务开发中')">全部服务 ›</span>
+	  </div>
+	  <div class="service-grid fade-in delay-4">
+	    <!-- 第一行 -->
+	    <div class="service-item" onclick="openService('话费充值')" tabindex="0" role="button">
+	      <div class="icon-wrap ic-green">
+	        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>
+	      </div>
+	      <span>话费充值</span>
+	    </div>
+	    <div class="service-item" onclick="openService('流量购买')" tabindex="0" role="button">
+	      <div class="icon-wrap ic-blue">
+	        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1"/></svg>
+	      </div>
+	      <span>流量购买</span>
+	    </div>
+	    <div class="service-item" onclick="openService('生活缴费')" tabindex="0" role="button">
+	      <div class="icon-wrap ic-orange">
+	        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+	      </div>
+	      <span>生活缴费</span>
+	      <div class="badge">惠</div>
+	    </div>
+	    <div class="service-item" onclick="openService('社保查询')" tabindex="0" role="button">
+	      <div class="icon-wrap ic-yellow">
+	        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+	      </div>
+	      <span>社保查询</span>
+	    </div>
+	    <!-- 第二行 -->
+	    <div class="service-item" onclick="openService('公积金')" tabindex="0" role="button">
+	      <div class="icon-wrap ic-pink">
+	        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 3h18v18H3z"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+	      </div>
+	      <span>公积金</span>
+	    </div>
+	    <div class="service-item" onclick="openService('医疗服务')" tabindex="0" role="button">
+	      <div class="icon-wrap ic-purple">
+	        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 2v4"/><path d="M16 2v4"/><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M12 10v6"/><path d="M9 13h6"/></svg>
+	      </div>
+	      <span>医疗服务</span>
+	      <div class="badge">新</div>
+	    </div>
+	    <div class="service-item" onclick="openService('交通出行')" tabindex="0" role="button">
+	      <div class="icon-wrap ic-green">
+	        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 6v6"/><path d="M16 6v6"/><path d="M2 12h20"/><path d="M4 18h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2z"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg>
+	      </div>
+	      <span>交通出行</span>
+	    </div>
+	    <div class="service-item" onclick="openService('更多服务')" tabindex="0" role="button">
+	      <div class="icon-wrap ic-blue">
+	        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+	      </div>
+	      <span>更多服务</span>
+	    </div>
+	  </div>
+	</section>
+	<!-- ===== 快捷操作卡片 ===== -->
+	<section>
+	  <div class="section-header fade-in delay-5">
+	    <h3>快捷操作</h3>
+	  </div>
+	  <div class="quick-cards fade-in delay-5">
+	    <div class="quick-card" onclick="openService('电子证件')">
+	      <div class="qc-icon ic-green">
+	        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="20" height="20"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></svg>
+	      </div>
+	      <h4>电子证件</h4>
+	      <p>身份证、驾驶证等电子凭证</p>
+	      <span class="qc-arrow">›</span>
+	      <div class="qc-decor" style="background:var(--accent)"></div>
+	    </div>
+	    <div class="quick-card" onclick="openService('办事大厅')">
+	      <div class="qc-icon ic-orange">
+	        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="20" height="20"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+	      </div>
+	      <h4>办事大厅</h4>
+	      <p>政务办理一站通</p>
+	      <span class="qc-arrow">›</span>
+	      <div class="qc-decor" style="background:var(--accent2)"></div>
+	    </div>
+	    <div class="quick-card" onclick="openService('智慧出行')">
+	      <div class="qc-icon ic-blue">
+	        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="20" height="20"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+	      </div>
+	      <h4>智慧出行</h4>
+	      <p>公交地铁、实时导航</p>
+	      <span class="qc-arrow">›</span>
+	      <div class="qc-decor" style="background:var(--accent3)"></div>
+	    </div>
+	    <div class="quick-card" onclick="openService('便民助手')">
+	      <div class="qc-icon ic-yellow">
+	        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="20" height="20"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+	      </div>
+	      <h4>便民助手</h4>
+	      <p>天气、汇率、计算器</p>
+	      <span class="qc-arrow">›</span>
+	      <div class="qc-decor" style="background:var(--accent4)"></div>
+	    </div>
+	  </div>
+	</section>
+	<!-- ===== 热门推荐 ===== -->
+	<section>
+	  <div class="section-header fade-in delay-6">
+	    <h3>热门推荐</h3>
+	    <span class="more" onclick="showToast('更多推荐开发中')">更多 ›</span>
+	  </div>
+	  <div class="hot-list fade-in delay-6">
+	    <div class="hot-item" onclick="openService('医保电子凭证')">
+	      <div class="rank rank-top1">1</div>
+	      <div class="hot-info">
+	        <h5>医保电子凭证</h5>
+	        <p>全国通用，扫码即可使用</p>
+	      </div>
+	      <span class="hot-tag tag-hot">热门</span>
+	    </div>
+	    <div class="hot-item" onclick="openService('个体户注册')">
+	      <div class="rank rank-top2">2</div>
+	      <div class="hot-info">
+	        <h5>个体户在线注册</h5>
+	        <p>零跑腿，全程网办</p>
+	      </div>
+	      <span class="hot-tag tag-new">新品</span>
+	    </div>
+	    <div class="hot-item" onclick="openService('居住证办理')">
+	      <div class="rank rank-top3">3</div>
+	      <div class="hot-info">
+	        <h5>居住证在线办理</h5>
+	        <p>申请、签注一站式服务</p>
+	      </div>
+	      <span class="hot-tag tag-rec">推荐</span>
+	    </div>
+	    <div class="hot-item" onclick="openService('不动产登记')">
+	      <div class="rank rank-normal">4</div>
+	      <div class="hot-info">
+	        <h5>不动产登记查询</h5>
+	        <p>房产信息在线查</p>
+	      </div>
+	      <span class="hot-tag tag-rec">推荐</span>
+	    </div>
+	    <div class="hot-item" onclick="openService('婚姻登记预约')">
+	      <div class="rank rank-normal">5</div>
+	      <div class="hot-info">
+	        <h5>婚姻登记预约</h5>
+	        <p>在线预约，到场即办</p>
+	      </div>
+	      <span class="hot-tag tag-hot">热门</span>
+	    </div>
+	  </div>
+	</section>
+	<!-- ===== 底部间距 ===== -->
+	<div style="height:30px; position:relative; z-index:1;"></div>
+	<!-- ===== 底部导航 ===== -->
+	<nav class="bottom-nav" aria-label="主导航">
+	  <div class="nav-item active" onclick="switchNav(this, '首页')" tabindex="0" role="button" aria-label="首页">
+	    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+	    <span>首页</span>
+	  </div>
+	  <div class="nav-item" onclick="switchNav(this, '服务')" tabindex="0" role="button" aria-label="服务">
+	    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+	    <span>服务</span>
+	  </div>
+	  <div class="nav-item" onclick="switchNav(this, '消息')" tabindex="0" role="button" aria-label="消息">
+	    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+	    <span>消息</span>
+	    <div class="nav-badge"></div>
+	  </div>
+	  <div class="nav-item" onclick="switchNav(this, '我的')" tabindex="0" role="button" aria-label="我的">
+	    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+	    <span>我的</span>
+	  </div>
+	</nav>
+	<script>
+	  /* ========== 问候语（基于当前时间） ========== */
+	  (function() {
+	    var h = new Date().getHours();
+	    var g = h < 6 ? '凌晨好' : h < 9 ? '早上好' : h < 12 ? '上午好' : h < 14 ? '中午好' : h < 18 ? '下午好' : h < 22 ? '晚上好' : '夜深了';
+	    document.getElementById('greeting-text').textContent = g;
+	  })();
+	  /* ========== Toast 提示 ========== */
+	  var toastTimer = null;
+	  function showToast(msg) {
+	    var t = document.getElementById('toast');
+	    t.textContent = msg;
+	    t.classList.add('show');
+	    clearTimeout(toastTimer);
+	    toastTimer = setTimeout(function() { t.classList.remove('show'); }, 2200);
+	  }
+	  /* ========== 搜索功能 ========== */
+	  function handleSearch() {
+	    var v = document.getElementById('search-input').value.trim();
+	    if (!v) { showToast('请输入搜索关键词'); return; }
+	    showToast('正在搜索: ' + v);
+	  }
+	  document.getElementById('search-input').addEventListener('keydown', function(e) {
+	    if (e.key === 'Enter') handleSearch();
+	  });
+	  /* ========== 服务点击 ========== */
+	  function openService(name) {
+	    var modal = document.getElementById('modal');
+	    document.getElementById('modal-title').textContent = name;
+	    document.getElementById('modal-body').innerHTML =
+	      '<button class="modal-btn" onclick="showToast(\'正在跳转: ' + name + '\'); closeModal();">打开 ' + name + '</button>' +
+	      '<button class="modal-btn" onclick="showToast(\'已收藏: ' + name + '\'); closeModal();">收藏此服务</button>' +
+	      '<button class="modal-btn" onclick="showToast(\'已分享: ' + name + '\'); closeModal();">分享给朋友</button>';
+	    modal.classList.add('show');
+	  }
+	  /* ========== 模态框 ========== */
+	  function closeModal() {
+	    document.getElementById('modal').classList.remove('show');
+	  }
+	  document.getElementById('modal').addEventListener('click', function(e) {
+	    if (e.target === this) closeModal();
+	  });
+	  /* ========== 底部导航切换 ========== */
+	  function switchNav(el, name) {
+	    document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
+	    el.classList.add('active');
+	    showToast('切换到: ' + name);
+	  }
+	  /* ========== 数字滚动动画 ========== */
+	  function animateNumber(el, target, suffix, duration) {
+	    var start = 0;
+	    var startTime = null;
+	    suffix = suffix || '';
+	    duration = duration || 1500;
+	    function step(ts) {
+	      if (!startTime) startTime = ts;
+	      var progress = Math.min((ts - startTime) / duration, 1);
+	      var eased = 1 - Math.pow(1 - progress, 3); // easeOutCubic
+	      var current = Math.floor(start + (target - start) * eased);
+	      el.textContent = current.toLocaleString() + suffix;
+	      if (progress < 1) requestAnimationFrame(step);
+	    }
+	    requestAnimationFrame(step);
+	  }
+	  /* 使用 IntersectionObserver 触发统计数字动画 */
+	  var statsAnimated = false;
+	  var statsBar = document.querySelector('.stats-bar');
+	  var observer = new IntersectionObserver(function(entries) {
+	    entries.forEach(function(entry) {
+	      if (entry.isIntersecting && !statsAnimated) {
+	        statsAnimated = true;
+	        animateNumber(document.getElementById('stat-users'), 128600, '+', 1800);
+	        animateNumber(document.getElementById('stat-services'), 256, '项', 1500);
+	        animateNumber(document.getElementById('stat-rate'), 98, '%', 1200);
+	      }
+	    });
+	  }, { threshold: 0.3 });
+	  observer.observe(statsBar);
+	  /* ========== 横幅轮播 ========== */
+	  var bannerDots = document.querySelectorAll('.banner-dots .dot');
+	  var currentBanner = 0;
+	  setInterval(function() {
+	    bannerDots[currentBanner].classList.remove('active');
+	    currentBanner = (currentBanner + 1) % bannerDots.length;
+	    bannerDots[currentBanner].classList.add('active');
+	  }, 3500);
+	  /* ========== 粒子背景 ========== */
+	  (function() {
+	    var canvas = document.getElementById('particles-canvas');
+	    var ctx = canvas.getContext('2d');
+	    var particles = [];
+	    var PARTICLE_COUNT = 35;
+	    function resize() {
+	      canvas.width = window.innerWidth;
+	      canvas.height = window.innerHeight;
+	    }
+	    resize();
+	    window.addEventListener('resize', resize);
+	    // 初始化粒子
+	    for (var i = 0; i < PARTICLE_COUNT; i++) {
+	      particles.push({
+	        x: Math.random() * canvas.width,
+	        y: Math.random() * canvas.height,
+	        r: Math.random() * 1.5 + 0.5,
+	        vx: (Math.random() - 0.5) * 0.3,
+	        vy: (Math.random() - 0.5) * 0.3,
+	        alpha: Math.random() * 0.3 + 0.1
+	      });
+	    }
+	    function drawParticles() {
+	      ctx.clearRect(0, 0, canvas.width, canvas.height);
+	      for (var i = 0; i < particles.length; i++) {
+	        var p = particles[i];
+	        p.x += p.vx;
+	        p.y += p.vy;
+	        if (p.x < 0) p.x = canvas.width;
+	        if (p.x > canvas.width) p.x = 0;
+	        if (p.y < 0) p.y = canvas.height;
+	        if (p.y > canvas.height) p.y = 0;
+	        ctx.beginPath();
+	        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+	        ctx.fillStyle = 'rgba(0,232,162,' + p.alpha + ')';
+	        ctx.fill();
+	        // 连线
+	        for (var j = i + 1; j < particles.length; j++) {
+	          var p2 = particles[j];
+	          var dx = p.x - p2.x;
+	          var dy = p.y - p2.y;
+	          var dist = Math.sqrt(dx * dx + dy * dy);
+	          if (dist < 120) {
+	            ctx.beginPath();
+	            ctx.moveTo(p.x, p.y);
+	            ctx.lineTo(p2.x, p2.y);
+	            ctx.strokeStyle = 'rgba(0,232,162,' + (0.06 * (1 - dist / 120)) + ')';
+	            ctx.lineWidth = 0.5;
+	            ctx.stroke();
+	          }
+	        }
+	      }
+	      requestAnimationFrame(drawParticles);
+	    }
+	    drawParticles();
+	  })();
+	  /* ========== 涟漪效果 ========== */
+	  document.querySelectorAll('.service-item, .quick-card, .hot-item').forEach(function(el) {
+	    el.style.position = 'relative';
+	    el.style.overflow = 'hidden';
+	    el.addEventListener('click', function(e) {
+	      var rect = el.getBoundingClientRect();
+	      var ripple = document.createElement('span');
+	      ripple.className = 'ripple';
+	      var size = Math.max(rect.width, rect.height);
+	      ripple.style.width = ripple.style.height = size + 'px';
+	      ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
+	      ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
+	      el.appendChild(ripple);
+	      setTimeout(function() { ripple.remove(); }, 600);
+	    });
+	  });
+	</script>
+	</body>
+	</html>
+  
