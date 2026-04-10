@@ -1,66 +1,1073 @@
+```html
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>比心 - 游戏陪玩语音社交</title>
+<title>比心 - 游戏陪玩语音社交平台</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
 <style>
-  :root {
-    --primary: #FF4D6A;
-    --primary-light: #FF7A90;
-    --primary-dark: #E8365A;
-    --primary-glow: rgba(255,77,106,0.25);
-    --secondary: #FF8A4C;
-    --accent-gold: #FFD25A;
-    --accent-purple: #A855F7;
-    --accent-blue: #3B82F6;
-    --accent-green: #22C55E;
-    --bg: #F5F5F8;
-    --bg-white: #FFFFFF;
-    --bg-card: #FFFFFF;
-    --fg: #1A1A2E;
-    --fg-secondary: #6B7280;
-    --fg-muted: #9CA3AF;
-    --border: #F0F0F5;
-    --shadow: 0 2px 12px rgba(0,0,0,0.06);
-    --shadow-lg: 0 8px 30px rgba(0,0,0,0.1);
-    --radius: 14px;
-    --radius-sm: 10px;
-    --radius-xs: 6px;
-    --safe-bottom: env(safe-area-inset-bottom, 0px);
-  }
-  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-  html { font-size:16px; }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif;
-    background: var(--bg);
-    color: var(--fg);
-    min-height: 100vh;
-    overflow-x: hidden;
-    position: relative;
-  }
+/* ===== 设计令牌 ===== */
+:root {
+  --pri: #FF3E6C;
+  --pri-l: #FF6B8A;
+  --pri-d: #E0295A;
+  --pri-glow: rgba(255,62,108,0.28);
+  --sec: #FF8C42;
+  --gold: #FFB800;
+  --purple: #9333EA;
+  --blue: #3B82F6;
+  --green: #10B981;
+  --teal: #14B8A6;
+  --bg: #F3F4F8;
+  --bg2: #FFFFFF;
+  --bg3: #F9FAFB;
+  --fg: #111827;
+  --fg2: #4B5563;
+  --fg3: #9CA3AF;
+  --border: #F0F1F5;
+  --border2: #E5E7EB;
+  --r: 14px;
+  --rs: 10px;
+  --rx: 6px;
+  --shadow: 0 2px 12px rgba(0,0,0,0.05);
+  --shadow2: 0 8px 32px rgba(0,0,0,0.1);
+  --safe-b: env(safe-area-inset-bottom, 0px);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{font-size:16px;}
+body{font-family:'Noto Sans SC',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden;position:relative;}
+img{display:block;}
+input,textarea,button{font-family:inherit;}
+::-webkit-scrollbar{width:0;height:0;}
 
-  /* ===== 顶部导航栏 ===== */
-  .top-nav {
-    position: fixed; top:0; left:0; right:0; z-index:100;
-    background: var(--bg-white);
-    border-bottom: 1px solid var(--border);
-    padding-top: env(safe-area-inset-top, 0px);
+/* ===== 顶部导航 ===== */
+.gn{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg2);border-bottom:1px solid var(--border);transition:transform .3s;}
+.gn.hide{transform:translateY(-100%);}
+.gn-in{display:flex;align-items:center;padding:8px 14px;gap:8px;}
+.gn-loc{display:flex;align-items:center;gap:2px;font-size:.78rem;font-weight:600;flex-shrink:0;cursor:pointer;padding:4px;}
+.gn-loc i{font-size:.65rem;color:var(--pri);}
+.gn-search{flex:1;display:flex;align-items:center;gap:6px;background:var(--bg);border-radius:20px;padding:7px 12px;cursor:pointer;transition:background .2s;}
+.gn-search:hover{background:#EDEDF3;}
+.gn-search i{font-size:.8rem;color:var(--fg3);}
+.gn-search span{font-size:.78rem;color:var(--fg3);}
+.gn-acts{display:flex;gap:4px;flex-shrink:0;}
+.gn-btn{position:relative;width:34px;height:34px;display:flex;align-items:center;justify-content:center;cursor:pointer;border-radius:50%;transition:background .2s;font-size:1.05rem;color:var(--fg2);}
+.gn-btn:hover{background:var(--bg);}
+.gn-dot{position:absolute;top:4px;right:4px;min-width:16px;height:16px;border-radius:8px;background:var(--pri);color:#fff;font-size:.52rem;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 3px;border:2px solid var(--bg2);}
+
+/* ===== 分类标签 ===== */
+.ct{position:fixed;top:49px;left:0;right:0;z-index:99;background:var(--bg2);border-bottom:1px solid var(--border);}
+.ct-in{display:flex;overflow-x:auto;padding:6px 10px;gap:4px;}
+.ct-t{flex-shrink:0;padding:5px 13px;border-radius:16px;font-size:.74rem;font-weight:500;color:var(--fg2);background:var(--bg);cursor:pointer;transition:all .25s;border:1.5px solid transparent;white-space:nowrap;}
+.ct-t.on{background:rgba(255,62,108,.07);color:var(--pri);border-color:var(--pri);font-weight:600;}
+
+/* ===== 主内容 ===== */
+.mc{padding-top:94px;padding-bottom:calc(72px + var(--safe-b));}
+.pg{display:none;}.pg.on{display:block;}
+
+/* ===== 首页 ===== */
+.bw{padding:10px 14px 2px;}
+.bt{display:flex;overflow:hidden;border-radius:var(--r);position:relative;height:128px;}
+.bs{min-width:100%;height:100%;display:flex;align-items:center;padding:20px;position:relative;overflow:hidden;transition:transform .4s cubic-bezier(.4,0,.2,1);}
+.bs .bbg{position:absolute;inset:0;}
+.bs1 .bbg{background:linear-gradient(135deg,#FF3E6C,#FF8C42);}
+.bs2 .bbg{background:linear-gradient(135deg,#9333EA,#6366F1);}
+.bs3 .bbg{background:linear-gradient(135deg,#3B82F6,#06B6D4);}
+.bs .bcr{position:absolute;right:-20px;top:-20px;width:110px;height:110px;border-radius:50%;background:rgba(255,255,255,.1);}
+.bs .bcr::after{content:'';position:absolute;bottom:-30px;left:-20px;width:70px;height:70px;border-radius:50%;background:rgba(255,255,255,.07);}
+.bs .btx{position:relative;z-index:2;color:#fff;}
+.bs .btx h3{font-size:1.08rem;font-weight:800;margin-bottom:3px;}
+.bs .btx p{font-size:.72rem;opacity:.85;line-height:1.5;}
+.bs .btx .bb{display:inline-block;margin-top:8px;background:rgba(255,255,255,.2);backdrop-filter:blur(8px);color:#fff;border:1px solid rgba(255,255,255,.25);padding:4px 14px;border-radius:12px;font-size:.68rem;font-weight:600;cursor:pointer;transition:background .2s;}
+.bs .btx .bb:hover{background:rgba(255,255,255,.35);}
+.bdots{display:flex;justify-content:center;gap:4px;margin-top:6px;}
+.bdots .bd{width:5px;height:5px;border-radius:3px;background:var(--fg3);opacity:.3;transition:all .3s;}
+.bdots .bd.on{width:16px;background:var(--pri);opacity:1;}
+
+/* 快捷入口 */
+.qe{display:flex;padding:12px 6px 4px;}
+.qe-i{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;}
+.qe-c{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;position:relative;transition:transform .2s;}
+.qe-i:active .qe-c{transform:scale(.9);}
+.qe-i span{font-size:.67rem;color:var(--fg2);font-weight:500;}
+.qe-h{position:absolute;top:-3px;right:-8px;background:var(--pri);color:#fff;font-size:.48rem;font-weight:700;padding:1px 4px;border-radius:4px;line-height:1.3;}
+
+/* 区块标题 */
+.st{display:flex;align-items:center;justify-content:space-between;padding:14px 14px 8px;}
+.st h3{font-size:.95rem;font-weight:700;display:flex;align-items:center;gap:5px;}
+.st .si{width:3px;height:14px;border-radius:2px;background:linear-gradient(180deg,var(--pri),var(--sec));}
+.st .sm{font-size:.72rem;color:var(--fg3);cursor:pointer;display:flex;align-items:center;gap:2px;}
+.st .sm i{font-size:.6rem;}
+
+/* 在线大神 */
+.gsw{padding:0 0 2px;}
+.gs{display:flex;overflow-x:auto;padding:0 10px 6px;gap:10px;}
+.gc{flex-shrink:0;width:105px;cursor:pointer;transition:transform .2s;}
+.gc:active{transform:scale(.96);}
+.gc-aw{position:relative;width:105px;height:105px;border-radius:var(--r);overflow:visible;}
+.gc-a{width:100%;height:100%;border-radius:var(--r);object-fit:cover;background:linear-gradient(135deg,#FFE4E8,#FFF0E5);}
+.gc-ol{position:absolute;bottom:5px;right:5px;width:9px;height:9px;border-radius:50%;background:var(--green);border:2px solid #fff;}
+.gc-rk{position:absolute;top:-2px;left:-2px;background:linear-gradient(135deg,#FFB800,#FF8C42);color:#fff;font-size:.5rem;font-weight:800;padding:2px 6px;border-radius:0 0 7px 0;box-shadow:0 2px 6px rgba(255,184,0,.35);}
+.gc-i{padding:5px 1px 0;}
+.gc-n{font-size:.74rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.gc-ts{display:flex;gap:3px;margin-top:2px;flex-wrap:wrap;}
+.gc-t{font-size:.52rem;padding:1px 4px;border-radius:3px;font-weight:500;}
+.gtg{background:rgba(255,62,108,.08);color:var(--pri);}
+.gtv{background:rgba(147,51,234,.08);color:var(--purple);}
+.gtp{background:rgba(255,140,66,.08);color:var(--sec);}
+
+/* 陪玩师列表 */
+.pl{padding:0 14px;}
+.pc{display:flex;gap:11px;padding:12px 0;border-bottom:1px solid var(--border);cursor:pointer;position:relative;}
+.pc:last-child{border-bottom:none;}
+.pc:active{background:rgba(0,0,0,.01);}
+.pc-aw{position:relative;flex-shrink:0;}
+.pc-a{width:54px;height:54px;border-radius:15px;object-fit:cover;background:linear-gradient(135deg,#FFE4E8,#FFF0E5);}
+.pc-ol{position:absolute;bottom:0;right:0;width:9px;height:9px;border-radius:50%;background:var(--green);border:2px solid #fff);}
+.pc-i{flex:1;min-width:0;}
+.pc-nr{display:flex;align-items:center;gap:5px;}
+.pc-n{font-size:.84rem;font-weight:600;}
+.pc-g{width:15px;height:15px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:.55rem;}
+.pc-g.f{background:rgba(255,62,108,.1);color:var(--pri);}
+.pc-g.m{background:rgba(59,130,246,.1);color:var(--blue);}
+.pc-lv{font-size:.5rem;font-weight:700;padding:1px 4px;border-radius:3px;background:linear-gradient(135deg,#FFB800,#FF8C42);color:#fff;}
+.pc-d{font-size:.7rem;color:var(--fg2);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.pc-ts{display:flex;gap:3px;margin-top:5px;flex-wrap:wrap;}
+.pc-t{font-size:.58rem;padding:2px 6px;border-radius:3px;background:var(--bg);color:var(--fg2);font-weight:500;}
+.pc-t.h{background:rgba(255,62,108,.06);color:var(--pri);}
+.pc-rt{display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;flex-shrink:0;}
+.pc-p{font-size:.82rem;font-weight:700;color:var(--pri);}
+.pc-p em{font-style:normal;font-size:.6rem;font-weight:400;color:var(--fg3);}
+.pc-ob{background:linear-gradient(135deg,var(--pri),var(--pri-l));color:#fff;border:none;border-radius:13px;padding:5px 13px;font-size:.68rem;font-weight:600;cursor:pointer;box-shadow:0 3px 10px var(--pri-glow);transition:transform .15s;}
+.pc-ob:active{transform:scale(.93);}
+
+/* ===== 派对页面 ===== */
+.py-h{padding:14px;display:flex;align-items:center;justify-content:space-between;}
+.py-h h2{font-size:1.15rem;font-weight:800;}
+.py-f{display:flex;align-items:center;gap:4px;font-size:.74rem;color:var(--fg2);cursor:pointer;}
+.py-f i{font-size:.7rem;}
+.py-cs{display:flex;padding:0 14px 10px;gap:6px;overflow-x:auto;}
+.py-c{flex-shrink:0;padding:7px 14px;border-radius:18px;background:var(--bg2);border:1.5px solid var(--border);font-size:.74rem;font-weight:500;color:var(--fg2);cursor:pointer;transition:all .2s;white-space:nowrap;}
+.py-c.on{background:rgba(255,62,108,.06);border-color:var(--pri);color:var(--pri);font-weight:600;}
+.rl{padding:0 14px;}
+.rc{background:var(--bg2);border-radius:var(--r);padding:12px;margin-bottom:8px;box-shadow:var(--shadow);cursor:pointer;transition:transform .2s;position:relative;overflow:hidden;}
+.rc:active{transform:scale(.98);}
+.rc-h{display:flex;align-items:center;gap:9px;margin-bottom:9px;}
+.rc-cv{width:42px;height:42px;border-radius:12px;object-fit:cover;background:linear-gradient(135deg,#FFE4E8,#E8D5FF);}
+.rc-i{flex:1;}
+.rc-n{font-size:.84rem;font-weight:600;}
+.rc-ht{font-size:.66rem;color:var(--fg3);margin-top:1px;}
+.rc-lv{display:flex;align-items:center;gap:3px;background:rgba(255,62,108,.07);color:var(--pri);padding:3px 7px;border-radius:9px;font-size:.6rem;font-weight:600;}
+.rc-lv .ld{width:5px;height:5px;border-radius:50%;background:var(--pri);animation:lp 1.5s infinite;}
+@keyframes lp{0%,100%{opacity:1;}50%{opacity:.3;}}
+.rc-b{display:flex;align-items:center;justify-content:space-between;}
+.rc-ts{display:flex;gap:3px;}
+.rc-t{font-size:.58rem;padding:2px 6px;border-radius:3px;background:var(--bg);color:var(--fg2);}
+.rc-avs{display:flex;align-items:center;}
+.rc-avs img{width:26px;height:26px;border-radius:50%;border:2px solid #fff;margin-left:-7px;object-fit:cover;background:#eee;}
+.rc-avs img:first-child{margin-left:0;}
+.rc-am{width:26px;height:26px;border-radius:50%;background:var(--bg);border:2px solid #fff;margin-left:-7px;display:flex;align-items:center;justify-content:center;font-size:.5rem;color:var(--fg3);font-weight:600;}
+.rc-jb{background:linear-gradient(135deg,var(--pri),var(--pri-l));color:#fff;border:none;border-radius:12px;padding:5px 14px;font-size:.68rem;font-weight:600;cursor:pointer;box-shadow:0 3px 10px var(--pri-glow);}
+.rc-jb:active{transform:scale(.93);}
+.rc-wv{position:absolute;bottom:-18px;right:-18px;width:70px;height:70px;border-radius:50%;opacity:.04;pointer-events:none;}
+
+/* ===== 动态页面 ===== */
+.mt-h{padding:14px;display:flex;align-items:center;justify-content:space-between;}
+.mt-h h2{font-size:1.15rem;font-weight:800;}
+.mt-pb{background:linear-gradient(135deg,var(--pri),var(--pri-l));color:#fff;border:none;border-radius:16px;padding:6px 14px;font-size:.72rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:4px;box-shadow:0 3px 10px var(--pri-glow);}
+.mt-pb i{font-size:.7rem;}
+.mt-list{padding:0 14px;}
+.mt-card{background:var(--bg2);border-radius:var(--r);padding:14px;margin-bottom:8px;box-shadow:var(--shadow);}
+.mt-user{display:flex;align-items:center;gap:9px;margin-bottom:10px;}
+.mt-ua{width:38px;height:38px;border-radius:50%;object-fit:cover;background:linear-gradient(135deg,#FFE4E8,#FFF0E5);}
+.mt-ui{flex:1;}
+.mt-un{font-size:.82rem;font-weight:600;}
+.mt-ut{font-size:.62rem;color:var(--fg3);}
+.mt-fow{background:rgba(255,62,108,.07);color:var(--pri);border:none;border-radius:12px;padding:4px 12px;font-size:.66rem;font-weight:600;cursor:pointer;}
+.mt-txt{font-size:.8rem;line-height:1.6;margin-bottom:8px;color:var(--fg);}
+.mt-imgs{display:grid;gap:4px;margin-bottom:8px;}
+.mt-imgs.g1{grid-template-columns:1fr;max-height:200px;}
+.mt-imgs.g2{grid-template-columns:1fr 1fr;}
+.mt-imgs.g3{grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;}
+.mt-imgs.g3 .mi:first-child{grid-row:1/3;}
+.mt-img{width:100%;height:100%;object-fit:cover;border-radius:6px;background:var(--bg);}
+.mt-imgs.g1 .mt-img{max-height:200px;}
+.mt-imgs.g2 .mi{height:120px;}
+.mt-imgs.g3 .mi{height:80px;}
+.mt-imgs.g3 .mi:first-child{height:100%;}
+.mt-acts{display:flex;align-items:center;gap:0;border-top:1px solid var(--border);padding-top:8px;margin-top:4px;}
+.mt-act{flex:1;display:flex;align-items:center;justify-content:center;gap:4px;font-size:.72rem;color:var(--fg3);cursor:pointer;padding:4px 0;transition:color .2s;}
+.mt-act:hover{color:var(--pri);}
+.mt-act i{font-size:.85rem;}
+.mt-act.liked{color:var(--pri);}
+.mt-act.liked i{font-weight:900;}
+
+/* ===== 消息页面 ===== */
+.ms-h{padding:14px;display:flex;align-items:center;justify-content:space-between;}
+.ms-h h2{font-size:1.15rem;font-weight:800;}
+.ms-ts{display:flex;padding:0 14px 10px;gap:0;background:var(--bg2);border-radius:var(--rs);margin:0 14px;overflow:hidden;}
+.ms-t{flex:1;text-align:center;padding:7px 0;font-size:.76rem;font-weight:500;color:var(--fg2);cursor:pointer;transition:all .2s;position:relative;}
+.ms-t.on{color:var(--pri);font-weight:700;}
+.ms-t.on::after{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:18px;height:2.5px;border-radius:1px;background:var(--pri);}
+.ms-l{padding:4px 14px 0;}
+.ms-i{display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s;}
+.ms-i:last-child{border-bottom:none;}
+.ms-av{position:relative;flex-shrink:0;}
+.ms-a{width:48px;height:48px;border-radius:50%;object-fit:cover;background:linear-gradient(135deg,#FFE4E8,#FFF0E5);}
+.ms-ur{position:absolute;top:-2px;right:-2px;min-width:16px;height:16px;border-radius:8px;background:var(--pri);color:#fff;font-size:.52rem;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 3px;border:2px solid var(--bg);}
+.ms-ct{flex:1;min-width:0;}
+.ms-nm{font-size:.84rem;font-weight:600;}
+.ms-pv{font-size:.7rem;color:var(--fg3);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ms-tm{font-size:.6rem;color:var(--fg3);flex-shrink:0;align-self:flex-start;margin-top:2px;}
+
+/* ===== 聊天页面 ===== */
+.ch{position:fixed;inset:0;z-index:300;background:var(--bg2);transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;}
+.ch.on{transform:translateX(0);}
+.ch-h{display:flex;align-items:center;padding:10px 14px;gap:10px;border-bottom:1px solid var(--border);flex-shrink:0;}
+.ch-bk{width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;border-radius:50%;transition:background .2s;font-size:1rem;color:var(--fg2);}
+.ch-bk:hover{background:var(--bg);}
+.ch-ti{flex:1;text-align:center;}
+.ch-tn{font-size:.9rem;font-weight:600;}
+.ch-ts2{font-size:.62rem;color:var(--green);}
+.ch-mr{width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.95rem;color:var(--fg2);}
+.ch-msgs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;}
+.ch-row{display:flex;gap:8px;max-width:80%;}
+.ch-row.me{align-self:flex-end;flex-direction:row-reverse;}
+.ch-row .ch-av{width:32px;height:32px;border-radius:50%;object-fit:cover;flex-shrink:0;background:#FFE4E8;}
+.ch-bbl{padding:9px 13px;border-radius:14px;font-size:.8rem;line-height:1.5;position:relative;}
+.ch-row:not(.me) .ch-bbl{background:var(--bg);border-top-left-radius:4px;}
+.ch-row.me .ch-bbl{background:var(--pri);color:#fff;border-top-right-radius:4px;}
+.ch-time{text-align:center;font-size:.62rem;color:var(--fg3);padding:4px 0;}
+.ch-in{display:flex;align-items:center;gap:8px;padding:8px 14px calc(8px + var(--safe-b));border-top:1px solid var(--border);flex-shrink:0;background:var(--bg2);}
+.ch-ib{width:34px;height:34px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.15rem;color:var(--fg3);border-radius:50%;transition:background .2s;}
+.ch-ib:hover{background:var(--bg);}
+.ch-ipt{flex:1;background:var(--bg);border:none;border-radius:18px;padding:8px 14px;font-size:.82rem;outline:none;color:var(--fg);}
+.ch-ipt::placeholder{color:var(--fg3);}
+.ch-sb{background:linear-gradient(135deg,var(--pri),var(--pri-l));color:#fff;border:none;border-radius:16px;padding:7px 14px;font-size:.74rem;font-weight:600;cursor:pointer;transition:transform .15s;}
+.ch-sb:active{transform:scale(.93);}
+
+/* ===== 我的页面 ===== */
+.pf-h{background:linear-gradient(135deg,var(--pri),var(--pri-l));padding:28px 14px 36px;color:#fff;position:relative;overflow:hidden;}
+.pf-d1{position:absolute;top:-30px;right:-20px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.07);}
+.pf-d2{position:absolute;bottom:-40px;left:-20px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.05);}
+.pf-info{display:flex;align-items:center;gap:13px;position:relative;z-index:2;}
+.pf-av{width:62px;height:62px;border-radius:50%;border:3px solid rgba(255,255,255,.35);object-fit:cover;background:#FFE4E8;}
+.pf-dt{flex:1;}
+.pf-nm{font-size:1.05rem;font-weight:700;}
+.pf-id{font-size:.68rem;opacity:.75;margin-top:1px;}
+.pf-ed{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:14px;padding:5px 12px;font-size:.68rem;cursor:pointer;font-weight:500;transition:background .2s;}
+.pf-ed:hover{background:rgba(255,255,255,.3);}
+.pf-sts{display:flex;margin-top:18px;position:relative;z-index:2;}
+.pf-si{flex:1;text-align:center;}
+.pf-sn{font-size:1.1rem;font-weight:800;}
+.pf-sl{font-size:.64rem;opacity:.75;margin-top:1px;}
+.pf-wl{display:flex;margin:-16px 14px 0;background:var(--bg2);border-radius:var(--r);padding:14px;box-shadow:var(--shadow2);position:relative;z-index:3;}
+.pf-wi{flex:1;text-align:center;position:relative;}
+.pf-wi+.pf-wi::before{content:'';position:absolute;left:0;top:15%;height:70%;width:1px;background:var(--border);}
+.pf-wn{font-size:1.05rem;font-weight:700;color:var(--pri);}
+.pf-wl2{font-size:.64rem;color:var(--fg3);margin-top:1px;}
+.pf-mn{padding:14px;}
+.pf-grp{background:var(--bg2);border-radius:var(--r);margin-bottom:8px;overflow:hidden;box-shadow:var(--shadow);}
+.pf-mi{display:flex;align-items:center;gap:11px;padding:13px 14px;cursor:pointer;transition:background .15s;}
+.pf-mi:active{background:rgba(0,0,0,.02);}
+.pf-mi+.pf-mi{border-top:1px solid var(--border);}
+.pf-mic{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1rem;}
+.pf-mtx{flex:1;font-size:.82rem;font-weight:500;}
+.pf-mar{color:var(--fg3);font-size:.75rem;}
+.pf-mbg{background:var(--pri);color:#fff;font-size:.5rem;font-weight:700;padding:1px 5px;border-radius:5px;margin-right:4px;}
+
+/* ===== 底部导航 ===== */
+.btb{position:fixed;bottom:0;left:0;right:0;z-index:200;background:var(--bg2);border-top:1px solid var(--border);display:flex;padding:3px 0 calc(5px + var(--safe-b));}
+.bti{flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;padding:3px 0;cursor:pointer;transition:transform .12s;position:relative;}
+.bti:active{transform:scale(.9);}
+.bti i{font-size:1.15rem;transition:color .2s;color:var(--fg3);}
+.bti span{font-size:.58rem;transition:color .2s;color:var(--fg3);}
+.bti.on i{color:var(--pri);}
+.bti.on span{color:var(--pri);font-weight:600;}
+.btc{flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;padding:0;cursor:pointer;margin-top:-16px;}
+.btc-b{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--pri),var(--pri-l));display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px var(--pri-glow);transition:transform .2s;}
+.btc:active .btc-b{transform:scale(.88);}
+.btc-b i{font-size:1.15rem;color:#fff;}
+.btc span{font-size:.58rem;color:var(--fg3);margin-top:1px;}
+.bti .btd{position:absolute;top:1px;right:calc(50% - 14px);width:6px;height:6px;border-radius:50%;background:var(--pri);}
+
+/* ===== 详情弹窗 ===== */
+.dov{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;}
+.dov.on{opacity:1;pointer-events:auto;}
+.dsh{background:var(--bg2);border-radius:18px 18px 0 0;width:100%;max-width:500px;max-height:85vh;overflow-y:auto;transform:translateY(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);}
+.dov.on .dsh{transform:translateY(0);}
+.dsh-hd{width:34px;height:4px;border-radius:2px;background:#ddd;margin:8px auto 0;}
+.dsh-pf{padding:18px;text-align:center;position:relative;}
+.dsh-av{width:76px;height:76px;border-radius:50%;object-fit:cover;margin:0 auto;border:3px solid rgba(255,62,108,.15);background:#FFE4E8;}
+.dsh-nm{font-size:1.05rem;font-weight:700;margin-top:8px;}
+.dsh-ds{font-size:.74rem;color:var(--fg2);margin-top:3px;line-height:1.5;}
+.dsh-sts{display:flex;justify-content:center;gap:22px;margin-top:12px;}
+.dsh-st{text-align:center;}
+.dsh-sv{font-size:.95rem;font-weight:700;color:var(--pri);}
+.dsh-sl{font-size:.6rem;color:var(--fg3);}
+.dsh-tags{display:flex;justify-content:center;gap:5px;margin-top:10px;flex-wrap:wrap;}
+.dsh-tag{font-size:.65rem;padding:3px 8px;border-radius:4px;background:rgba(255,62,108,.06);color:var(--pri);font-weight:500;}
+.dsh-phs{display:flex;gap:5px;padding:0 18px 14px;overflow-x:auto;}
+.dsh-ph{flex-shrink:0;width:95px;height:120px;border-radius:8px;object-fit:cover;background:linear-gradient(135deg,#FFE4E8,#E8D5FF);}
+.dsh-acts{display:flex;gap:8px;padding:0 18px 14px;}
+.dsh-ab{flex:1;padding:11px;border-radius:23px;font-size:.84rem;font-weight:600;cursor:pointer;border:none;text-align:center;transition:transform .15s;}
+.dsh-ab:active{transform:scale(.96);}
+.dsh-ac{background:var(--bg);color:var(--fg);border:1.5px solid var(--border2);}
+.dsh-ao{background:linear-gradient(135deg,var(--pri),var(--pri-l));color:#fff;box-shadow:0 4px 14px var(--pri-glow);}
+.dsh-gf{padding:0 18px 20px;}
+.dsh-gf h4{font-size:.8rem;font-weight:600;margin-bottom:8px;}
+.dsh-gls{display:flex;gap:10px;overflow-x:auto;}
+.dsh-gl{text-align:center;cursor:pointer;transition:transform .15s;flex-shrink:0;}
+.dsh-gl:active{transform:scale(.88);}
+.dsh-gi{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.35rem;margin:0 auto;}
+.dsh-gn{font-size:.56rem;color:var(--fg3);margin-top:2px;}
+.dsh-gp{font-size:.54rem;color:var(--pri);font-weight:600;}
+
+/* ===== 下单弹窗 ===== */
+.odov{position:fixed;inset:0;z-index:510;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;}
+.odov.on{opacity:1;pointer-events:auto;}
+.odsh{background:var(--bg2);border-radius:18px 18px 0 0;width:100%;max-width:500px;max-height:80vh;overflow-y:auto;transform:translateY(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);}
+.odov.on .odsh{transform:translateY(0);}
+.od-t{padding:18px;border-bottom:1px solid var(--border);}
+.od-t h3{font-size:1rem;font-weight:700;text-align:center;margin-bottom:14px;}
+.od-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.od-opt{padding:12px;border-radius:var(--rs);border:1.5px solid var(--border);cursor:pointer;transition:all .2s;text-align:center;}
+.od-opt.on{border-color:var(--pri);background:rgba(255,62,108,.04);}
+.od-opt h5{font-size:.82rem;font-weight:600;}
+.od-opt p{font-size:.66rem;color:var(--fg3);margin-top:2px;}
+.od-opt .od-pr{font-size:.88rem;font-weight:700;color:var(--pri);margin-top:4px;}
+.od-tl{padding:14px 18px;border-bottom:1px solid var(--border);}
+.od-tl h4{font-size:.84rem;font-weight:600;margin-bottom:8px;}
+.od-tms{display:flex;gap:6px;}
+.od-tm{padding:6px 14px;border-radius:16px;border:1.5px solid var(--border);font-size:.72rem;cursor:pointer;transition:all .2s;font-weight:500;color:var(--fg2);}
+.od-tm.on{border-color:var(--pri);color:var(--pri);background:rgba(255,62,108,.04);font-weight:600;}
+.od-note{padding:14px 18px;border-bottom:1px solid var(--border);}
+.od-note h4{font-size:.84rem;font-weight:600;margin-bottom:6px;}
+.od-note textarea{width:100%;height:60px;border:1.5px solid var(--border);border-radius:var(--rs);padding:8px;font-size:.78rem;resize:none;outline:none;color:var(--fg);background:var(--bg3);}
+.od-note textarea:focus{border-color:var(--pri);}
+.od-ft{padding:14px 18px 24px;display:flex;align-items:center;justify-content:space-between;}
+.od-total{font-size:.78rem;color:var(--fg2);}
+.od-total b{font-size:1.1rem;color:var(--pri);font-weight:800;}
+.od-sb{background:linear-gradient(135deg,var(--pri),var(--pri-l));color:#fff;border:none;border-radius:22px;padding:11px 28px;font-size:.88rem;font-weight:600;cursor:pointer;box-shadow:0 4px 14px var(--pri-glow);transition:transform .15s;}
+.od-sb:active{transform:scale(.95);}
+
+/* ===== 呼叫界面 ===== */
+.cov{position:fixed;inset:0;z-index:600;background:linear-gradient(180deg,#1A1024,#2D1530);display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .4s;}
+.cov.on{opacity:1;pointer-events:auto;}
+.c-av{width:96px;height:96px;border-radius:50%;object-fit:cover;border:4px solid rgba(255,62,108,.25);background:#FFE4E8;animation:cp 2s ease-in-out infinite;}
+@keyframes cp{0%,100%{box-shadow:0 0 0 0 rgba(255,62,108,.35);}50%{box-shadow:0 0 0 20px rgba(255,62,108,0);}}
+.c-nm{color:#fff;font-size:1.05rem;font-weight:600;margin-top:14px;}
+.c-st{color:rgba(255,255,255,.55);font-size:.78rem;margin-top:4px;}
+.c-wv{display:flex;align-items:center;gap:3px;margin-top:28px;height:36px;}
+.c-wb{width:3px;border-radius:2px;background:var(--pri);animation:cwa 1.2s ease-in-out infinite;}
+@keyframes cwa{0%,100%{height:6px;opacity:.35;}50%{height:28px;opacity:1;}}
+.c-end{margin-top:45px;width:56px;height:56px;border-radius:50%;background:var(--pri);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 18px var(--pri-glow);transition:transform .15s;}
+.c-end:active{transform:scale(.88);}
+.c-end i{font-size:1.3rem;color:#fff;}
+
+/* ===== 发布动态弹窗 ===== */
+.pbov{position:fixed;inset:0;z-index:520;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;}
+.pbov.on{opacity:1;pointer-events:auto;}
+.pbsh{background:var(--bg2);border-radius:18px 18px 0 0;width:100%;max-width:500px;max-height:85vh;overflow-y:auto;transform:translateY(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);}
+.pbov.on .pbsh{transform:translateY(0);}
+.pb-hd{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border);}
+.pb-hd h3{font-size:.95rem;font-weight:700;}
+.pb-hd .pb-cl{font-size:.78rem;color:var(--fg3);cursor:pointer;}
+.pb-hd .pb-pb{background:linear-gradient(135deg,var(--pri),var(--pri-l));color:#fff;border:none;border-radius:14px;padding:5px 16px;font-size:.74rem;font-weight:600;cursor:pointer;}
+.pb-ta{padding:14px 18px;}
+.pb-ta textarea{width:100%;height:120px;border:none;outline:none;font-size:.86rem;resize:none;color:var(--fg);background:transparent;line-height:1.6;}
+.pb-ta textarea::placeholder{color:var(--fg3);}
+.pb-ims{display:flex;gap:8px;padding:0 18px 14px;overflow-x:auto;}
+.pb-im{width:80px;height:80px;border-radius:8px;object-fit:cover;flex-shrink:0;background:linear-gradient(135deg,#FFE4E8,#E8D5FF);}
+.pb-add{width:80px;height:80px;border-radius:8px;border:1.5px dashed var(--border2);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:border-color .2s;}
+.pb-add:hover{border-color:var(--pri);}
+.pb-add i{font-size:1.5rem;color:var(--fg3);}
+.pb-opts{display:flex;gap:0;padding:10px 18px 20px;border-top:1px solid var(--border);}
+.pb-opt{flex:1;display:flex;align-items:center;justify-content:center;gap:4px;font-size:.74rem;color:var(--fg2);cursor:pointer;padding:8px 0;}
+.pb-opt i{font-size:.9rem;color:var(--pri);}
+
+/* ===== 搜索页 ===== */
+.srov{position:fixed;inset:0;z-index:400;background:var(--bg2);transform:translateY(-100%);transition:transform .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;}
+.srov.on{transform:translateY(0);}
+.sr-h{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--border);}
+.sr-bk{width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;color:var(--fg2);}
+.sr-ipt{flex:1;background:var(--bg);border:none;border-radius:18px;padding:8px 14px;font-size:.82rem;outline:none;color:var(--fg);}
+.sr-ipt::placeholder{color:var(--fg3);}
+.sr-sb{background:none;border:none;color:var(--pri);font-size:.82rem;font-weight:600;cursor:pointer;}
+.sr-hot{padding:18px;}
+.sr-hot h4{font-size:.88rem;font-weight:600;margin-bottom:10px;}
+.sr-tags{display:flex;flex-wrap:wrap;gap:6px;}
+.sr-tag{padding:6px 12px;border-radius:14px;background:var(--bg);font-size:.74rem;color:var(--fg2);cursor:pointer;transition:all .2s;}
+.sr-tag:hover{background:rgba(255,62,108,.06);color:var(--pri);}
+.sr-hist{padding:0 18px;}
+.sr-hist h4{font-size:.88rem;font-weight:600;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;}
+.sr-hist h4 span{font-size:.72rem;color:var(--fg3);font-weight:400;cursor:pointer;}
+.sr-hi{padding:10px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;cursor:pointer;}
+.sr-hi i{color:var(--fg3);font-size:.8rem;}
+.sr-hi span{font-size:.8rem;color:var(--fg2);}
+
+/* ===== 充值弹窗 ===== */
+.rgov{position:fixed;inset:0;z-index:530;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;}
+.rgov.on{opacity:1;pointer-events:auto;}
+.rgsh{background:var(--bg2);border-radius:18px 18px 0 0;width:100%;max-width:500px;transform:translateY(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);padding-bottom:calc(20px + var(--safe-b));}
+.rgov.on .rgsh{transform:translateY(0);}
+.rg-hd{text-align:center;padding:14px;border-bottom:1px solid var(--border);position:relative;}
+.rg-hd h3{font-size:.95rem;font-weight:700;}
+.rg-cl{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:1.1rem;color:var(--fg3);cursor:pointer;}
+.rg-opts{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding:14px;}
+.rg-opt{padding:14px 8px;border-radius:var(--rs);border:1.5px solid var(--border);text-align:center;cursor:pointer;transition:all .2s;}
+.rg-opt.on{border-color:var(--pri);background:rgba(255,62,108,.04);}
+.rg-opt .rg-am{font-size:1rem;font-weight:700;}
+.rg-opt .rg-bn{font-size:.6rem;color:var(--pri);margin-top:2px;}
+.rg-opt .rg-pr{font-size:.66rem;color:var(--fg3);margin-top:1px;}
+.rg-ft{padding:0 14px;}
+.rg-sb{width:100%;background:linear-gradient(135deg,var(--pri),var(--pri-l));color:#fff;border:none;border-radius:22px;padding:12px;font-size:.9rem;font-weight:600;cursor:pointer;box-shadow:0 4px 14px var(--pri-glow);}
+
+/* ===== Toast ===== */
+.tst{position:fixed;top:70px;left:50%;transform:translateX(-50%) translateY(-16px);background:rgba(17,24,39,.88);backdrop-filter:blur(10px);color:#fff;padding:9px 22px;border-radius:20px;font-size:.78rem;z-index:9999;opacity:0;pointer-events:none;transition:all .3s cubic-bezier(.4,0,.2,1);}
+.tst.on{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* ===== 动画 ===== */
+.fu{opacity:0;transform:translateY(10px);animation:fu .4s ease forwards;}
+@keyframes fu{to{opacity:1;transform:translateY(0);}}
+.d1{animation-delay:.04s}.d2{animation-delay:.08s}.d3{animation-delay:.12s}.d4{animation-delay:.16s}.d5{animation-delay:.2s}.d6{animation-delay:.24s}
+
+/* 浮动爱心 */
+.fhs{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.fh{position:absolute;opacity:0;animation:fhf 7s ease-in infinite;}
+@keyframes fhf{0%{opacity:0;transform:translateY(100vh) scale(.5) rotate(0deg);}10%{opacity:.1;}90%{opacity:.03;}100%{opacity:0;transform:translateY(-10vh) scale(1) rotate(25deg);}}
+
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;}}
+@media(min-width:500px){.mc,.gn,.ct,.btb{max-width:500px;margin:0 auto;}.dsh,.odsh,.pbsh,.rgsh{max-width:500px;}}
+</style>
+</head>
+<body>
+
+<!-- 浮动爱心 -->
+<div class="fhs" id="fhs" aria-hidden="true"></div>
+<!-- Toast -->
+<div class="tst" id="tst"></div>
+
+<!-- 顶部导航 -->
+<nav class="gn" id="gn">
+  <div class="gn-in">
+    <div class="gn-loc" onclick="toast('切换城市')"><span>全国</span><i class="fas fa-chevron-down"></i></div>
+    <div class="gn-search" onclick="openSearch()"><i class="fas fa-search"></i><span>搜索陪玩师、游戏</span></div>
+    <div class="gn-acts">
+      <div class="gn-btn" onclick="openRecharge()" aria-label="充值"><i class="fas fa-coins" style="color:var(--gold)"></i></div>
+      <div class="gn-btn" onclick="switchTab(3)" aria-label="消息"><i class="fas fa-bell"></i><div class="gn-dot">3</div></div>
+    </div>
+  </div>
+</nav>
+
+<!-- 分类标签 -->
+<div class="ct" id="ct"><div class="ct-in" id="ctIn"></div></div>
+
+<!-- 主内容 -->
+<main class="mc" id="mc">
+  <!-- 首页 -->
+  <div class="pg on" id="pg0"></div>
+  <!-- 派对 -->
+  <div class="pg" id="pg1"></div>
+  <!-- 动态 -->
+  <div class="pg" id="pg2"></div>
+  <!-- 消息 -->
+  <div class="pg" id="pg3"></div>
+  <!-- 我的 -->
+  <div class="pg" id="pg4"></div>
+</main>
+
+<!-- 底部导航 -->
+<nav class="btb" id="btb" aria-label="主导航"></nav>
+
+<!-- 详情弹窗 -->
+<div class="dov" id="dov" role="dialog" aria-modal="true"><div class="dsh" id="dsh"></div></div>
+<!-- 下单弹窗 -->
+<div class="odov" id="odov" role="dialog" aria-modal="true"><div class="odsh" id="odsh"></div></div>
+<!-- 呼叫界面 -->
+<div class="cov" id="cov"></div>
+<!-- 发布动态弹窗 -->
+<div class="pbov" id="pbov" role="dialog" aria-modal="true"><div class="pbsh" id="pbsh"></div></div>
+<!-- 充值弹窗 -->
+<div class="rgov" id="rgov" role="dialog" aria-modal="true"><div class="rgsh" id="rgsh"></div></div>
+<!-- 搜索页 -->
+<div class="srov" id="srov" role="dialog" aria-modal="true"></div>
+<!-- 聊天页 -->
+<div class="ch" id="chPage"></div>
+
+<script>
+/* ========================================
+   数据层 - 比心APP核心数据
+   ======================================== */
+
+var D = {
+  cats: ['推荐','王者荣耀','和平精英','英雄联盟','原神','语音交友','唱歌','陪聊','第五人格','永劫无间','蛋仔派对','金铲铲'],
+  players: [
+    {id:1,nm:'甜甜酱',gd:'f',age:22,lv:38,ds:'国服貂蝉 陪玩陪聊陪你开心~',tags:['王者荣耀','语音','上分'],pr:30,un:'局',ol:true,sc:4.9,od:2860,fs:1.2,rk:1,ph:3},
+    {id:2,nm:'夜色',gd:'m',age:25,lv:45,ds:'和平精英四排车神 带你吃鸡',tags:['和平精英','四排','吃鸡'],pr:25,un:'局',ol:true,sc:4.8,od:1920,fs:0.8,rk:2,ph:2},
+    {id:3,nm:'小鹿乱撞',gd:'f',age:20,lv:29,ds:'甜美声线 治愈你的每一个夜晚',tags:['语音交友','唱歌','治愈'],pr:20,un:'时',ol:true,sc:4.9,od:3560,fs:2.1,rk:3,ph:4},
+    {id:4,nm:'阿离',gd:'f',age:23,lv:41,ds:'峡谷最强辅助 温柔指挥',tags:['王者荣耀','辅助','上分'],pr:35,un:'局',ol:false,sc:4.7,od:1280,fs:0.6,rk:0,ph:2},
+    {id:5,nm:'星辰',gd:'m',age:27,lv:50,ds:'英雄联盟钻石代练 专业中单',tags:['英雄联盟','中单','排位'],pr:40,un:'局',ol:true,sc:4.8,od:960,fs:0.5,rk:0,ph:1},
+    {id:6,nm:'软糖',gd:'f',age:21,lv:33,ds:'原神代肝 日常委托深渊全包',tags:['原神','代肝','深渊'],pr:15,un:'时',ol:true,sc:4.9,od:4120,fs:3.2,rk:4,ph:5},
+    {id:7,nm:'阿墨',gd:'m',age:24,lv:36,ds:'第五人格屠皇 殿堂局带飞',tags:['第五人格','屠皇','排位'],pr:30,un:'局',ol:false,sc:4.6,od:780,fs:0.3,rk:0,ph:1},
+    {id:8,nm:'奶盖',gd:'f',age:19,lv:25,ds:'唱歌超好听 给你专属演唱会',tags:['唱歌','点唱','语音'],pr:25,un:'时',ol:true,sc:5.0,od:5200,fs:4.5,rk:5,ph:6},
+    {id:9,nm:'烈风',gd:'m',age:26,lv:42,ds:'永劫无间顶级高手 教学带飞',tags:['永劫无间','教学','排位'],pr:35,un:'局',ol:true,sc:4.7,od:1100,fs:0.4,rk:0,ph:2},
+    {id:10,nm:'桃夭',gd:'f',age:22,lv:35,ds:'温柔陪聊 解忧树洞 深夜陪伴',tags:['陪聊','树洞','深夜'],pr:20,un:'时',ol:true,sc:4.8,od:2340,fs:1.8,rk:0,ph:3},
+    {id:11,nm:'小白兔',gd:'f',age:20,lv:28,ds:'蛋仔派对带跑 分享快乐',tags:['蛋仔派对','跑图','娱乐'],pr:10,un:'局',ol:true,sc:4.9,od:1800,fs:0.9,rk:0,ph:2},
+    {id:12,nm:'龙少',gd:'m',age:28,lv:48,ds:'金铲铲之战王者 教你运营',tags:['金铲铲','运营','教学'],pr:30,un:'局',ol:false,sc:4.6,od:620,fs:0.2,rk:0,ph:1}
+  ],
+  rooms: [
+    {nm:'甜蜜晚安屋',ht:'甜甜酱',ct:8,mx:10,tags:['聊天','唱歌'],lv:true,cl:'#FF3E6C'},
+    {nm:'王者荣耀五排上分',ht:'星辰',ct:4,mx:5,tags:['王者荣耀','上分'],lv:true,cl:'#3B82F6'},
+    {nm:'深夜树洞FM',ht:'桃夭',ct:12,mx:20,tags:['陪聊','治愈'],lv:true,cl:'#9333EA'},
+    {nm:'唱歌连麦PK',ht:'奶盖',ct:6,mx:8,tags:['唱歌','PK'],lv:false,cl:'#FF8C42'},
+    {nm:'和平精英四排',ht:'夜色',ct:3,mx:4,tags:['吃鸡','四排'],lv:true,cl:'#10B981'},
+    {nm:'原神副本互助',ht:'软糖',ct:5,mx:8,tags:['原神','互助'],lv:true,cl:'#FFB800'}
+  ],
+  moments: [
+    {id:1,nm:'甜甜酱',tm:'3分钟前',txt:'今天又被夸声音好听啦～开心！晚上继续等你们来约哦',imgs:2,fw:false,lk:128,cm:32,sh:15},
+    {id:2,nm:'夜色',tm:'15分钟前',txt:'四排吃鸡12连胜！有没有一起的？',imgs:1,fw:false,lk:86,cm:18,sh:7},
+    {id:3,nm:'奶盖',tm:'1小时前',txt:'新学了《起风了》，等下来听～',imgs:3,fw:true,lk:256,cm:64,sh:42},
+    {id:4,nm:'软糖',tm:'2小时前',txt:'深渊12层满星！有需要代肝的找我',imgs:1,fw:false,lk:64,cm:12,sh:5},
+    {id:5,nm:'桃夭',tm:'3小时前',txt:'深夜的树洞，永远为你敞开。不开心就来找我聊聊吧',imgs:0,fw:false,lk:192,cm:48,sh:28}
+  ],
+  msgs: [
+    {nm:'甜甜酱',pv:'好的，晚上8点见~',tm:'刚刚',ur:2,tp:'chat'},
+    {nm:'系统通知',pv:'你的订单已被接单，请查看详情',tm:'5分钟前',ur:1,tp:'sys'},
+    {nm:'夜色',pv:'今天还打吗？',tm:'30分钟前',ur:0,tp:'chat'},
+    {nm:'小鹿乱撞',pv:'[语音消息] 0:12',tm:'1小时前',ur:0,tp:'chat'},
+    {nm:'奶盖',pv:'谢谢你送的礼物呀~',tm:'2小时前',ur:0,tp:'chat'},
+    {nm:'桃夭',pv:'明天也在的，随时找我',tm:'昨天',ur:0,tp:'chat'},
+    {nm:'星辰',pv:'战绩截图发你看看',tm:'昨天',ur:0,tp:'chat'}
+  ],
+  gifts: [
+    {nm:'小心心',pr:1,ic:'fa-heart',bg:'#FFE4E8',cl:'#FF3E6C'},
+    {nm:'玫瑰花',pr:5,ic:'fa-seedling',bg:'#FFF0E5',cl:'#FF8C42'},
+    {nm:'火箭',pr:50,ic:'fa-rocket',bg:'#E8F4FF',cl:'#3B82F6'},
+    {nm:'皇冠',pr:100,ic:'fa-crown',bg:'#FFF8E1',cl:'#FFB800'},
+    {nm:'城堡',pr:520,ic:'fa-chess-rook',bg:'#F3E8FF',cl:'#9333EA'},
+    {nm:'星球',pr:1314,ic:'fa-globe',bg:'#E8FFF3',cl:'#10B981'}
+  ],
+  chatMsgs: [
+    {frm:'other',txt:'嗨，我在呢～',tm:'20:30'},
+    {frm:'me',txt:'你好呀，想约一局王者',tm:'20:31'},
+    {frm:'other',txt:'好呀！我貂蝉超厉害的',tm:'20:31'},
+    {frm:'me',txt:'太好了，我辅助你',tm:'20:32'},
+    {frm:'other',txt:'嗯嗯，先试音一下？',tm:'20:32'}
+  ],
+  hotSearch: ['王者荣耀陪玩','和平精英上分','语音连麦','唱歌点唱','英雄联盟代练','原神代肝','深夜陪聊','蛋仔派对'],
+  searchHist: ['王者荣耀上分','语音交友','甜甜酱'],
+  rechargeOpts: [
+    {am:6,bn:'',pr:'6元'},
+    {am:30,bn:'送3币',pr:'30元'},
+    {am:68,bn:'送8币',pr:'68元'},
+    {am:128,bn:'送18币',pr:'128元'},
+    {am:328,bn:'送58币',pr:'328元'},
+    {am:648,bn:'送128币',pr:'648元'}
+  ]
+};
+
+/* ========================================
+   工具函数
+   ======================================== */
+var _tt = null;
+function toast(m){var t=document.getElementById('tst');t.textContent=m;t.classList.add('on');clearTimeout(_tt);_tt=setTimeout(function(){t.classList.remove('on');},2000);}
+
+function $(s){return document.querySelector(s);}
+function $$(s){return document.querySelectorAll(s);}
+
+// 生成图片URL
+function imgURL(seed,w,h){return 'https://picsum.photos/seed/'+seed+'/'+w+'/'+h+'.jpg';}
+
+/* ========================================
+   渲染 - 顶部/底部/分类
+   ======================================== */
+function renderCats(){
+  var h='';
+  D.cats.forEach(function(c,i){h+='<div class="ct-t'+(i===0?' on':'')+'" onclick="selCat(this,\''+c+'\')">'+c+'</div>';});
+  $('#ctIn').innerHTML=h;
+}
+
+function renderBottomNav(){
+  var items=[
+    {ic:'fa-home',lb:'首页'},
+    {ic:'fa-headset',lb:'派对'},
+    null,
+    {ic:'fa-comment-dots',lb:'消息',dot:true},
+    {ic:'fa-user',lb:'我的'}
+  ];
+  var h='';
+  items.forEach(function(it,i){
+    if(!it){
+      h+='<div class="btc" onclick="openPublish()" role="button" tabindex="0" aria-label="接单"><div class="btc-b"><i class="fas fa-plus"></i></div><span>接单</span></div>';
+    } else {
+      h+='<div class="bti'+(i===0?' on':'')+'" onclick="switchTab('+i+')" role="button" tabindex="0" aria-label="'+it.lb+'"><i class="fas '+it.ic+'"></i><span>'+it.lb+'</span>'+(it.dot?'<div class="btd"></div>':'')+'</div>';
+    }
+  });
+  $('#btb').innerHTML=h;
+}
+
+/* ========================================
+   渲染 - 首页
+   ======================================== */
+function renderHome(){
+  var h='';
+
+  // 轮播
+  h+='<div class="bw fu"><div class="bt" id="bTrack">';
+  var slides=[
+    {cls:'bs1',t:'新人首单立减10元',d:'千名大神在线，等你来约'},
+    {cls:'bs2',t:'语音派对上线',d:'连麦K歌，遇见有趣的灵魂'},
+    {cls:'bs3',t:'赛季冲分季',d:'国服大神带你上分如喝水'}
+  ];
+  slides.forEach(function(s){
+    h+='<div class="bs '+s.cls+'"><div class="bbg"></div><div class="bcr"></div><div class="btx"><h3>'+s.t+'</h3><p>'+s.d+'</p><span class="bb" onclick="toast(\'活动详情\')">立即查看</span></div></div>';
+  });
+  h+='</div><div class="bdots" id="bDots">';
+  slides.forEach(function(_,i){h+='<div class="bd'+(i===0?' on':'')+'"></div>';});
+  h+='</div></div>';
+
+  // 快捷入口
+  var qes=[
+    {nm:'游戏陪玩',ic:'fa-gamepad',bg:'rgba(255,62,108,.08)',cl:'#FF3E6C',hot:true},
+    {nm:'语音交友',ic:'fa-microphone',bg:'rgba(147,51,234,.08)',cl:'#9333EA',hot:false},
+    {nm:'唱歌电台',ic:'fa-music',bg:'rgba(255,140,66,.08)',cl:'#FF8C42',hot:false},
+    {nm:'代练上分',ic:'fa-trophy',bg:'rgba(59,130,246,.08)',cl:'#3B82F6',hot:true},
+    {nm:'聊天树洞',ic:'fa-moon',bg:'rgba(20,184,166,.08)',cl:'#14B8A6',hot:false}
+  ];
+  h+='<div class="qe fu d2">';
+  qes.forEach(function(q){
+    h+='<div class="qe-i" onclick="toast(\''+q.nm+'\')"><div class="qe-c" style="background:'+q.bg+';color:'+q.cl+'"><i class="fas '+q.ic+'"></i>'+(q.hot?'<div class="qe-h">HOT</div>':'')+'</div><span>'+q.nm+'</span></div>';
+  });
+  h+='</div>';
+
+  // 在线大神
+  h+='<div class="gsw"><div class="st fu d3"><h3><span class="si"></span>在线大神</h3><span class="sm" onclick="toast(\'查看全部大神\')">更多 <i class="fas fa-chevron-right"></i></span></div><div class="gs fu d3" id="godScroll">';
+  D.players.filter(function(p){return p.rk>0;}).sort(function(a,b){return a.rk-b.rk;}).forEach(function(p){
+    h+='<div class="gc" onclick="openDetail('+p.id+')"><div class="gc-aw"><img class="gc-a" src="'+imgURL(p.nm,220,220)+'" alt="'+p.nm+'"><div class="gc-ol"></div>'+(p.rk<=3?'<div class="gc-rk">TOP'+p.rk+'</div>':'')+'</div><div class="gc-i"><div class="gc-n">'+p.nm+'</div><div class="gc-ts"><span class="gc-t gtg">'+p.tags[0]+'</span><span class="gc-t gtp">'+p.pr+'/'+p.un+'</span></div></div></div>';
+  });
+  h+='</div></div>';
+
+  // 推荐陪玩
+  h+='<div class="st fu d5"><h3><span class="si"></span>推荐陪玩</h3><span class="sm" onclick="toast(\'查看全部\')">更多 <i class="fas fa-chevron-right"></i></span></div><div class="pl fu d5" id="pList">';
+  D.players.forEach(function(p){
+    h+=renderPlayerCard(p);
+  });
+  h+='</div>';
+
+  $('#pg0').innerHTML=h;
+}
+
+function renderPlayerCard(p){
+  var h='<div class="pc" onclick="openDetail('+p.id+')"><div class="pc-aw"><img class="pc-a" src="'+imgURL(p.nm+'2',112,112)+'" alt="'+p.nm+'"><div class="pc-ol" style="background:'+(p.ol?'var(--green)':'var(--fg3)')+'"></div></div><div class="pc-i"><div class="pc-nr"><span class="pc-n">'+p.nm+'</span><span class="pc-g '+(p.gd==='f'?'f':'m')+'"><i class="fas '+(p.gd==='f'?'fa-venus':'fa-mars')+'"></i></span><span class="pc-lv">Lv.'+p.lv+'</span></div><div class="pc-d">'+p.ds+'</div><div class="pc-ts">';
+  p.tags.forEach(function(t,i){h+='<span class="pc-t'+(i===0?' h':'')+'">'+t+'</span>';});
+  h+='</div></div><div class="pc-rt"><div class="pc-p">&yen;'+p.pr+'<em>/'+p.un+'</em></div><button class="pc-ob" onclick="event.stopPropagation();openOrder('+p.id+')">下单</button></div></div>';
+  return h;
+}
+
+/* ========================================
+   渲染 - 派对
+   ======================================== */
+function renderParty(){
+  var pcl=['全部','聊天','唱歌','游戏','交友','PK'];
+  var h='<div class="py-h fu"><h2>语音派对</h2><div class="py-f" onclick="toast(\'筛选\')"><i class="fas fa-sliders-h"></i> 筛选</div></div>';
+  h+='<div class="py-cs fu d1">';
+  pcl.forEach(function(c,i){h+='<div class="py-c'+(i===0?' on':'')+'" onclick="selPCat(this)">'+c+'</div>';});
+  h+='</div><div class="rl fu d2">';
+  D.rooms.forEach(function(r){
+    var avh='';
+    for(var i=0;i<Math.min(r.ct,3);i++){avh+='<img src="'+imgURL('room'+r.nm+i,56,56)+'" alt="">';}
+    if(r.ct>3){avh+='<div class="rc-am">+'+(r.ct-3)+'</div>';}
+    h+='<div class="rc" onclick="toast(\'进入房间: '+r.nm+'\')"><div class="rc-h"><img class="rc-cv" src="'+imgURL('cover'+r.nm,88,88)+'" alt=""><div class="rc-i"><div class="rc-n">'+r.nm+'</div><div class="rc-ht">房主: '+r.ht+'</div></div>'+(r.lv?'<div class="rc-lv"><div class="ld"></div>直播中</div>':'')+'</div><div class="rc-b"><div class="rc-ts">';
+    r.tags.forEach(function(t){h+='<span class="rc-t">'+t+'</span>';});
+    h+='</div><div class="rc-avs">'+avh+'</div><button class="rc-jb" onclick="event.stopPropagation();toast(\'加入: '+r.nm+'\')">加入</button></div><div class="rc-wv" style="background:'+r.cl+'"></div></div>';
+  });
+  h+='</div>';
+  $('#pg1').innerHTML=h;
+}
+
+/* ========================================
+   渲染 - 动态
+   ======================================== */
+function renderMoments(){
+  var h='<div class="mt-h fu"><h2>动态圈子</h2><button class="mt-pb" onclick="openPublishMoment()"><i class="fas fa-plus"></i> 发布</button></div><div class="mt-list fu d1">';
+  D.moments.forEach(function(m){
+    var p=D.players.find(function(pl){return pl.nm===m.nm;})||{id:0,gd:'f'};
+    h+='<div class="mt-card"><div class="mt-user"><img class="mt-ua" src="'+imgURL(m.nm,76,76)+'" alt=""><div class="mt-ui"><div class="mt-un">'+m.nm+'</div><div class="mt-ut">'+m.tm+'</div></div><button class="mt-fow" onclick="followMoment(this,'+m.id+')">'+(m.fw?'已关注':'关注')+'</button></div>';
+    h+='<div class="mt-txt">'+m.txt+'</div>';
+    if(m.imgs>0){
+      var gc=m.imgs===1?'g1':m.imgs===2?'g2':'g3';
+      h+='<div class="mt-imgs '+gc+'">';
+      for(var i=0;i<m.imgs;i++){h+='<div class="mi"><img class="mt-img" src="'+imgURL(m.nm+'mt'+m.id+'_'+i,200,200)+'" alt=""></div>';}
+      h+='</div>';
+    }
+    h+='<div class="mt-acts"><div class="mt-act" onclick="likeMoment(this,'+m.id+')"><i class="far fa-heart"></i> <span>'+m.lk+'</span></div><div class="mt-act" onclick="toast(\'评论\')"><i class="far fa-comment"></i> '+m.cm+'</div><div class="mt-act" onclick="toast(\'分享\')"><i class="fas fa-share"></i> '+m.sh+'</div></div></div>';
+  });
+  h+='</div>';
+  $('#pg2').innerHTML=h;
+}
+
+/* ========================================
+   渲染 - 消息
+   ======================================== */
+function renderMessages(){
+  var tabs=['聊天','系统','互动'];
+  var h='<div class="ms-h fu"><h2>消息</h2></div><div class="ms-ts fu d1">';
+  tabs.forEach(function(t,i){h+='<div class="ms-t'+(i===0?' on':'')+'" onclick="selMTab(this)">'+t+'</div>';});
+  h+='</div><div class="ms-l fu d2">';
+  D.msgs.forEach(function(m){
+    h+='<div class="ms-i" onclick="openChat(\''+m.nm+'\')"><div class="ms-av"><img class="ms-a" src="'+imgURL(m.nm+'msg',96,96)+'" alt="">'+(m.ur>0?'<div class="ms-ur">'+m.ur+'</div>':'')+'</div><div class="ms-ct"><div class="ms-nm">'+m.nm+'</div><div class="ms-pv">'+m.pv+'</div></div><div class="ms-tm">'+m.tm+'</div></div>';
+  });
+  h+='</div>';
+  $('#pg3').innerHTML=h;
+}
+
+/* ========================================
+   渲染 - 我的
+   ======================================== */
+function renderProfile(){
+  var menus=[
+    [{ic:'fa-receipt',bg:'rgba(255,62,108,.08)',cl:'#FF3E6C',nm:'我的订单',bg2:''},{ic:'fa-wallet',bg:'rgba(255,184,0,.12)',cl:'#FFB800',nm:'我的钱包',bg2:''},{ic:'fa-gift',bg:'rgba(147,51,234,.08)',cl:'#9333EA',nm:'礼物收入',bg2:'NEW'}],
+    [{ic:'fa-star',bg:'rgba(255,140,66,.08)',cl:'#FF8C42',nm:'我的收藏',bg2:''},{ic:'fa-history',bg:'rgba(59,130,246,.08)',cl:'#3B82F6',nm:'浏览记录',bg2:''},{ic:'fa-tag',bg:'rgba(16,185,129,.08)',cl:'#10B981',nm:'优惠券',bg2:'3'}],
+    [{ic:'fa-certificate',bg:'rgba(147,51,234,.08)',cl:'#9333EA',nm:'技能认证',bg2:'去认证'},{ic:'fa-shield-halved',bg:'rgba(20,184,166,.08)',cl:'#14B8A6',nm:'安全中心',bg2:''},{ic:'fa-gear',bg:'rgba(156,163,175,.08)',cl:'#9CA3AF',nm:'设置',bg2:''}]
+  ];
+  var h='<div class="pf-h fu"><div class="pf-d1"></div><div class="pf-d2"></div><div class="pf-info"><img class="pf-av" src="'+imgURL('myavatar',128,128)+'" alt=""><div class="pf-dt"><div class="pf-nm">比心用户</div><div class="pf-id">ID: 888666</div></div><button class="pf-ed" onclick="toast(\'编辑资料\')">编辑</button></div><div class="pf-sts"><div class="pf-si"><div class="pf-sn">128</div><div class="pf-sl">关注</div></div><div class="pf-si"><div class="pf-sn">1.2w</div><div class="pf-sl">粉丝</div></div><div class="pf-si"><div class="pf-sn">8600</div><div class="pf-sl">获赞</div></div></div></div>';
+  h+='<div class="pf-wl fu d1"><div class="pf-wi"><div class="pf-wn">328.00</div><div class="pf-wl2">余额(元)</div></div><div class="pf-wi"><div class="pf-wn">5</div><div class="pf-wl2">优惠券</div></div><div class="pf-wi"><div class="pf-wn">86</div><div class="pf-wl2">比心币</div></div></div>';
+  h+='<div class="pf-mn fu d2">';
+  menus.forEach(function(grp){
+    h+='<div class="pf-grp">';
+    grp.forEach(function(it){
+      h+='<div class="pf-mi" onclick="'+(it.nm==='技能认证'?'toast(\'前往技能认证\')':it.nm==='我的钱包'?'openRecharge()':'toast(\''+it.nm+'\')')+'"><div class="pf-mic" style="background:'+it.bg+';color:'+it.cl+'"><i class="fas '+it.ic+'"></i></div><div class="pf-mtx">'+it.nm+'</div>'+(it.bg2?'<span class="pf-mbg">'+it.bg2+'</span>':'')+'<span class="pf-mar">&#8250;</span></div>';
+    });
+    h+='</div>';
+  });
+  h+='</div>';
+  $('#pg4').innerHTML=h;
+}
+
+/* ========================================
+   交互 - Tab切换
+   ======================================== */
+var curTab=0;
+function switchTab(idx){
+  curTab=idx;
+  $$('.pg').forEach(function(p){p.classList.remove('on');});
+  $('#pg'+idx).classList.add('on');
+  var showCt=idx===0;
+  $('#ct').style.display=showCt?'':'none';
+  $('#gn').style.display=idx===4?'none':'';
+  $$('.bti').forEach(function(t){t.classList.remove('on');});
+  var btns=$$('.bti');
+  var map=[0,1,3,4];
+  if(map[idx]!==undefined&&btns[map[idx]])btns[map[idx]].classList.add('on');
+  var mc=$('#mc');
+  mc.style.paddingTop=idx===0?'94px':idx===4?'0':'52px';
+  window.scrollTo(0,0);
+}
+
+/* ========================================
+   交互 - 分类选择
+   ======================================== */
+function selCat(el,nm){$$('.ct-t').forEach(function(t){t.classList.remove('on');});el.classList.add('on');toast('切换到: '+nm);}
+function selPCat(el){$$('.py-c').forEach(function(t){t.classList.remove('on');});el.classList.add('on');}
+function selMTab(el){$$('.ms-t').forEach(function(t){t.classList.remove('on');});el.classList.add('on');}
+
+/* ========================================
+   交互 - 陪玩师详情
+   ======================================== */
+function openDetail(id){
+  var p=D.players.find(function(pl){return pl.id===id;});
+  if(!p)return;
+  var phh='';
+  for(var i=0;i<p.ph;i++){phh+='<img class="dsh-ph" src="'+imgURL(p.nm+'ph'+i,200,260)+'" alt="">';}
+  var gh='';
+  D.gifts.forEach(function(g){
+    gh+='<div class="dsh-gl" onclick="sendGift(\''+g.nm+'\',\''+p.nm+'\')"><div class="dsh-gi" style="background:'+g.bg+';color:'+g.cl+'"><i class="fas '+g.ic+'"></i></div><div class="dsh-gn">'+g.nm+'</div><div class="dsh-gp">'+g.pr+'币</div></div>';
+  });
+  var th='';
+  p.tags.forEach(function(t){th+='<span class="dsh-tag">'+t+'</span>';});
+
+  var h='<div class="dsh-hd"></div><div class="dsh-pf"><img class="dsh-av" src="'+imgURL(p.nm,160,160)+'" alt=""><div class="dsh-nm">'+p.nm+' <span class="pc-g '+(p.gd==='f'?'f':'m')+'" style="display:inline-flex;width:17px;height:17px;font-size:.6rem;"><i class="fas '+(p.gd==='f'?'fa-venus':'fa-mars')+'"></i></span> <span class="pc-lv">Lv.'+p.lv+'</span></div><div class="dsh-ds">'+p.ds+'</div><div class="dsh-sts"><div class="dsh-st"><div class="dsh-sv">'+p.sc+'</div><div class="dsh-sl">评分</div></div><div class="dsh-st"><div class="dsh-sv">'+(p.od>=1000?(p.od/1000).toFixed(1)+'k':p.od)+'</div><div class="dsh-sl">接单</div></div><div class="dsh-st"><div class="dsh-sv">'+p.fs+'w</div><div class="dsh-sl">粉丝</div></div></div><div class="dsh-tags">'+th+'</div></div><div class="dsh-phs">'+phh+'</div><div class="dsh-acts"><button class="dsh-ab dsh-ac" onclick="openChat(\''+p.nm+'\');closeDetail();">私信</button><button class="dsh-ab dsh-ao" onclick="openOrder('+p.id+');closeDetail();">立即下单 &yen;'+p.pr+'/'+p.un+'</button></div><div class="dsh-gf"><h4>送礼物</h4><div class="dsh-gls">'+gh+'</div></div>';
+  $('#dsh').innerHTML=h;
+  $('#dov').classList.add('on');
+}
+function closeDetail(){$('#dov').classList.remove('on');}
+$('#dov').addEventListener('click',function(e){if(e.target===this)closeDetail();});
+
+function sendGift(gn,pn){toast('送给 '+pn+' 一个'+gn);}
+
+/* ========================================
+   交互 - 下单
+   ======================================== */
+var orderPlayer=null;
+function openOrder(id){
+  var p=D.players.find(function(pl){return pl.id===id;});
+  if(!p)return;
+  orderPlayer=p;
+  var games=[
+    {nm:p.tags[0]||'游戏陪玩',ds:'标准陪玩',pr:p.pr},
+    {nm:'语音聊天',ds:'纯语音互动',pr:Math.round(p.pr*0.7)},
+    {nm:'视频聊天',ds:'视频1v1',pr:Math.round(p.pr*1.5)},
+    {nm:'代练上分',ds:'专业代练',pr:Math.round(p.pr*1.2)}
+  ];
+  var times=['30分钟','1小时','2小时','3小时'];
+  var gh='';
+  games.forEach(function(g,i){gh+='<div class="od-opt'+(i===0?' on':'')+'" onclick="selOrderOpt(this)"><h5>'+g.nm+'</h5><p>'+g.ds+'</p><div class="od-pr">&yen;'+g.pr+'</div></div>';});
+  var th='';
+  times.forEach(function(t,i){th+='<div class="od-tm'+(i===1?' on':'')+'" onclick="selOrderTm(this)">'+t+'</div>';});
+
+  var h='<div class="dsh-hd"></div><div class="od-t"><h3>选择服务</h3><div class="od-opts">'+gh+'</div></div><div class="od-tl"><h4>选择时长</h4><div class="od-tms">'+th+'</div></div><div class="od-note"><h4>备注信息</h4><textarea placeholder="告诉大神你的需求..."></textarea></div><div class="od-ft"><div class="od-total">合计: <b>&yen;'+p.pr+'</b></div><button class="od-sb" onclick="placeOrder()">确认下单</button></div>';
+  $('#odsh').innerHTML=h;
+  $('#odov').classList.add('on');
+}
+function selOrderOpt(el){$$('.od-opt').forEach(function(o){o.classList.remove('on');});el.classList.add('on');updateOrderTotal();}
+function selOrderTm(el){$$('.od-tm').forEach(function(o){o.classList.remove('on');});el.classList.add('on');updateOrderTotal();}
+function updateOrderTotal(){
+  if(!orderPlayer)return;
+  var selOpt=$$('.od-opt').find(function(o){return o.classList.contains('on');});
+  var selTm=$$('.od-tm').find(function(o){return o.classList.contains('on');});
+  if(!selOpt||!selTm)return;
+  var base=parseInt(selOpt.querySelector('.od-pr').textContent.replace(/[^\d]/g,''));
+  var tm=selTm.textContent;
+  var mul=tm==='30分钟'?0.5:tm==='1小时'?1:tm==='2小时'?2:3;
+  var total=Math.round(base*mul);
+  var totalEl=document.querySelector('.od-total b');
+  if(totalEl)totalEl.innerHTML='&yen;'+total;
+}
+function placeOrder(){
+  $('#odov').classList.remove('on');
+  if(orderPlayer)startCall(orderPlayer.nm);
+}
+function closeOrder(){$('#odov').classList.remove('on');}
+$('#odov').addEventListener('click',function(e){if(e.target===this)closeOrder();});
+
+/* ========================================
+   交互 - 语音呼叫
+   ======================================== */
+var callTm=null,callInt=null;
+function startCall(nm){
+  var h='<img class="c-av" src="'+imgURL(nm,200,200)+'" alt=""><div class="c-nm">'+nm+'</div><div class="c-st" id="cSt">正在呼叫...</div><div class="c-wv" id="cWv">';
+  for(var i=0;i<20;i++){h+='<div class="c-wb" style="animation-delay:'+(i*0.07)+'s"></div>';}
+  h+='</div><button class="c-end" onclick="endCall()" aria-label="挂断"><i class="fas fa-phone-slash"></i></button>';
+  $('#cov').innerHTML=h;
+  $('#cov').classList.add('on');
+  clearTimeout(callTm);
+  callTm=setTimeout(function(){
+    var st=$('#cSt');
+    if(st)st.textContent='已接通 00:00';
+    var sec=0;
+    clearInterval(callInt);
+    callInt=setInterval(function(){
+      sec++;
+      var m=Math.floor(sec/60),s=sec%60;
+      if($('#cSt'))$('#cSt').textContent='已接通 '+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+    },1000);
+  },2500);
+}
+function endCall(){
+  $('#cov').classList.remove('on');
+  clearTimeout(callTm);clearInterval(callInt);
+  toast('通话已结束');
+}
+
+/* ========================================
+   交互 - 聊天
+   ======================================== */
+var chatTarget='';
+function openChat(nm){
+  chatTarget=nm;
+  var p=D.players.find(function(pl){return pl.nm===nm;});
+  var ol=p?p.ol:false;
+  var h='<div class="ch-h"><div class="ch-bk" onclick="closeChat()"><i class="fas fa-chevron-left"></i></div><div class="ch-ti"><div class="ch-tn">'+nm+'</div><div class="ch-ts2">'+(ol?'在线':'离线')+'</div></div><div class="ch-mr" onclick="openDetail('+(p?p.id:0)+')"><i class="fas fa-ellipsis-v"></i></div></div><div class="ch-msgs" id="chMsgs">';
+  D.chatMsgs.forEach(function(m){
+    h+='<div class="ch-row'+(m.frm==='me'?' me':'')+'"><img class="ch-av" src="'+imgURL(m.frm==='me'?'myavatar':nm,64,64)+'" alt=""><div class="ch-bbl">'+m.txt+'</div></div>';
+  });
+  h+='</div><div class="ch-in"><div class="ch-ib" onclick="toast(\'语音消息\')"><i class="fas fa-microphone"></i></div><div class="ch-ib" onclick="toast(\'更多功能\')"><i class="fas fa-plus-circle"></i></div><input class="ch-ipt" id="chIpt" type="text" placeholder="输入消息..." onkeydown="if(event.key===\'Enter\')sendChat()"><button class="ch-sb" onclick="sendChat()">发送</button></div>';
+  $('#chPage').innerHTML=h;
+  setTimeout(function(){var msgs=$('#chMsgs');if(msgs)msgs.scrollTop=msgs.scrollHeight;},100);
+  $('#chPage').classList.add('on');
+}
+function closeChat(){$('#chPage').classList.remove('on');}
+function sendChat(){
+  var ipt=$('#chIpt');
+  if(!ipt||!ipt.value.trim())return;
+  var txt=ipt.value.trim();
+  ipt.value='';
+  var msgs=$('#chMsgs');
+  var row=document.createElement('div');
+  row.className='ch-row me';
+  row.innerHTML='<img class="ch-av" src="'+imgURL('myavatar',64,64)+'" alt=""><div class="ch-bbl">'+txt+'</div>';
+  msgs.appendChild(row);
+  msgs.scrollTop=msgs.scrollHeight;
+  // 模拟回复
+  setTimeout(function(){
+    var replies=['好的呀~','嗯嗯没问题！','马上来！','哈哈好的','等你哦~','收到！'];
+    var rpl=replies[Math.floor(Math.random()*replies.length)];
+    var row2=document.createElement('div');
+    row2.className='ch-row';
+    row2.innerHTML='<img class="ch-av" src="'+imgURL(chatTarget,64,64)+'" alt=""><div class="ch-bbl">'+rpl+'</div>';
+    msgs.appendChild(row2);
+    msgs.scrollTop=msgs.scrollHeight;
+  },800+Math.random()*1200);
+}
+
+/* ========================================
+   交互 - 发布动态
+   ======================================== */
+function openPublishMoment(){
+  var h='<div class="dsh-hd"></div><div class="pb-hd"><span class="pb-cl" onclick="closePb()">取消</span><h3>发布动态</h3><button class="pb-pb" onclick="publishMoment()">发布</button></div><div class="pb-ta"><textarea id="pbTxt" placeholder="分享你的想法..."></textarea></div><div class="pb-ims" id="pbIms"><div class="pb-add" onclick="toast(\'添加图片\')"><i class="fas fa-plus"></i></div></div><div class="pb-opts"><div class="pb-opt" onclick="toast(\'添加定位\'"><i class="fas fa-map-marker-alt"></i> 定位</div><div class="pb-opt" onclick="toast(\'添加话题\')"><i class="fas fa-hashtag"></i> 话题</div><div class="pb-opt" onclick="toast(\'@好友\')"><i class="fas fa-at"></i> 好友</div></div>';
+  $('#pbsh').innerHTML=h;
+  $('#pbov').classList.add('on');
+}
+function closePb(){$('#pbov').classList.remove('on');}
+function publishMoment(){
+  var txt=document.getElementById('pbTxt');
+  if(!txt||!txt.value.trim()){toast('请输入内容');return;}
+  // 添加到动态列表
+  D.moments.unshift({id:Date.now(),nm:'比心用户',tm:'刚刚',txt:txt.value.trim(),imgs:0,fw:false,lk:0,cm:0,sh:0});
+  closePb();
+  renderMoments();
+  toast('动态发布成功');
+}
+$('#pbov').addEventListener('click',function(e){if(e.target===this)closePb();});
+
+/* ========================================
+   交互 - 充值
+   ======================================== */
+function openRecharge(){
+  var h='<div class="rg-hd"><h3>充值比心币</h3><span class="rg-cl" onclick="closeRg()"><i class="fas fa-times"></i></span></div><div class="rg-opts">';
+  D.rechargeOpts.forEach(function(o,i){
+    h+='<div class="rg-opt'+(i===1?' on':'')+'" onclick="selRg(this)"><div class="rg-am">'+o.am+'币</div>'+(o.bn?'<div class="rg-bn">'+o.bn+'</div>':'')+'<div class="rg-pr">'+o.pr+'</div></div>';
+  });
+  h+='</div><div class="rg-ft"><button class="rg-sb" onclick="doRecharge()">立即充值</button></div>';
+  $('#rgsh').innerHTML=h;
+  $('#rgov').classList.add('on');
+}
+function selRg(el){$$('.rg-opt').forEach(function(o){o.classList.remove('on');});el.classList.add('on');}
+function closeRg(){$('#rgov').classList.remove('on');}
+function doRecharge(){closeRg();toast('充值成功');}
+$('#rgov').addEventListener('click',function(e){if(e.target===this)closeRg();});
+
+/* ========================================
+   交互 - 搜索
+   ======================================== */
+function openSearch(){
+  var h='<div class="sr-h"><div class="sr-bk" onclick="closeSearch()"><i class="fas fa-chevron-left"></i></div><input class="sr-ipt" id="srIpt" type="text" placeholder="搜索陪玩师、游戏" onkeydown="if(event.key===\'Enter\')doSearch()"><button class="sr-sb" onclick="doSearch()">搜索</button></div><div class="sr-hot"><h4>热门搜索</h4><div class="sr-tags">';
+  D.hotSearch.forEach(function(s){h+='<div class="sr-tag" onclick="doSearchFor(\''+s+'\')">'+s+'</div>';});
+  h+='</div></div><div class="sr-hist"><h4>搜索历史 <span onclick="toast(\'清空历史\')">清空</span></h4>';
+  D.searchHist.forEach(function(s){h+='<div class="sr-hi" onclick="doSearchFor(\''+s+'\')"><i class="fas fa-clock"></i><span>'+s+'</span></div>';});
+  h+='</div>';
+  $('#srov').innerHTML=h;
+  $('#srov').classList.add('on');
+  setTimeout(function(){var ipt=$('#srIpt');if(ipt)ipt.focus();},350);
+}
+function closeSearch(){$('#srov').classList.remove('on');}
+function doSearch(){
+  var ipt=$('#srIpt');
+  if(!ipt||!ipt.value.trim()){toast('请输入搜索关键词');return;}
+  toast('搜索: '+ipt.value.trim());
+  closeSearch();
+}
+function doSearchFor(kw){toast('搜索: '+kw);closeSearch();}
+
+/* ========================================
+   交互 - 动态点赞/关注
+   ======================================== */
+function likeMoment(el,id){
+  var m=D.moments.find(function(mt){return mt.id===id;});
+  if(!m)return;
+  var isLiked=el.classList.contains('liked');
+  if(isLiked){m.lk--;el.classList.remove('liked');el.querySelector('i').className='far fa-heart';}
+  else{m.lk++;el.classList.add('liked');el.querySelector('i').className='fas fa-heart';}
+  el.querySelector('span').textContent=m.lk;
+}
+function followMoment(el,id){
+  var m=D.moments.find(function(mt){return mt.id===id;});
+  if(!m)return;
+  m.fw=!m.fw;
+  el.textContent=m.fw?'已关注':'关注';
+  el.style.background=m.fw?'var(--bg)':'rgba(255,62,108,.07)';
+  el.style.color=m.fw?'var(--fg3)':'var(--pri)';
+}
+
+/* ========================================
+   交互 - 发布/接单按钮
+   ======================================== */
+function openPublish(){toast('接单中心 - 成为陪玩大神');}
+
+/* ========================================
+   轮播自动播放
+   ======================================== */
+var bIdx=0;
+function rotateBanner(){
+  bIdx=(bIdx+1)%3;
+  var track=$('#bTrack');
+  if(track)track.style.transform='translateX(-'+(bIdx*100)+'%)';
+  $$('.bd').forEach(function(d,i){d.classList.toggle('on',i===bIdx);});
+}
+setInterval(rotateBanner,3500);
+
+/* ========================================
+   浮动爱心
+   ======================================== */
+function createHearts(){
+  var c=$('#fhs');
+  var hs=['fa-heart'];
+  for(var i=0;i<10;i++){
+    var el=document.createElement('div');
+    el.className='fh';
+    el.innerHTML='<i class="fas fa-heart" style="font-size:'+(0.6+Math.random()*0.8)+'rem;color:rgba(255,62,108,'+(0.05+Math.random()*0.05)+')"></i>';
+    el.style.left=Math.random()*100+'%';
+    el.style.animationDelay=Math.random()*7+'s';
+    el.style.animationDuration=(5+Math.random()*5)+'s';
+    c.appendChild(el);
   }
-  .top-nav-inner {
-    display: flex; align-items: center; padding: 10px 16px; gap: 10px;
-  }
-  .nav-location {
-    display: flex; align-items: center; gap: 3px;
-    font-size: 0.82rem; font-weight: 600; color: var(--fg);
-    flex-shrink: 0; cursor: pointer;
-  }
-  .nav-location svg { width:14px; height:14px; fill:var(--primary); }
-  .nav-search {
-    flex:1; display:flex; align-items:center; gap:6px;
-    background: var(--bg); border-radius: 20px;
-    padding: 7px 14px; cursor: pointer;
-  }
+}
+
+/* ========================================
+   初始化
+   ======================================== */
+renderCats();
+renderBottomNav();
+renderHome();
+renderParty();
+renderMoments();
+renderMessages();
+renderProfile();
+createHearts();
+</script>
+</body>
+</html>
+```
+
+## 实现说明
+
+这是一个完整的比心APP网页复刻版，纯单HTML文件，包含以下核心模块：
+
+### 五大页面
+1. **首页** — 轮播Banner（3张自动切换）、5个快捷入口（游戏陪玩/语音交友/唱歌电台/代练上分/聊天树洞）、TOP在线大神横向滚动、12位陪玩师详细列表
+2. **派对** — 6个语音房间卡片，含在线直播状态、房主信息、用户头像、加入按钮
+3. **动态圈子** — 5条动态内容流（含图文混排），支持发布新动态、点赞（实时计数切换红心）、关注/取关
+4. **消息** — 聊天/系统/互动三Tab切换，7条消息（含未读红点），点击进入完整聊天窗口
+5. **我的** — 渐变头部个人信息、粉丝/关注/获赞统计、钱包余额、9项功能菜单（订单/钱包/收藏/技能认证/安全中心/设置等）
+
+### 核心交互功能
+- **陪玩师详情弹窗** — 头像、评分、接单量、粉丝数、标签、相册横滑、私信/下单按钮、6种礼物打赏
+- **下单流程** — 选择服务类型（陪玩/语音/视频/代练）→ 选择时长 → 填写备注 → 自动计算价格 → 确认下单
+- **语音呼叫** — 全屏呼叫界面，脉冲动画头像 + 音波动画 + 2.5秒自动接通 + 实时计时 + 挂断
+- **聊天窗口** — 完整聊天界面，可发送消息，对方自动回复（随机话术），支持回车发送
+- **搜索页** — 全屏搜索，热门搜索标签、搜索历史、输入搜索
+- **充值系统** — 6档充值选项（含赠送提示），选中确认
+- **发布动态** — 输入文字 + 添加图片占位 + 定位/话题/好友，发布后实时插入动态流
+
+### 视觉特色
+- 比心标志性 `#FF3E6C` 粉红主色贯穿全局
+- 浮动爱心粒子背景氛围
+- 在线绿点、等级徽章、TOP排名、直播脉冲等细节还原
+- 所有弹窗均为底部Sheet滑入动画，支持点击遮罩关闭  }
   .nav-search svg { width:16px; height:16px; stroke:var(--fg-muted); fill:none; }
   .nav-search span { font-size:0.8rem; color:var(--fg-muted); }
   .nav-actions { display:flex; gap:12px; flex-shrink:0; }
